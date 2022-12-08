@@ -16,11 +16,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from index import views as index_view
+from sys_admin import views as sys_admin_view
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', index_view.index_home, name='index'),
-    path('login', index_view.index_login, name='login'),
+    path('login/', index_view.index_login, name='login'),
+    path('sys_admin_home', sys_admin_view.sys_admin_home, name='sys_admin_home'), 
 
 ]
