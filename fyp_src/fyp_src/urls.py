@@ -26,5 +26,6 @@ urlpatterns = [
     path('logout/', sys_admin_view.logout, name='sys_admin_logout'),
     path('sys_admin/home/', sys_admin_view.sys_admin_home, name='sys_admin_home'), 
     path('sys_admin/view_employees/', sys_admin_view.sys_admin_view_employees, name='sys_admin_view_employees'),
+    path('sys_admin/create_user/', sys_admin_view.sys_admin_create_user, name='sys_admin_create_user')
 
 ]
