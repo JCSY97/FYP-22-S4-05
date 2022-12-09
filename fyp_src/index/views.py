@@ -18,7 +18,19 @@ def index_login(request):
 		# user authentication, might move this function to another place if needed
 		if Employee.objects.filter(Employee_ID=EmployeeID).count() == 1:
 			if Employee.objects.filter(Employee_ID=EmployeeID).first().Password == password:
-				return render(request, 'admin/admin-home.html')
+
+				currentEmployee = Employee.objects.filter(Employee_ID=EmployeeID).first()
+
+				request.session['Employee_ID'] = currentEmployee.Employee_ID
+				context = {
+					'Employee' : currentEmployee,
+				}
+
+				print('testing123  @@@@@@@@@@@@@@@@@@@ ')
+				print(request.session['Employee_ID'])
+
+			
+				return render(request, 'sys_admin/sys_admin_home.html')
 
 		else:
 			messages.error(request, 'Invalid Username or Password')
