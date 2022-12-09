@@ -18,6 +18,23 @@ def sys_admin_home(request):
 		return redirect('login')
 
 
+def sys_admin_view_employees(request):
+
+	currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
+
+	allEmployees = Employee.objects.filter(Role=3)
+	context={
+		'Employee_ID' : currentEmployee.Employee_ID,
+		'Full_Name' : currentEmployee.Full_Name,
+		'Role' : currentEmployee.Role.Role_Name,
+		'Employees' : allEmployees,
+
+	}
+
+
+	return render(request, 'sys_admin/sys_admin_view_employees.html', context)
+
+
 def logout(request):
 	request.session.flush()
 	messages.info(request, 'You have been logged out')
