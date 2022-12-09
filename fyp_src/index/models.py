@@ -11,7 +11,7 @@ class Role(models.Model):
 		return self.Role_Name
 
 class Employee(models.Model):
-	Employee_ID = models.IntegerField()
+	Employee_ID = models.IntegerField(primary_key=True)
 	Full_Name = models.CharField(max_length=256)
 	Phone_Number = models.CharField(max_length=256)
 	Email_Address = models.EmailField()
