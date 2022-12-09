@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from index.models import Employee
+from django.contrib import messages
 
 # Create your views here.
 def sys_admin_home(request):
@@ -13,9 +14,11 @@ def sys_admin_home(request):
 		return render(request, 'sys_admin/sys_admin_home.html', context)
 
 	else:
+		messages.error(request, 'Please login first')
 		return redirect('login')
 
 
 def logout(request):
 	request.session.flush()
-	return render(request, 'index/login.html')
+	messages.info(request, 'You have been logged out')
+	return redirect('login')

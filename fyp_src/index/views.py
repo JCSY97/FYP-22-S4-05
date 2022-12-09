@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-
+from django.contrib import messages
 
 from .models import Employee
 
@@ -13,8 +13,12 @@ def index_login(request):
 
 	#if request.POST:
 	if request.method == 'POST':
+
+
 		EmployeeID = request.POST.get('EmployeeID')
+
 		password = request.POST.get('password')
+		
 
 		# user authentication, might move this function to another place if needed
 		if Employee.objects.filter(Employee_ID=EmployeeID).count() == 1:
@@ -23,14 +27,16 @@ def index_login(request):
 				currentEmployee = Employee.objects.filter(Employee_ID=EmployeeID).first()
 
 				request.session['Employee_ID'] = currentEmployee.Employee_ID
-				
-
 			
 				return redirect('sys_admin_home')
+			else:
+				messages.error(request, 'Invalid Username or Password')
+				return redirect('login')
+
 
 		else:
 			messages.error(request, 'Invalid Username or Password')
-			return render(request, 'index/login.html')
+			return redirect('login')
 	else:
 		return render(request, 'index/login.html')
 
