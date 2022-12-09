@@ -1,5 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
+
 
 from .models import Employee
 
@@ -22,15 +23,10 @@ def index_login(request):
 				currentEmployee = Employee.objects.filter(Employee_ID=EmployeeID).first()
 
 				request.session['Employee_ID'] = currentEmployee.Employee_ID
-				context = {
-					'Employee' : currentEmployee,
-				}
-
-				print('testing123  @@@@@@@@@@@@@@@@@@@ ')
-				print(request.session['Employee_ID'])
+				
 
 			
-				return render(request, 'sys_admin/sys_admin_home.html')
+				return redirect('sys_admin_home')
 
 		else:
 			messages.error(request, 'Invalid Username or Password')
