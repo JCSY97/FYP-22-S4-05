@@ -23,15 +23,14 @@ def index_login(request):
 		# user authentication, might move this function to another place if needed
 		if Employee.objects.filter(Employee_ID=EmployeeID).count() == 1:
 			if Employee.objects.filter(Employee_ID=EmployeeID).first().Password == password:
-				userObject = Employee.objects.filter(Employee_ID=EmployeeID).first()
+				userObject = Employee.objects.get(Employee_ID=EmployeeID)
+				request.session['Employee_ID'] = EmployeeID
 
 				# if user == Sys_Admin
 				if userObject.Role.Role_ID == 1:
-					currentEmployee = Employee.objects.filter(Employee_ID=EmployeeID).first()
-					request.session['Employee_ID'] = currentEmployee.Employee_ID
 					return redirect('sys_admin_home')
 				elif userObject.Role.Role_ID == 2:
-					return HttpResponse('<h1>youre HR</h1>')
+					return redirect('HR_home')
 				else:
 					return HttpResponse('<h1>youre employee</h1>')
 

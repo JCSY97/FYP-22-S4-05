@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'index.apps.IndexConfig',
     'crispy_forms',
     'sys_admin.apps.SysAdminConfig',
+    'HR.apps.HrConfig',
 ]
 
 MIDDLEWARE = [
