@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, reverse
 from index.models import Employee, Role
 from django.contrib import messages
 
@@ -70,6 +70,14 @@ def sys_admin_create_user(request):
 
 	else:
 		return render(request, 'sys_admin/sys_admin_create_user.html')
+
+
+def delete_employee(request, delete_employee_id):
+	if Employee.objects.filter(Employee_ID=delete_employee_id).count() == 1:
+		Employee_to_delete = Employee.objects.get(Employee_ID=delete_employee_id)
+		Employee_to_delete.delete()
+
+	return redirect('sys_admin_view_employees')
 
 
 def logout(request):

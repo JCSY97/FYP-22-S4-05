@@ -152,8 +152,8 @@
                     <td>{{ employee.Full_Name }}</td>
                     <td>{{ employee.Email_Address }}</td>
                     <td>{{ employee.Phone_Number }}</td>
-                    <td>Edit</td>
-                    <td>Delete</td>
+                    <td><a href="#">Edit</a></td>
+                    <td><a href="delete/{{ employee.Employee_ID }}" onclick="return confirm('Are you sure you want to delete this?')">Delete</a></td>
                   </tr>
                   {% endfor %}
                 </tbody>
