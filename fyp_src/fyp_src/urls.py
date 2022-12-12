@@ -29,6 +29,7 @@ urlpatterns = [
     path('sys_admin/view_employees/', sys_admin_view.sys_admin_view_employees, name='sys_admin_view_employees'),
     path('sys_admin/view_employees/delete/<int:delete_employee_id>/', sys_admin_view.delete_employee, name='sys_admin_delete_employee'),
     path('sys_admin/create_user/', sys_admin_view.sys_admin_create_user, name='sys_admin_create_user'),
+    path('sys_admin/user_profile', sys_admin_view.user_profile, name='sys_admin_user_profile'),
     path('HR/home/', HR_view.HR_home, name='HR_home'),
     path('logout/', HR_view.logout, name='HR_logout'),
 

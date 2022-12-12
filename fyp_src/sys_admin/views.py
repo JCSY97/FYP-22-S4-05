@@ -80,6 +80,23 @@ def delete_employee(request, delete_employee_id):
 	return redirect('sys_admin_view_employees')
 
 
+def user_profile(request):
+	if 'Employee_ID' in request.session:
+		currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
+
+		context = {
+			'Employee_ID' : currentEmployee.Employee_ID,
+			'Full_Name' : currentEmployee.Full_Name,
+			'Role' : currentEmployee.Role.Role_Name,
+			'Email' : currentEmployee.Email_Address,
+			'Phone' : currentEmployee.Phone_Number,
+		}
+		return render(request, 'sys_admin/sys_admin_user_profile.html', context)
+	else:
+		messages.error(request, 'Please login')
+		return redirect('login')
+
+
 def logout(request):
 	request.session.flush()
 	messages.info(request, 'You have been logged out')
