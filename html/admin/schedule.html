@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Employees</title>
+  <title>User Profile</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -25,7 +25,13 @@
   <link href="../../assets/vendor/quill/quill.bubble.css" rel="stylesheet">
   <link href="../../assets/vendor/remixicon/remixicon.css" rel="stylesheet">
   <link href="../../assets/vendor/simple-datatables/style.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+
+
+
+  <!-----add to bash----------->
+  <link href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.1.0/fullcalendar.print.min.css' rel='stylesheet' media='print' />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.1.0/fullcalendar.min.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.7/semantic.min.css" rel="stylesheet" />
 
   <!-- Template Main CSS File -->
   <link href="../../assets/css/style.css" rel="stylesheet">
@@ -38,7 +44,7 @@
   <header id="header" class="header fixed-top d-flex align-items-center">
 
     <div class="d-flex align-items-center justify-content-between">
-      <a href="./admin-home.html" class="logo d-flex align-items-center">
+      <a href="./employee-home.html" class="logo d-flex align-items-center">
         <img src="../../assets/img/logo.png" alt="">
         <span class="d-none d-lg-block">FYP-22-S4-05</span>
       </a>
@@ -67,7 +73,7 @@
 
           <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
             <img src="../../assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
-            <span class="d-none d-md-block dropdown-toggle ps-2">K. Anderson</span>
+            <span class="d-none d-md-block dropdown-toggle ps-2">James Chen</span>
           </a><!-- End Profile Iamge Icon -->
 
           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
@@ -138,107 +144,70 @@
         </a>
       </li><!-- End employee Nav -->
       <li class="nav-item">
-        <a class="nav-link " href="./employee-upload.html">
+        <a class="nav-link collapsed" href="./employee-upload.html">
           <i class="bi bi-card-image"></i>
           <span>Upload Image</span>
         </a>
       </li><!-- End Upload Image Nav -->
       <li class="nav-item">
-        <a class="nav-link collapsed" href="./schedule.html">
+        <a class="nav-link " href="./schedule.html">
           <i class="bi bi-card-image"></i>
           <span>Schedule</span>
         </a>
-      </li><!-- End Schedule Nav -->
-    </ul>
+      </li><!-- End Upload Image Nav -->
+
+      
 
   </aside><!-- End Sidebar-->
 
   <main id="main" class="main">
 
     <div class="pagetitle">
-      <h1>Upload Image</h1>
+      <h1>Schedule</h1>
       <nav>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="./admin-home.html">Home</a></li>
-          <li class="breadcrumb-item active">Upload Image</li>
+          <li class="breadcrumb-item"><a href="./employee-home.html">Home</a></li>
+          <li class="breadcrumb-item active">Schedule</li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
 
-    <section class="section">
+    <section class="section profile">
       <div class="row">
-        <div class="col-lg-12">
+        
 
-          <div class="card recent-sales overflow-auto">
+        <div class="col-xl-12">
 
-            <div class="card-body">
-              <h5 class="card-title">Upload Image</h5>
+          <div class="card">
+            <div class="card-body pt-3">
+              
+              <div class="ui container">
 
-              <table class="table table-borderless datatable">
-                <thead>
-                  <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Position</th>
-                    <th scope="col">Start Date</th>
-                    <th scope="col">Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr onclick="document.location = './upload-img.html'">
-                    <th scope="row">1</th>
-                    <td>Brandon Jacob</td>
-                    <td>Designer</td>
-                    <td>2016-05-25</td>
-                    <td><span class="badge bg-warning">pending</span></td>
-                  </tr>
-                  <tr onclick="document.location = './upload-img.html'">
-                    <th scope="row">2</th>
-                    <td>Bridie Kessler</td>
-                    <td>Developer</td>
-                    <td>2014-12-05</td>
-                    <td><span class="badge bg-warning">pending</span></td>
-                  </tr>
-                  <tr onclick="document.location = './upload-img.html'">
-                    <th scope="row">3</th>
-                    <td>Ashleigh Langosh</td>
-                    <td>Finance</td>
-                    <td>2011-08-12</td>
-                    <td><span class="badge bg-success">Completed</span></td>
-                  </tr>
-                  <tr onclick="document.location = './upload-img.html'">
-                    <th scope="row">4</th>
-                    <td>Angus Grady</td>
-                    <td>HR</td>
-                    <td>2012-06-11</td>
-                    <td><span class="badge bg-success">Completed</span></td>
-                  </tr>
-                  <tr onclick="document.location = './upload-img.html'">
-                    <th scope="row">5</th>
-                    <td>Raheem Lehner</td>
-                    <td>Dynamic Division Officer</td>
-                    <td>2011-04-19</td>
-                    <td><span class="badge bg-warning">pending</span></td>
-                  </tr>
-                </tbody>
-              </table>
+                <br/>
+                <div class="ui container">
+                  <div class="ui grid">
+                    <div class="ui sixteen column">
+                      <div id="calendar"></div>
+                    </div>
+                  </div>
+                </div>
+                
+                </div>
 
             </div>
-
           </div>
-
-          
-          
 
         </div>
       </div>
     </section>
+  
 
   </main><!-- End #main -->
 
-  
 
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  
 
   <!-- Vendor JS Files -->
   <script src="../../assets/vendor/apexcharts/apexcharts.min.js"></script>
@@ -250,8 +219,93 @@
   <script src="../../assets/vendor/tinymce/tinymce.min.js"></script>
   <script src="../../assets/vendor/php-email-form/validate.js"></script>
 
+
+  <!-----add to bash----------->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js"></script>
+  <script src="https://fullcalendar.io/releases/fullcalendar/3.9.0/fullcalendar.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.7/semantic.min.js"></script>
+  <script src="https://fullcalendar.io/releases/fullcalendar/3.9.0/gcal.min.js"></script>
+
   <!-- Template Main JS File -->
   <script src="../../assets/js/main.js"></script>
+
+  <script type="text/javascript">
+   
+    $(document).ready(function() {
+      
+      $('#calendar').fullCalendar({
+        header: {
+          left: 'prev,next today',
+          center: 'title',
+          right: 'month,basicWeek,basicDay'
+        },
+        defaultDate: moment().format("YYYY-MM-DD"),
+        navLinks: true, // can click day/week names to navigate views
+        editable: false,
+        eventLimit: true, // allow "more" link when too many events
+        events: [
+          {
+            title: 'All Day Event',
+            start: '2022-12-01'
+          },
+          {
+            title: 'Long Event',
+            start: '2022-12-07',
+            end: '2022-12-10'
+          },
+          {
+            id: 999,
+            title: 'Clock In',
+            start: '2022-12-09T09:00:00'
+          },
+          {
+            id: 999,
+            title: 'Repeating Event',
+            start: '2022-12-16T16:00:00'
+          },
+          {
+            title: 'Conference',
+            start: '2022-12-11',
+            end: '2022-12-13'
+          },
+          {
+            title: 'Meeting',
+            start: '2022-12-12T10:30:00',
+            end: '2022-12-12T12:30:00'
+          },
+          {
+            title: 'Lunch',
+            start: '2022-12-12T12:00:00'
+          },
+          {
+            title: 'Meeting',
+            start: '2022-12-12T14:30:00'
+          },
+          {
+            title: 'Happy Hour',
+            start: '2022-12-12'
+          },
+          {
+            title: 'Dinner',
+            start: '2022-12-12T20:00:00'
+          },
+          {
+            title: 'Birthday Party',
+            start: '2022-12-13T07:00:00'
+          },
+          {
+            title: 'Click for Google',
+            url: 'https://google.com/',
+            start: '2022-12-28'
+          }
+        ]
+      });
+      
+    });
+  </script>
+
+  
 
 </body>
 
