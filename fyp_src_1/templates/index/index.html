@@ -1,0 +1,43 @@
+{% extends "index/base.html" %}
+{% load static %}
+{% block content %}
+<main>
+    <div class="container">
+
+      <section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
+        <div class="container text-center">
+          <h1 style="color:white;"><b>Welcome to face recognition attendance taking system</b></h1>
+          <div style="padding-top:100px;" class="row justify-content-center">     
+            <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">  
+              <!-- CAMERA -->
+              <a href="./camera.html">
+              <div class=" mb-3 homeitem1">
+                  <br>
+                  <i class="fa fa-camera largeicon"></i>
+                    <br>
+                    <br>
+                    <h2 style="font-size: bold">Clock In</h2>
+              </div>
+            </a>
+            </div>      
+            <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
+              <!-- log in -->
+              <a href="{% url 'login' %}">
+                <div class=" mb-3 homeitem1">
+                      <br>
+                        <i class="fa fa-sign-in largeicon"></i>
+                        <br>
+                        <br>
+                        <h2 style="font-size: bold;">Login</h2>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main><!-- End #main -->
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+	
+{% endblock content %}
