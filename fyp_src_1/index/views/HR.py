@@ -3,7 +3,7 @@ from index.models import Employee, Role
 
 # Create your views here.
 
-
+# test
 def HR_home(request):
 	if 'Employee_ID' in request.session:
 		currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
