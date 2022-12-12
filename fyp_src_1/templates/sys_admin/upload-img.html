@@ -1,11 +1,11 @@
 {% extends "index/base.html" %}
 {% load static %}
 {% block content %}
-<!-- ======= Header ======= -->
+  <!-- ======= Header ======= -->
   <header id="header" class="header fixed-top d-flex align-items-center">
 
     <div class="d-flex align-items-center justify-content-between">
-      <a href="{% url 'sys_admin_home' %}" class="logo d-flex align-items-center">
+      <a href="./admin-home.html" class="logo d-flex align-items-center">
         <img src="../../assets/img/logo.png" alt="">
         <span class="d-none d-lg-block">FYP-22-S4-05</span>
       </a>
@@ -34,20 +34,20 @@
 
           <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
             <img src="../../assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
-            <span class="d-none d-md-block dropdown-toggle ps-2">{{ Full_Name }}</span>
+            <span class="d-none d-md-block dropdown-toggle ps-2">K. Anderson</span>
           </a><!-- End Profile Iamge Icon -->
 
           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
             <li class="dropdown-header">
-              <h6>{{ Full_Name }}</h6>
-              <span>{{ Role }}</span>
+              <h6>Kevin Anderson</h6>
+              <span>Web Designer</span>
             </li>
             <li>
               <hr class="dropdown-divider">
             </li>
 
             <li>
-              <a class="dropdown-item d-flex align-items-center" href="../../users-profile.html">
+              <a class="dropdown-item d-flex align-items-center" href="./users-profile.html">
                 <i class="bi bi-person"></i>
                 <span>My Profile</span>
               </a>
@@ -57,7 +57,7 @@
             </li>
 
             <li>
-              <a class="dropdown-item d-flex align-items-center" href="../../users-profile.html">
+              <a class="dropdown-item d-flex align-items-center" href="./users-profile.html">
                 <i class="bi bi-gear"></i>
                 <span>Account Settings</span>
               </a>
@@ -72,7 +72,7 @@
             </li>
 
             <li>
-              <a class="dropdown-item d-flex align-items-center" href="{% url 'logout' %}">
+              <a class="dropdown-item d-flex align-items-center" href="../../login.html">
                 <i class="bi bi-box-arrow-right"></i>
                 <span>Sign Out</span>
               </a>
@@ -93,7 +93,7 @@
       <li class="nav-heading">Pages</li>
 
       <li class="nav-item">
-        <a class="nav-link" href="./admin-home.html">
+        <a class="nav-link collapsed" href="./admin-home.html">
           <i class="bi bi-grid"></i>
           <span>Dashboard</span>
         </a>
@@ -112,23 +112,23 @@
       </li><!-- End Upload Image Nav -->
       <li class="nav-item">
         <a class="nav-link collapsed" href="./schedule.html">
-          <i class="bi bi-calendar"></i>
+          <i class="bi bi-card-image"></i>
           <span>Schedule</span>
         </a>
       </li><!-- End Schedule Nav -->
-
-      
+    </ul>
 
   </aside><!-- End Sidebar-->
 
   <main id="main" class="main">
 
     <div class="pagetitle">
-      <h1>Employees</h1>
+      <h1>Employee ID</h1>
       <nav>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="{% url 'sys_admin_home' %}">Home</a></li>
-          <li class="breadcrumb-item active">Employees</li>
+          <li class="breadcrumb-item"><a href="./admin-home.html">Home</a></li>
+          <li class="breadcrumb-item"><a href="./employee-upload.html">Upload Image</a></li>
+          <li class="breadcrumb-item active">Employee ID</li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
@@ -137,44 +137,22 @@
       <div class="row">
         <div class="col-lg-12">
 
-          <div class="card">
-            <div class="card-body ">
-              <div class="col-lg-12 align-items-center justify-content-center card-title">
-                <h5 class=" float-start">Employees</h5>
-                <a href="{% url 'sys_admin_create_user' %}" class="btn btn-primary float-end">Create Employee</a>
+          
+          <form>
+            <div class="upload__box">
+              <div class="upload__btn-box">
+                <label class="upload__btn">
+                  <p>Upload images</p>
+                  <input type="file" multiple="" data-max_length="20" class="upload__inputfile">
+                </label>
               </div>
-              <!-- Table with hoverable rows -->
-              <br>
-              <br>
-              <table class="table table-hover">
-                
-                <thead>
-                  <tr>
-                    <th scope="col">Employee ID</th>
-                    <th scope="col">Full Name</th>
-                    <th scope="col">E-mail</th>
-                    <th scope="col">Phone No.</th>
-                    <th scope="col"><i class="fa fa-edit"></i> Edit</th>
-                    <th scope="col">Delete</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {% for employee in Employees %}
-                  <tr>
-                    <th scope="row">{{ employee.Employee_ID }}</th>
-                    <td>{{ employee.Full_Name }}</td>
-                    <td>{{ employee.Email_Address }}</td>
-                    <td>{{ employee.Phone_Number }}</td>
-                    <td><a href="#">Edit</a></td>
-                    <td><a href="delete/{{ employee.Employee_ID }}" onclick="return confirm('Are you sure you want to delete this?')">Delete</a></td>
-                  </tr>
-                  {% endfor %}
-                </tbody>
-              </table>
-              <!-- End Table with hoverable rows -->
-
+              <div class="upload__img-wrap"></div>
             </div>
-          </div>
+            <div class="text-center">
+              <button type="submit" class="btn btn-primary float-start">Upload</button>
+            </div>
+          </form>
+            
 
         </div>
       </div>
