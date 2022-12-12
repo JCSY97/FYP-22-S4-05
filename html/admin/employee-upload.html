@@ -132,13 +132,13 @@
         </a>
       </li><!-- End Dashboard Nav -->
       <li class="nav-item">
-        <a class="nav-link " href="./employees.html">
+        <a class="nav-link collapsed" href="./employees.html">
           <i class="bi bi-person"></i>
           <span>Employees</span>
         </a>
       </li><!-- End employee Nav -->
       <li class="nav-item">
-        <a class="nav-link collapsed" href="./employee-upload.html">
+        <a class="nav-link " href="./employee-upload.html">
           <i class="bi bi-card-image"></i>
           <span>Upload Image</span>
         </a>
@@ -150,11 +150,11 @@
   <main id="main" class="main">
 
     <div class="pagetitle">
-      <h1>Employees</h1>
+      <h1>Upload Image</h1>
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="./admin-home.html">Home</a></li>
-          <li class="breadcrumb-item active">Emplyees</li>
+          <li class="breadcrumb-item active">Upload Image</li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
@@ -166,7 +166,7 @@
           <div class="card recent-sales overflow-auto">
 
             <div class="card-body">
-              <h5 class="card-title">Employees</h5>
+              <h5 class="card-title">Upload Image</h5>
 
               <table class="table table-borderless datatable">
                 <thead>
@@ -175,38 +175,44 @@
                     <th scope="col">Name</th>
                     <th scope="col">Position</th>
                     <th scope="col">Start Date</th>
+                    <th scope="col">Status</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr onclick="document.location = './edit-user.html'">
+                  <tr onclick="document.location = './upload-img.html'">
                     <th scope="row">1</th>
                     <td>Brandon Jacob</td>
                     <td>Designer</td>
                     <td>2016-05-25</td>
+                    <td><span class="badge bg-warning">pending</span></td>
                   </tr>
-                  <tr onclick="document.location = './edit-user.html'">
+                  <tr onclick="document.location = './upload-img.html'">
                     <th scope="row">2</th>
                     <td>Bridie Kessler</td>
                     <td>Developer</td>
                     <td>2014-12-05</td>
+                    <td><span class="badge bg-warning">pending</span></td>
                   </tr>
-                  <tr onclick="document.location = './edit-user.html'">
+                  <tr onclick="document.location = './upload-img.html'">
                     <th scope="row">3</th>
                     <td>Ashleigh Langosh</td>
                     <td>Finance</td>
                     <td>2011-08-12</td>
+                    <td><span class="badge bg-success">Completed</span></td>
                   </tr>
-                  <tr onclick="document.location = './edit-user.html'">
+                  <tr onclick="document.location = './upload-img.html'">
                     <th scope="row">4</th>
                     <td>Angus Grady</td>
                     <td>HR</td>
                     <td>2012-06-11</td>
+                    <td><span class="badge bg-success">Completed</span></td>
                   </tr>
-                  <tr onclick="document.location = './edit-user.html'">
+                  <tr onclick="document.location = './upload-img.html'">
                     <th scope="row">5</th>
                     <td>Raheem Lehner</td>
                     <td>Dynamic Division Officer</td>
                     <td>2011-04-19</td>
+                    <td><span class="badge bg-warning">pending</span></td>
                   </tr>
                 </tbody>
               </table>
@@ -215,6 +221,7 @@
 
           </div>
 
+          
           
 
         </div>
