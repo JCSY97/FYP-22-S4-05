@@ -21,10 +21,13 @@ class Employee(models.Model):
 	Full_Name = models.CharField(max_length=100)
 	Phone_Number = models.CharField(max_length=100)
 	Email_Address = models.EmailField()
-	Role = models.ForeignKey(Role,on_delete=models.CASCADE)
-	Profile_Image = models.ImageField(upload_to=user_directory_path,null=True,blank=True)
+	Role = models.ForeignKey(Role, on_delete=models.CASCADE)
+	Profile_Image = models.ImageField(upload_to=user_directory_path, null=True, blank=True)
 	# change to password hashes later
 	Password = models.CharField(max_length=256)
+	Start_Date = models.DateField(auto_now_add=True)
+
+
 	#Salt = models.CharField(max_length=100)
 	def __str__(self):
 		return f'Employee {self.Employee_ID}'

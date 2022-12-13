@@ -1,6 +1,7 @@
 {% extends "index/base.html" %}
 {% load static %}
 {% block content %}
+
 <!-- ======= Header ======= -->
   <header id="header" class="header fixed-top d-flex align-items-center">
 
@@ -57,7 +58,7 @@
             </li>
 
             <li>
-              <a class="dropdown-item d-flex align-items-center" href="../../users-profile.html">
+              <a class="dropdown-item d-flex align-items-center" href="{% url 'sys_admin_user_profile' %}">
                 <i class="bi bi-gear"></i>
                 <span>Account Settings</span>
               </a>
@@ -93,25 +94,25 @@
       <li class="nav-heading">Pages</li>
 
       <li class="nav-item">
-        <a class="nav-link " href="./admin-home.html">
+        <a class="nav-link " href="{% url 'sys_admin_home' %}">
           <i class="bi bi-grid"></i>
           <span>Dashboard</span>
         </a>
       </li><!-- End Dashboard Nav -->
       <li class="nav-item">
-        <a class="nav-link collapsed" href="./employees.html">
+        <a class="nav-link collapsed" href="{% url 'sys_admin_view_employees' %}">
           <i class="bi bi-person"></i>
           <span>Employees</span>
         </a>
       </li><!-- End employee Nav -->
       <li class="nav-item">
-        <a class="nav-link collapsed" href="./employee-upload.html">
+        <a class="nav-link collapsed" href="#">
           <i class="bi bi-card-image"></i>
           <span>Upload Image</span>
         </a>
       </li><!-- End Upload Image Nav -->
       <li class="nav-item">
-        <a class="nav-link collapsed" href="./schedule.html">
+        <a class="nav-link collapsed" href="#">
           <i class="bi bi-calendar"></i>
           <span>Schedule</span>
         </a>
@@ -126,7 +127,7 @@
       <h1>Dashboard</h1>
       <nav>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="./admin-home.html">Home</a></li>
+          <li class="breadcrumb-item"><a href="{% url 'sys_admin_home' %}">Home</a></li>
           <li class="breadcrumb-item active">Dashboard</li>
         </ol>
       </nav>
@@ -212,21 +213,10 @@
             <div class="col-12">
               <div class="card recent-sales overflow-auto">
 
-                <div class="filter">
-                  <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                    <li class="dropdown-header text-start">
-                      <h6>Filter</h6>
-                    </li>
-
-                    <li><a class="dropdown-item" href="#">Today</a></li>
-                    <li><a class="dropdown-item" href="#">This Month</a></li>
-                    <li><a class="dropdown-item" href="#">This Year</a></li>
-                  </ul>
-                </div>
+                
 
                 <div class="card-body">
-                  <h5 class="card-title">Recent Sales <span>| Today</span></h5>
+                  <h5 class="card-title">Recent Status</h5>
 
                   <table class="table table-borderless datatable">
                     <thead>
@@ -289,19 +279,7 @@
 
           <!-- Recent Activity -->
           <div class="card">
-            <div class="filter">
-              <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-              <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                <li class="dropdown-header text-start">
-                  <h6>Filter</h6>
-                </li>
-
-                <li><a class="dropdown-item" href="#">Today</a></li>
-                <li><a class="dropdown-item" href="#">This Month</a></li>
-                <li><a class="dropdown-item" href="#">This Year</a></li>
-              </ul>
-            </div>
-
+            
             <div class="card-body">
               <h5 class="card-title">Schedule <span>| This week</span></h5>
 
@@ -378,6 +356,7 @@
 
   </main><!-- End #main -->
 
-  
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+{% block script %}
+{% endblock script %}
 {% endblock content %}
