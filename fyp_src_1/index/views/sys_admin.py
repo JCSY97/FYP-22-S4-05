@@ -85,14 +85,35 @@ def user_profile(request):
 	if 'Employee_ID' in request.session:
 		currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
 
-		context = {
-			'Employee_ID' : currentEmployee.Employee_ID,
-			'Full_Name' : currentEmployee.Full_Name,
-			'Role' : currentEmployee.Role.Role_Name,
-			'Email' : currentEmployee.Email_Address,
-			'Phone' : currentEmployee.Phone_Number,
-		}
-		return render(request, 'sys_admin/sys_admin_user_profile.html', context)
+		if request.method == 'POST':
+
+			if Role.objects.filter(Role_Name=request.POST.get('role_edit')) == 0:
+				messages.error(request, 'No such role')
+				return redirect('sys_admin_user_profile')
+
+
+			currentEmployee.Full_Name = request.POST.get('fullName_edit')
+			
+			Role_edit = Role.objects.get(Role_Name=request.POST.get('role_edit'))
+			currentEmployee.Role = Role_edit
+
+			currentEmployee.Phone_Number = request.POST.get('phone_edit')
+			currentEmployee.Email_Address = request.POST.get('email_edit')
+
+
+			currentEmployee.save()
+
+			return redirect('sys_admin_user_profile')
+
+		else:
+			context = {
+				'Employee_ID' : currentEmployee.Employee_ID,
+				'Full_Name' : currentEmployee.Full_Name,
+				'Role' : currentEmployee.Role.Role_Name,
+				'Email' : currentEmployee.Email_Address,
+				'Phone' : currentEmployee.Phone_Number,
+			}
+			return render(request, 'sys_admin/sys_admin_user_profile.html', context)
 	else:
 		messages.error(request, 'Please login')
 		return redirect('login')

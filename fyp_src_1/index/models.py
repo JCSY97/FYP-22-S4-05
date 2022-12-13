@@ -26,11 +26,11 @@ class Employee(models.Model):
 	# change to password hashes later
 	Password = models.CharField(max_length=256)
 	Start_Date = models.DateField(auto_now_add=True)
-
-
 	#Salt = models.CharField(max_length=100)
+
 	def __str__(self):
 		return f'Employee {self.Employee_ID}'
+
 
 class Attendance(models.Model):
 	Attendance_id = models.BigAutoField(primary_key=True)
