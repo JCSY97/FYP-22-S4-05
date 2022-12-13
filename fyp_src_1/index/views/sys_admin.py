@@ -86,24 +86,42 @@ def user_profile(request):
 		currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
 
 		if request.method == 'POST':
+			# for edit user profile form
+			if request.POST.get('form_type') == 'editProfile':
 
-			if Role.objects.filter(Role_Name=request.POST.get('role_edit')) == 0:
-				messages.error(request, 'No such role')
+				if Role.objects.filter(Role_Name=request.POST.get('role_edit')) == 0:
+					messages.error(request, 'No such role')
+					return redirect('sys_admin_user_profile')
+
+
+				currentEmployee.Full_Name = request.POST.get('fullName_edit')
+				
+				Role_edit = Role.objects.get(Role_Name=request.POST.get('role_edit'))
+				currentEmployee.Role = Role_edit
+
+				currentEmployee.Phone_Number = request.POST.get('phone_edit')
+				currentEmployee.Email_Address = request.POST.get('email_edit')
+
+
+				currentEmployee.save()
+
 				return redirect('sys_admin_user_profile')
 
+			# for change password form	
+			elif request.POST.get('form_type') == 'changePassword':
 
-			currentEmployee.Full_Name = request.POST.get('fullName_edit')
-			
-			Role_edit = Role.objects.get(Role_Name=request.POST.get('role_edit'))
-			currentEmployee.Role = Role_edit
+				# make sure current password matches
+				if request.POST.get('password') == currentEmployee.Password:
+					currentEmployee.Password = request.POST.get('newpassword')
+					currentEmployee.save()
 
-			currentEmployee.Phone_Number = request.POST.get('phone_edit')
-			currentEmployee.Email_Address = request.POST.get('email_edit')
+					messages.info(request, 'Your password has been changed')
+					return redirect('sys_admin_user_profile')
 
+				else:
+					messages.error(request, 'Your current password does not match')
+					return redirect('sys_admin_user_profile')
 
-			currentEmployee.save()
-
-			return redirect('sys_admin_user_profile')
 
 		else:
 			context = {
