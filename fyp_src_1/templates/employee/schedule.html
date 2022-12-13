@@ -1,0 +1,240 @@
+{% extends "index/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+  <!-- ======= Header ======= -->
+  <header id="header" class="header fixed-top d-flex align-items-center">
+
+    <div class="d-flex align-items-center justify-content-between">
+      <a href="./employee-home.html" class="logo d-flex align-items-center">
+        <img src="../../assets/img/logo.png" alt="">
+        <span class="d-none d-lg-block">FYP-22-S4-05</span>
+      </a>
+      <i class="bi bi-list toggle-sidebar-btn"></i>
+    </div><!-- End Logo -->
+
+    <div class="search-bar">
+      <form class="search-form d-flex align-items-center" method="POST" action="#">
+        <input type="text" name="query" placeholder="Search" title="Enter search keyword">
+        <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+      </form>
+    </div><!-- End Search Bar -->
+
+    <nav class="header-nav ms-auto">
+      <ul class="d-flex align-items-center">
+
+        <li class="nav-item d-block d-lg-none">
+          <a class="nav-link nav-icon search-bar-toggle " href="#">
+            <i class="bi bi-search"></i>
+          </a>
+        </li><!-- End Search Icon-->
+
+        
+
+        <li class="nav-item dropdown pe-3">
+
+          <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+            <img src="../../assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
+            <span class="d-none d-md-block dropdown-toggle ps-2">{{Full_Name}}</span>
+          </a><!-- End Profile Iamge Icon -->
+
+          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+            <li class="dropdown-header">
+              <h6>{{ Full_Name }}</h6>
+              <span>{{ Position }}</span>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li>
+              <a class="dropdown-item d-flex align-items-center" href="{% url 'Profile' %}">
+                <i class="bi bi-person"></i>
+                <span>My Profile</span>
+              </a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li>
+              <a class="dropdown-item d-flex align-items-center" href="{% url 'Profile' %}">
+                <i class="bi bi-gear"></i>
+                <span>Account Settings</span>
+              </a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+           
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li>
+              <a class="dropdown-item d-flex align-items-center" href="{% url 'logout' %}">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Sign Out</span>
+              </a>
+            </li>
+
+          </ul><!-- End Profile Dropdown Items -->
+        </li><!-- End Profile Nav -->
+
+      </ul>
+    </nav><!-- End Icons Navigation -->
+
+  </header><!-- End Header -->
+
+  <!-- ======= Sidebar ======= -->
+  <aside id="sidebar" class="sidebar">
+
+    <ul class="sidebar-nav" id="sidebar-nav">
+      <li class="nav-heading">Pages</li>
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'Home' %}">
+          <i class="bi bi-grid"></i>
+          <span>Dashboard</span>
+        </a>
+      </li><!-- End Dashboard Nav -->
+      <li class="nav-item">
+        <a class="nav-link " href="{% url 'Employee_schedule' %}">
+          <i class="bi bi-calendar"></i>
+          <span>Schedule</span>
+        </a>
+      </li><!-- End Upload Image Nav -->
+
+      
+
+  </aside><!-- End Sidebar-->
+
+  <main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1>Schedule</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url 'Home' %}">Home</a></li>
+          <li class="breadcrumb-item active">Schedule</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section profile">
+      <div class="row">
+        
+
+        <div class="col-xl-12">
+
+          <div class="card">
+            <div class="card-body pt-3">
+              
+              <div class="ui container">
+
+                <br/>
+                <div class="ui container">
+                  <div class="ui grid">
+                    <div class="ui sixteen column">
+                      <div id="calendar"></div>
+                    </div>
+                  </div>
+                </div>
+                
+                </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  
+
+  </main><!-- End #main -->
+
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+
+{% block script %}
+
+
+
+  <script type="text/javascript">
+   
+    $(document).ready(function() {
+      
+      $('#calendar').fullCalendar({
+        header: {
+          left: 'prev,next today',
+          center: 'title',
+          right: 'month,basicWeek,basicDay'
+        },
+        defaultDate: moment().format("YYYY-MM-DD"),
+        navLinks: true, // can click day/week names to navigate views
+        editable: false,
+        eventLimit: true, // allow "more" link when too many events
+        events: [
+          {
+            title: 'All Day Event',
+            start: '2022-12-01'
+          },
+          {
+            title: 'Long Event',
+            start: '2022-12-07',
+            end: '2022-12-10'
+          },
+          {
+            id: 999,
+            title: 'Clock In',
+            start: '2022-12-09T09:00:00'
+          },
+          {
+            id: 999,
+            title: 'Repeating Event',
+            start: '2022-12-16T16:00:00'
+          },
+          {
+            title: 'Conference',
+            start: '2022-12-11',
+            end: '2022-12-13'
+          },
+          {
+            title: 'Meeting',
+            start: '2022-12-12T10:30:00',
+            end: '2022-12-12T12:30:00'
+          },
+          {
+            title: 'Lunch',
+            start: '2022-12-12T12:00:00'
+          },
+          {
+            title: 'Meeting',
+            start: '2022-12-12T14:30:00'
+          },
+          {
+            title: 'Happy Hour',
+            start: '2022-12-12'
+          },
+          {
+            title: 'Dinner',
+            start: '2022-12-12T20:00:00'
+          },
+          {
+            title: 'Birthday Party',
+            start: '2022-12-13T07:00:00'
+          },
+          {
+            title: 'Click for Google',
+            url: 'https://google.com/',
+            start: '2022-12-28'
+          }
+        ]
+      });
+      
+    });
+  </script>
+{% endblock script %}
+{% endblock content %}

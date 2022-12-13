@@ -94,11 +94,17 @@
       <li class="nav-heading">Pages</li>
 
       <li class="nav-item">
-        <a class="nav-link " href="./employee-home.html">
+        <a class="nav-link " href="{% url 'Home' %}">
           <i class="bi bi-grid"></i>
           <span>Dashboard</span>
         </a>
       </li><!-- End Dashboard Nav -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'Employee_schedule' %}">
+          <i class="bi bi-calendar"></i>
+          <span>Schedule</span>
+        </a>
+      </li><!-- End Upload Image Nav -->
 
       
 
@@ -110,7 +116,7 @@
       <h1>Dashboard</h1>
       <nav>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href=" {% url 'Home' %}employee-home.html">Home</a></li>
+          <li class="breadcrumb-item"><a href=" {% url 'Home' %}">Home</a></li>
           <li class="breadcrumb-item active">Dashboard</li>
         </ol>
       </nav>

@@ -19,6 +19,15 @@ def Employee_home(request):
 		messages.error(request, 'Please login first')
 		return redirect('login')
 
+def Employee_schedule(request):
+	if 'Employee_ID' in request.session:
+		currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
+		context = {
+		    'Employee_ID' : currentEmployee.Employee_ID,
+			'Full_Name' : currentEmployee.Full_Name,
+		}
+
+		return render(request, 'employee/schedule.html')
 
 
 def logout(request):
