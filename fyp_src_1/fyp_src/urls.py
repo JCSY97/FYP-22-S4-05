@@ -35,4 +35,5 @@ urlpatterns = [
     path('users_profile/',index.viewProfile, name='Profile'),
     path('users_profile/edit/<int:Editempid>/',index.UpdateProfile, name='EditProfile'),
     path('employee/schedule', employees.Employee_schedule, name='Employee_schedule'),
+    path('check_in/', index.Check_In, name='Check_in'),
 ]

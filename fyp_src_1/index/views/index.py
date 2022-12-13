@@ -9,6 +9,8 @@ from . import form
 def index_home(request):
 	return render(request, 'index/index.html')
 
+def Check_In(request):
+	return render(request, 'index/camera.html')
 
 def index_login(request):
 
