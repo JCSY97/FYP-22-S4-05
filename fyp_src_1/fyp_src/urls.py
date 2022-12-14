@@ -30,6 +30,7 @@ urlpatterns = [
     path('sys_admin/create_user/', sys_admin.sys_admin_create_user, name='sys_admin_create_user'),
     path('sys_admin/user_profile/', sys_admin.user_profile, name='sys_admin_user_profile'),
     path('sys_admin/schedule/', sys_admin.schedule, name='sys_admin_schedule'),
+    path('sys_admin/upload_img', sys_admin.upload_img, name='sys_admin_upload_img'),
     path('HR/home/', HR.HR_home, name='HR_home'),
 #   path('logout/', HR.logout, name='HR_logout'),
     path('employee/employee_home',employees.Employee_home, name='Home'),

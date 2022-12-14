@@ -141,6 +141,9 @@ def schedule(request):
 
 	return render(request, 'sys_admin/sys_admin_schedule.html')
 
+def upload_img(request):
+	return render(request, 'sys_admin/sys_admin_upload_img.html')
+
 
 def logout(request):
 	request.session.flush()
