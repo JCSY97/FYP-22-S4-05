@@ -137,6 +137,11 @@ def user_profile(request):
 		return redirect('login')
 
 
+def schedule(request):
+
+	return render(request, 'sys_admin/sys_admin_schedule.html')
+
+
 def logout(request):
 	request.session.flush()
 	messages.info(request, 'You have been logged out')

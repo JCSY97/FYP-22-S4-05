@@ -1,0 +1,134 @@
+{% extends "index/base.html" %}
+{% load static %}
+{% block content %}
+
+{% include 'sys_admin/sys_admin_base.html'%}
+<main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1>Schedule</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="./admin-home.html">Home</a></li>
+          <li class="breadcrumb-item active">Schedule</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section profile">
+      <div class="row">
+        
+
+        <div class="col-xl-12">
+
+          <div class="card">
+            <div class="card-body pt-3">
+              
+              <div class="ui container">
+
+                <br/>
+                <div class="ui container">
+                  <div class="ui grid">
+                    <div class="ui sixteen column">
+                      <div id="calendar"></div>
+                    </div>
+                  </div>
+                </div>
+                
+                </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  
+
+  </main><!-- End #main -->
+
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+  <script type="text/javascript">
+   
+    $(document).ready(function() {
+      
+      $('#calendar').fullCalendar({
+        header: {
+          left: 'prev,next today',
+          center: 'title',
+          right: 'month,basicWeek,basicDay'
+        },
+        defaultDate: moment().format("YYYY-MM-DD"),
+        navLinks: true, // can click day/week names to navigate views
+        editable: false,
+        eventLimit: true, // allow "more" link when too many events
+        events: [
+          {
+            title: 'All Day Event',
+            start: '2022-12-01'
+          },
+          {
+            title: 'Long Event',
+            start: '2022-12-07',
+            end: '2022-12-10'
+          },
+          {
+            id: 999,
+            title: 'Clock In',
+            start: '2022-12-09T09:00:00'
+          },
+          {
+            id: 999,
+            title: 'Repeating Event',
+            start: '2022-12-16T16:00:00'
+          },
+          {
+            title: 'Conference',
+            start: '2022-12-11',
+            end: '2022-12-13'
+          },
+          {
+            title: 'Meeting',
+            start: '2022-12-12T10:30:00',
+            end: '2022-12-12T12:30:00'
+          },
+          {
+            title: 'Lunch',
+            start: '2022-12-12T12:00:00'
+          },
+          {
+            title: 'Meeting',
+            start: '2022-12-12T14:30:00'
+          },
+          {
+            title: 'Happy Hour',
+            start: '2022-12-12'
+          },
+          {
+            title: 'Dinner',
+            start: '2022-12-12T20:00:00'
+          },
+          {
+            title: 'Birthday Party',
+            start: '2022-12-13T07:00:00'
+          },
+          {
+            title: 'Click for Google',
+            url: 'https://google.com/',
+            start: '2022-12-28'
+          }
+        ]
+      });
+      
+    });
+  </script>
+
+
+{% block script %}
+{% endblock script %}
+{% endblock content %}
+
+
+
+
