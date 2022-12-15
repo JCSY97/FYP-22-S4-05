@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Edit User</title>
+  <title>View employee schedule</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -25,6 +25,7 @@
   <link href="../../assets/vendor/quill/quill.bubble.css" rel="stylesheet">
   <link href="../../assets/vendor/remixicon/remixicon.css" rel="stylesheet">
   <link href="../../assets/vendor/simple-datatables/style.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
 
   <!-- Template Main CSS File -->
   <link href="../../assets/css/style.css" rel="stylesheet">
@@ -66,7 +67,7 @@
 
           <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
             <img src="../../assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
-            <span class="d-none d-md-block dropdown-toggle ps-2">James Chen</span>
+            <span class="d-none d-md-block dropdown-toggle ps-2">K. Anderson</span>
           </a><!-- End Profile Iamge Icon -->
 
           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
@@ -141,107 +142,87 @@
           <i class="bi bi-calendar"></i>
           <span>Schedule</span>
         </a>
-      </li><!-- End Schedule Nav -->
-
-      
+      </li><!-- End Upload Image Nav -->
+    </ul>
 
   </aside><!-- End Sidebar-->
 
   <main id="main" class="main">
 
     <div class="pagetitle">
-      <h1>User Profile</h1>
+      <h1>View Shedule for Employee name</h1>
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="./hr-home.html">Home</a></li>
-          <li class="breadcrumb-item"><a href="./employees.html">Employees</a></li>
-          <li class="breadcrumb-item active">Profile</li>
+          <li class="breadcrumb-item ">Emplyees</li>
+          <li class="breadcrumb-item"><a href="./employees-profile.html">Employee ID</a></li>
+          <li class="breadcrumb-item active">View Schedule</li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
 
-    <section class="section profile">
+    <section class="section">
       <div class="row">
-        <div class="col-xl-4">
+        <div class="col-lg-12">
 
-          <div class="card">
-            <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
+          <div class="card recent-sales overflow-auto">
 
-              <img src="../../assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
-              <h2>Kevin Anderson</h2>
-              <h3>Web Designer</h3>
-              
+            <div class="card-body">
+              <div class="col-lg-12 align-items-center justify-content-center card-title">
+                <h5 class="float-start"><b>View Shedule for Employee name</b></h5>
+                <br>
+              </div>
+
+              <table class="table table-borderless datatable">
+                <thead>
+                  <tr>
+                    <th scope="col">Date</th>
+                    <th scope="col">Clock In</th>
+                    <th scope="col">lock Out</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr onclick="document.location = './employee-edit-schedule.html'">
+                    
+                    <td>2016-05-25</td>
+                    <td>09:00</td>
+                    <td>17:00</td>
+                  </tr>
+                  <tr onclick="document.location = './employee-edit-schedule.html'">
+                    <td>2016-05-26</td>
+                    <td>09:00</td>
+                    <td>17:00</td>
+                  </tr>
+                  <tr onclick="document.location = './employee-edit-schedule.html'">
+                    <td>2016-05-27</td>
+                    <td>09:00</td>
+                    <td>17:00</td>
+                  </tr>
+                  <tr onclick="document.location = './employee-edit-schedule.html'">
+                    <td>2016-05-28</td>
+                    <td>09:00</td>
+                    <td>17:00</td>
+                  </tr>
+                  <tr onclick="document.location = './employee-edit-schedule.html'">
+                    <td>2016-05-29</td>
+                    <td>09:00</td>
+                    <td>17:00</td>
+                  </tr>
+                </tbody>
+              </table>
+              <a href="./employees-profile.html" class="btn btn-danger float-start">Back</a>
             </div>
-          </div>
-
-        </div>
-
-        <div class="col-xl-8">
-
-          <div class="card">
-            <div class="card-body pt-3">
-
-                <div class="tab-pane fade show active profile-overview" id="profile-overview">
-                  
-                  <h5 class="card-title">Profile Details</h5>
-
-                  <div class="row">
-                    <div class="col-lg-3 col-md-4 label">Employee ID</div>
-                    <div class="col-lg-9 col-md-8">0001</div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-lg-3 col-md-4 label ">Full Name</div>
-                    <div class="col-lg-9 col-md-8">Kevin Anderson</div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-lg-3 col-md-4 label">Company</div>
-                    <div class="col-lg-9 col-md-8">Lueilwitz, Wisoky and Leuschke</div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-lg-3 col-md-4 label">Positon</div>
-                    <div class="col-lg-9 col-md-8">Employee</div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-lg-3 col-md-4 label">Country</div>
-                    <div class="col-lg-9 col-md-8">USA</div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-lg-3 col-md-4 label">Phone</div>
-                    <div class="col-lg-9 col-md-8">(436) 486-3538 x29071</div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-lg-3 col-md-4 label">Email</div>
-                    <div class="col-lg-9 col-md-8">k.anderson@example.com</div>
-                  </div>
-
-                  <div class="col-lg-12">
-                    <a href="./employees.html" class="btn btn-danger">Back</a>
-                    <a href="./change-status.html" class="btn btn-primary">Change Status</a>
-                    <a href="./employees-view-schedule.html" class="btn btn-primary">View Schedule</a>
-                    <a href="./upload-schedule.html" class="btn btn-primary float-end">Upload Schedule</a>
-                  </div>
-                </div>
-
-                
-
-                
-
-              </div><!-- End Bordered Tabs -->
 
           </div>
+
+          
 
         </div>
       </div>
     </section>
 
   </main><!-- End #main -->
-
+  
 
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
