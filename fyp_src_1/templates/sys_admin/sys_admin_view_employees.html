@@ -37,15 +37,18 @@
                     <th scope="col">Name</th>
                     <th scope="col">Position</th>
                     <th scope="col">Start Date</th>
+                    <th scope="col"></th>
                   </tr>
                 </thead>
                 <tbody>
                   {% for employee in Employees %}
-                    <tr onclick="document.location = "#">
+                    <tr>
                       <th scope="row">{{ employee.Employee_ID }}</th>
                       <td>{{ employee.Full_Name }}</td>
                       <td>{{ employee.Role.Role_Name }}</td>
                       <td>{{ employee.Start_Date }}</td>
+                      <td><a href="edit/{{ employee.Employee_ID }}">Edit</a></td>
+                    </tr>
                   {% endfor %}
                 </tbody>
               </table>

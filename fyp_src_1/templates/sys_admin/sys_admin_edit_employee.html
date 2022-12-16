@@ -1,15 +1,16 @@
 {% extends "index/base.html" %}
 {% load static %}
 {% block content %}
-{% include 'sys_admin/sys_admin_base.html' %}
-  <main id="main" class="main">
+{% include 'sys_admin/sys_admin_base.html'%}
+
+<main id="main" class="main">
 
     <div class="pagetitle">
-      <h1>Profile</h1>
+      <h1>User Profile</h1>
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="{% url 'sys_admin_home' %}">Home</a></li>
-          <li class="breadcrumb-item">Users</li>
+          <li class="breadcrumb-item"><a href="{% url 'sys_admin_view_employees' %}">Employees</a></li>
           <li class="breadcrumb-item active">Profile</li>
         </ol>
       </nav>
@@ -22,9 +23,9 @@
           <div class="card">
             <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
 
-              <img src="{{ PFP }}" alt="Profile" class="rounded-circle">
-              <h2>{{ Full_Name }}</h2>
-              <h3>{{ Role }}</h3>
+              <img src="{{ edit_employee_pfp }}" alt="Profile" class="rounded-circle">
+              <h2>{{ edit_employee_full_name }}</h2>
+              <h3>{{ edit_employee_role }}</h3>
               
             </div>
           </div>
@@ -47,7 +48,7 @@
                 </li>
 
                 <li class="nav-item">
-                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-change-password">Change Password</button>
+                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-reset-password">Reset Password</button>
                 </li>
 
               </ul>
@@ -59,27 +60,27 @@
 
                   <div class="row">
                     <div class="col-lg-3 col-md-4 label">Employee ID</div>
-                    <div class="col-lg-9 col-md-8">{{ Employee_ID }}</div>
+                    <div class="col-lg-9 col-md-8">{{ edit_employee_id }}</div>
                   </div>
 
                   <div class="row">
                     <div class="col-lg-3 col-md-4 label ">Full Name</div>
-                    <div class="col-lg-9 col-md-8">{{ Full_Name }}</div>
+                    <div class="col-lg-9 col-md-8">{{ edit_employee_full_name }}</div>
                   </div>
 
                   <div class="row">
                     <div class="col-lg-3 col-md-4 label">Role</div>
-                    <div class="col-lg-9 col-md-8">{{ Role }}</div>
+                    <div class="col-lg-9 col-md-8">{{ edit_employee_role }}</div>
                   </div>
 
                   <div class="row">
                     <div class="col-lg-3 col-md-4 label">Phone</div>
-                    <div class="col-lg-9 col-md-8">{{ Phone }}</div>
+                    <div class="col-lg-9 col-md-8">{{ edit_employee_phone}}</div>
                   </div>
 
                   <div class="row">
                     <div class="col-lg-3 col-md-4 label">Email</div>
-                    <div class="col-lg-9 col-md-8">{{ Email }}</div>
+                    <div class="col-lg-9 col-md-8">{{ edit_employee_email }}</div>
                   </div>
 
                 </div>
@@ -89,12 +90,10 @@
                   <!-- Profile Edit Form -->
                   <form method="POST">
                     {% csrf_token %}
-                    <!-- to differentiate the form -->
-                    <input type="hidden" name="form_type" value="editProfile">
                     <div class="row mb-3">
                       <label for="profileImage" class="col-md-4 col-lg-3 col-form-label">Profile Image</label>
                       <div class="col-md-8 col-lg-9">
-                        <img src="#" alt="Profile">
+                        <img src="../../assets/img/profile-img.jpg" alt="Profile">
                         <div class="pt-2">
                           <a href="#" class="btn btn-primary btn-sm" title="Upload new profile image"><i class="bi bi-upload"></i></a>
                           <a href="#" class="btn btn-danger btn-sm" title="Remove my profile image"><i class="bi bi-trash"></i></a>
@@ -105,14 +104,14 @@
                     <div class="row mb-3">
                       <label for="company" class="col-md-4 col-lg-3 col-form-label">Employee ID</label>
                       <div class="col-md-8 col-lg-9">
-                        <input name="company" type="text" class="form-control" id="company" value="{{ Employee_ID }}" disabled>
+                        <input name="company" type="text" class="form-control" id="company" value="{{ edit_employee_id }}" disabled>
                       </div>
                     </div>
 
                     <div class="row mb-3">
                       <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Full Name</label>
                       <div class="col-md-8 col-lg-9">
-                        <input name="fullName_edit" type="text" class="form-control" id="fullName" value="{{ Full_Name }}">
+                        <input name="fullName" type="text" class="form-control" id="fullName" value="{{ edit_employee_full_name }}">
                       </div>
                     </div>
 
@@ -128,45 +127,41 @@
                     <div class="row mb-3">
                       <label for="Job" class="col-md-4 col-lg-3 col-form-label">Role</label>
                       <div class="col-md-8 col-lg-9">
-                        <input name="role_edit" type="text" class="form-control" id="Job" value="{{ Role }}">
+                        <select class="form-select" name="newRole">
+                          <option selected disabled>Select the role of employee</option>
+                          <option value="Admin">Admin</option>
+                          <option value="Hr">HR</option>
+                          <option value="Employee" selected="selected">Employee</option>
+                        </select>
                       </div>
                     </div>
 
                     <div class="row mb-3">
                       <label for="Phone" class="col-md-4 col-lg-3 col-form-label">Phone</label>
                       <div class="col-md-8 col-lg-9">
-                        <input name="phone_edit" type="text" class="form-control" id="Phone" value="{{ Phone }}">
+                        <input name="phone" type="text" class="form-control" id="Phone" value="{{ edit_employee_phone }}">
                       </div>
                     </div>
 
                     <div class="row mb-3">
                       <label for="Email" class="col-md-4 col-lg-3 col-form-label">Email</label>
                       <div class="col-md-8 col-lg-9">
-                        <input name="email_edit" type="email" class="form-control" id="Email" value="{{ Email }}">
+                        <input name="email" type="email" class="form-control" id="Email" value="{{ edit_employee_email }}">
                       </div>
                     </div>
 
                     <div class="text-center">
-                      <button type="submit" class="btn btn-primary">Save Changes</button>
+                      <button type="button" class="btn btn-danger float-start">Delete Employee</button>
+                      <button type="submit" class="btn btn-primary float-end">Save Changes</button>
                     </div>
                   </form><!-- End Profile Edit Form -->
 
                 </div>
 
-                <div class="tab-pane fade pt-3" id="profile-change-password">
-
+                <div class="tab-pane fade pt-3" id="profile-reset-password">
                   <!-- Change Password Form -->
-                  <form method="POST">
-                    {% csrf_token %}
-                    <!-- to differentiate the form -->
-                    <input type="hidden" name="form_type" value="changePassword">
+                  <form>
 
-                    <div class="row mb-3">
-                      <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">Current Password</label>
-                      <div class="col-md-8 col-lg-9">
-                        <input name="password" type="password" class="form-control" id="currentPassword">
-                      </div>
-                    </div>
 
                     <div class="row mb-3">
                       <label for="newPassword" class="col-md-4 col-lg-3 col-form-label">New Password</label>
@@ -186,14 +181,13 @@
                       <button type="submit" class="btn btn-primary">Change Password</button>
                     </div>
                   </form><!-- End Change Password Form -->
+
                 </div>
+
               </div><!-- End Bordered Tabs -->
 
             </div>
           </div>
-          {% for message in messages%}
-            <h5>{{ message }}</h5>
-          {% endfor %}
 
         </div>
       </div>
@@ -204,6 +198,8 @@
 
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
+
 {% block script %}
 {% endblock script %}
 {% endblock content %}
+

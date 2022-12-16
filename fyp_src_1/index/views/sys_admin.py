@@ -144,6 +144,42 @@ def user_profile(request):
 		return redirect('login')
 
 
+
+def edit_employee(request, edit_employee_id):
+	if 'Employee_ID' in request.session:
+		currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
+		if request.method == 'POST':
+			edit_employee = Employee.objects.get(Employee_ID=edit_employee_id)
+
+			edit_employee.Full_Name = request.POST.get('fullName')
+			edit_employee.Role = Role.objects.get(Role_Name=request.POST.get('newRole'))
+			edit_employee.Phone_Number = request.POST.get('phone')
+			edit_employee.Email_Address = request.POST.get('email')
+
+			edit_emplyee.save()
+
+			return redirect('/sys_admin/view_employees/edit/' + str(edit_employee_id))
+
+		else:
+			if Employee.objects.filter(Employee_ID=edit_employee_id).count() == 1:
+				edit_employee = Employee.objects.get(Employee_ID=edit_employee_id)
+				context = {
+					'edit_employee_id' : edit_employee_id,
+					'edit_employee_full_name' : edit_employee.Full_Name,
+					'edit_employee_role' : edit_employee.Role,
+					'edit_employee_phone' : edit_employee.Phone_Number,
+					'edit_employee_email' : edit_employee.Email_Address,
+					'edit_employee_pfp' : edit_employee.Profile_Image.url,
+					'Full_Name' : currentEmployee.Full_Name,
+					'Role' : currentEmployee.Role.Role_Name,
+					'PFP' : currentEmployee.Profile_Image.url,
+				}
+
+			return render(request, 'sys_admin/sys_admin_edit_employee.html', context)
+	else:
+		messages.error(request, 'Please login')
+		return redirect('login')
+
 def schedule(request):
 
 	return render(request, 'sys_admin/sys_admin_schedule.html')
