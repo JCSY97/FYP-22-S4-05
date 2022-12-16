@@ -9,6 +9,7 @@ def sys_admin_home(request):
 		context = {
 			'Employee_ID' : currentEmployee.Employee_ID,
 			'Full_Name' : currentEmployee.Full_Name,
+			'PFP' : currentEmployee.Profile_Image.url,
 		}
 
 		return render(request, 'sys_admin/sys_admin_home.html', context)
@@ -27,6 +28,7 @@ def sys_admin_view_employees(request):
 		'Employee_ID' : currentEmployee.Employee_ID,
 		'Full_Name' : currentEmployee.Full_Name,
 		'Role' : currentEmployee.Role.Role_Name,
+		'PFP' : currentEmployee.Profile_Image.url,
 		'Employees' : allEmployees,
 	}
 
@@ -130,6 +132,7 @@ def user_profile(request):
 				'Role' : currentEmployee.Role.Role_Name,
 				'Email' : currentEmployee.Email_Address,
 				'Phone' : currentEmployee.Phone_Number,
+				'PFP' : currentEmployee.Profile_Image.url,
 			}
 			return render(request, 'sys_admin/sys_admin_user_profile.html', context)
 	else:
