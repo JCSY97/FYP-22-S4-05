@@ -49,21 +49,25 @@ def sys_admin_create_user(request):
 		New_Password_2 = request.POST.get('password2')
 
 
-		# rmb to do profilepic later
-		#profilepic
 
 		#if employee_ID is taken
 		if Employee.objects.filter(Employee_ID=New_Employee_ID).exists():
 			messages.error(request, 'There already exist such Employee ID')
 			return redirect('sys_admin_create_user')
 
-		if New_Password != New_Password_2:
+		elif New_Password != New_Password_2:
 			messages.error(request, 'Your passwords does not match')
 			return redirect('sys_admin_create_user')
 		else:
 			New_Role = Role.objects.get(Role_Name=New_Role_Name)
 
-			new_employee = Employee(Employee_ID=New_Employee_ID, Full_Name=New_Employee_Full_Name, Phone_Number=New_Phone_Number,
+			# if have PFP
+			if request.FILES['profilepic']:
+				New_PFP = request.FILES['profilepic']
+				new_employee = Employee(Employee_ID=New_Employee_ID, Full_Name=New_Employee_Full_Name, Phone_Number=New_Phone_Number,
+									 Email_Address=New_Email_Address, Role=New_Role, Password=New_Password, Profile_Image=New_PFP)
+			else:
+				new_employee = Employee(Employee_ID=New_Employee_ID, Full_Name=New_Employee_Full_Name, Phone_Number=New_Phone_Number,
 									 Email_Address=New_Email_Address, Role=New_Role, Password=New_Password)
 			new_employee.save()
 			messages.success(request, 'New account has been created')

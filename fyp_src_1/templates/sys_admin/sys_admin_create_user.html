@@ -21,7 +21,7 @@
                     {% endfor %}
                   </div>
                   <br>
-                  <form class="row g-3 needs-validation" method="POST">
+                  <form class="row g-3 needs-validation" method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="col-6">
                       <label for="yourName" class="form-label">Full Name</label>
@@ -88,7 +88,7 @@
                     <div class="col-6">
                       <label for="yourProfile" class="form-label">Profile Picture</label>
                       <div class="input-group has-validation">
-                        <input class="form-control" type="file" id="yourProfile" name="profilepic">
+                        <input class="form-control" type="file" id="yourProfile" name="profilepic" accept="image/*">
                         <div class="invalid-feedback">Please upload an image.</div>
                       </div>
                     </div>
