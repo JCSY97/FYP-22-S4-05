@@ -4,7 +4,7 @@ from django.db import models
 # all models are to be created in index.models
 def user_directory_path(instance, filename): 
     name, ext = filename.split(".")
-    name = instance.Employee_ID + instance.section
+    name = instance.Employee_ID+"_"+ instance.section
     filename = name +'.'+ ext 
     return 'Users_images/{}'.format(filename)
 

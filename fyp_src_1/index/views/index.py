@@ -1,9 +1,13 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse,HttpResponseRedirect
+from django.http import HttpResponse,HttpResponseRedirect,StreamingHttpResponse
 from django.contrib import messages
 from django.urls import reverse
 from ..models import Employee
 from . import form
+from django.core.mail import EmailMessage
+from django.views.decorators import gzip
+import cv2
+import threading
 
 # Create your views here.
 def index_home(request):
@@ -79,3 +83,6 @@ def logout(request):
 	request.session.flush()
 	messages.info(request, 'You have been logged out')
 	return redirect('login')
+
+
+

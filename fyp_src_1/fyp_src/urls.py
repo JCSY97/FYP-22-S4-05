@@ -15,9 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from index.views import index,HR,sys_admin,employees
+from index.views import index,camera,HR,sys_admin,employees
 from django.conf.urls.static import static
 from django.conf import settings
+
+
 
 
 urlpatterns = [
@@ -35,7 +37,8 @@ urlpatterns = [
     path('sys_admin/schedule/', sys_admin.schedule, name='sys_admin_schedule'),
     path('sys_admin/upload_img/', sys_admin.upload_img, name='sys_admin_upload_img'),
     path('HR/home/', HR.HR_home, name='HR_home'),
-#   path('logout/', HR.logout, name='HR_logout'),
+    path('camera/', camera.index, name='camera'),
+    path('camera/feed', camera.video_feed, name='video_feed'),
     path('employee/employee_home',employees.Employee_home, name='Home'),
     path('users_profile/',index.viewProfile, name='Profile'),
     path('users_profile/edit/<int:Editempid>/',index.UpdateProfile, name='EditProfile'),

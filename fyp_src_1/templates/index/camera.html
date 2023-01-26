@@ -1,74 +1,10 @@
-{% extends "index/base.html" %}
-{% load static %}
-{% block content %}
-<style>
-  #videoElement {
-    width: 550px;
-    height: 415px;
-    background-color: #666;
-    transform: rotateY(180deg);
-  }
-  .boxborder{
-	width: 570px;
-	height: 435px;
-	border: 10px #333 solid;
-  }
-  .backbtn{
-    border-radius: 0;
-  }
-  .backbtn:hover{
-    border-bottom: 1px solid black;
-  }
-  </style>
-<body>
-
-  <main>
-    <div class="container">
-   
-      <a style="margin-top: 100px;" href="{% url 'index' %}" class="btn float-start backbtn"><i style="color: black;" class="fa fa-arrow-left"></i> back</a>
-      <section class="section register min-vh-100 d-flex flex-column justify-content-center py-4">
-        <div class="container">
-          
-          <div class="row justify-content-center">
-            
-            <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
-
-              <h1 style="width: 700px;text-align:center;font-weight:bold;">Please stay still for the system to recognise you</h1>
-              <br>
-
-              <div class=" boxborder">
-
-                <video autoplay="true" id="videoElement">
-
-                </video>
-              </div>
-
-
-            </div>
-          </div>
-        </div>
-
-      </section>
-
-    </div>
-  </main><!-- End #main -->
-
-  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
-{% block script %}
-  
-  <script>
-    var video = document.querySelector("#videoElement");
-
-    if (navigator.mediaDevices.getUserMedia) {
-      navigator.mediaDevices.getUserMedia({ video: true })
-        .then(function (stream) {
-          video.srcObject = stream;
-        })
-        .catch(function (err0r) {
-          console.log("Something went wrong!");
-        });
-    }
-  </script>
-
-{% endblock script %}
-{% endblock content %}
+<!DOCTYPE html>
+<html>
+  <head>
+  </head>
+  <body>
+    <h1>Hello</h1>
+    <img id="bg" src="{% url 'video_feed' %}" />
+      
+  </body>
+</html>
