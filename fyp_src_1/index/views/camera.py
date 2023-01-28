@@ -2,7 +2,10 @@ import cv2
 from django.http import HttpResponse , StreamingHttpResponse, request
 from django.shortcuts import render
 from flask import Flask, render_template,Response
+
+
 app = Flask(__name__)
+
 class VideoCamera(object):
     def __init__(self):
         # Using OpenCV to capture from device 0. If you have trouble capturing
