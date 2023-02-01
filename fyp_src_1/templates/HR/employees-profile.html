@@ -1,5 +1,5 @@
 {% extends "index/base.html" %}
-{% load crispy_forms_tags %}
+{% load static %}
 
 {% block content %}
   <!-- ======= Header ======= -->
@@ -149,7 +149,7 @@
 
           <div class="card">
             <div class="card-body pt-3">
-              {% for emp in Emp %}
+              {% for emp in EmployeesInfo %}
                 <div class="tab-pane fade show active profile-overview" id="profile-overview">
                   
                   <h5 class="card-title">Profile Details</h5>
@@ -213,6 +213,7 @@
 
 
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
 {% block script %}
 {% endblock script %}
 {% endblock content %}

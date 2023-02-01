@@ -39,6 +39,7 @@ urlpatterns = [
     path('HR/home/', HR.HR_home, name='HR_home'),
     path('HR/Profile/', HR.HR_Profile, name='HR_Profile'),
     path('HR/Employees/', HR.HR_Employee, name='EmployeesPage'),
+    path(r'^HR/EmployeesProfile$', HR.HR_EmpProfile, name='EmployeesProfile'),
     path('camera/', camera.index, name='camera'),
     path('camera/feed', camera.video_feed, name='video_feed'),
     path('check_in/', index.Check_In, name='Check_in'),

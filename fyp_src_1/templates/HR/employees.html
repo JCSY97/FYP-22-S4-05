@@ -150,15 +150,18 @@
                   </tr>
                 </thead>
                 {% for d in data  %}
+                
                 <tbody>
-                  <tr class="tr" value="">
+                  <tr class="tr" value="{{ d.Employee_ID}}" onclick='setGetParameter( "{{ d.Employee_ID}} ")'>
                     <th scope="row"> {{ forloop.counter }}</th>
                     <td>{{d.Full_Name}}</td>
                     <td>{{d.Position}}</td>
                     <td>{{d.Start_Date}}</td>
                   </tr>
                 </tbody>
+              
                 {% endfor %}
+              
               </table>
 
             </div>
@@ -178,6 +181,22 @@
 
 
 {% block script %}
+<script>
+//   $(".tr").click(function(){
+//    var a =$(this).attr("value");
+//    $.ajax({
+//     method:"POST",
+//     data:$(this).attr("value"),
+//     url : "{% url 'EmployeesProfile' %}",
+//     success: function(result){
+//         alert("Success");
+//       }
+//    })
+// });
 
+function setGetParameter(s){
+  window.location.href = "{% url 'EmployeesProfile' %}" + "?id="+s;
+}
+</script>
 {% endblock script %}
 {% endblock content %}

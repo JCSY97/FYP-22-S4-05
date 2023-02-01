@@ -61,5 +61,16 @@ def HR_Employee(request):
 	}
 	return render(request, 'HR/employees.html', context)
 
-	
 
+def HR_EmpProfile(request):
+	EmpId = request.GET.get('id')
+	ViewInfo = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
+	Myinfo = Employee.objects.filter(Employee_ID=EmpId)
+	context = {
+		'Employee_ID': ViewInfo.Employee_ID,
+		'Full_Name': ViewInfo.Full_Name,
+		'Role': ViewInfo.Role.Role_Name,
+		'EmployeesInfo': Myinfo,
+	}
+	return render(request, 'HR/employees-profile.html', context)
+	# return HttpResponse(EmpId)
