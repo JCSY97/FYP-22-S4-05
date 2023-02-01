@@ -41,26 +41,15 @@ class Attendance(models.Model):
 
 	InTime = models.CharField(max_length=256, null=True, blank=True)
 	OutTime = models.CharField(max_length=256,null=True, blank=True)
-
-
-	#InTime = models.DateTimeField(null=True,blank=True)
-	#OutTime = models.DateTimeField(null=True,blank=True)
-
-	status = models.IntegerField(default=0)
+	Status_text = (
+        ('0', 'Pending'),
+        ('1', 'Present'),
+        ('2', 'Absent'),
+    )
+	status = models.IntegerField(choices=Status_text,default=0)
 
 	def __str__(self):
 		return f'Employee_ID {self.Employee_ID}'
-
-
-
-	def status_text(self):
-	 	match self.status:
-	 		case 0: 
-	 			return "Pending"
-	 		case 1:
-	 			return "present"
-	 		case other:
-	 			return 'absent'
 
 
 	class Meta:
