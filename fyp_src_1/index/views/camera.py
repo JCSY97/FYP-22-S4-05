@@ -45,21 +45,18 @@ class VideoCamera(object):
 @app.route('/')
 def index(request):
     if (request.method == 'POST'):
-        print("TEST1!!!!!!!!!!!!")
         try:
             frame_ = request.POST.get('image')
             frame_=str(frame_)
             data=frame_.replace('data:image/jpeg;base64,','')
             data=data.replace(' ', '+')
-            print("testing lol")
             imgdata = base64.b64decode(data)
 
-            print("base64")
             filename = 'cameraTest/some_image.jpg' 
             with open(filename, 'wb') as f:
                 f.write(imgdata)
 
-            print("asdasdsa")
+            
 
         except:
             print('Error')
