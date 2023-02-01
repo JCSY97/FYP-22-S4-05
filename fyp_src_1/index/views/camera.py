@@ -43,6 +43,20 @@ class VideoCamera(object):
 
 @app.route('/')
 def index(request):
+    if (request.method == 'POST'):
+        try:
+            frame_ = request.POST.get('image')
+            frame_=str(frame_)
+            data=frame_.replace('data:image/jpeg;base64,','')
+            data=data.replace(' ', '+')
+            imgdata = base64.b64decode(data)
+            filename = 'cameraTest/some_image.jpg' 
+            with open(filename, 'wb') as f:
+                f.write(imgdata)
+        except:
+            print('Error')
+
+
     return render(request, 'index/camera.html')
 
 
@@ -60,3 +74,4 @@ def video_feed(request):
 
 if __name__ == 'main':
     app.run()
+
