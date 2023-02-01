@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'index.apps.IndexConfig',
     'crispy_forms',
+    'sslserver',
 ]
 
 MIDDLEWARE = [
