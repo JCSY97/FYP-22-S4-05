@@ -19,6 +19,7 @@ class Role(models.Model):
 class Employee(models.Model):
 	Employee_ID = models.IntegerField(primary_key=True)
 	Full_Name = models.CharField(max_length=100)
+	# Job_Title = models.CharField(max_length=100)
 	Phone_Number = models.CharField(max_length=100)
 	Email_Address = models.EmailField()
 	Role = models.ForeignKey(Role, on_delete=models.CASCADE)
@@ -43,26 +44,16 @@ class Attendance(models.Model):
 	InTime = models.CharField(max_length=256, null=True, blank=True)
 	OutTime = models.CharField(max_length=256,null=True, blank=True)
 
+	LOAN_STATUS = (
+		(0, 'Pending'),
+		(1, 'Present'),
+		(2, 'Absent'),
+	)
 
-	#InTime = models.DateTimeField(null=True,blank=True)
-	#OutTime = models.DateTimeField(null=True,blank=True)
-
-	status = models.IntegerField(default=0)
+	status = models.IntegerField(default=0,choices=LOAN_STATUS)
 
 	def __str__(self):
 		return f'Employee_ID {self.Employee_ID}'
-
-
-
-	def status_text(self):
-	 	match self.status:
-	 		case 0: 
-	 			return "Pending"
-	 		case 1:
-	 			return "present"
-	 		case other:
-	 			return 'absent'
-
 
 	class Meta:
 	 	db_table = 'Attendance'

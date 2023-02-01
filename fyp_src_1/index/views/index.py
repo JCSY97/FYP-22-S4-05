@@ -64,7 +64,7 @@ def viewProfile(request):
 			'Role' : ViewInfo.Role.Role_Name,
 			'EmployeesInfo' : Myinfo,
 		}
-		print(Myinfo)
+
 		return render(request, 'index/users_profile.html',context)
 
 
@@ -84,36 +84,36 @@ def UpdateProfile(request, Editempid):
 	return redirect('Home')
 
 
-def ChangePassword(request, Editempid):
-
-		UserID = Employee.objects.get(Employee_ID=Editempid)
-		if request.user.is_authenticated:
-			form = PasswordForm(request.POST or None)
-
-			old_password = request.POST.get("old_password")
-			new_password = request.POST.get("new_password")
-			re_new_password = request.POST.get("PasswordForm")
-			if request.POST.get("old_password"):
-
-				user = Employee.objects.get(Employee_ID=Editempid)
-
-				# User entered old password is checked against the password in the database below.
-				if user.check_password('{}'.format(old_password)) == False:
-					form.set_old_password_flag()
-
-			if form.is_valid():
-
-				user.set_password('{}'.format(new_password))
-				user.save()
-				update_session_auth_hash(request, user)
-
-				return redirect('ChangePassword')
-
-			else:
-				return render(request, 'users_profile.html', {"form": form})
-
-		else:
-			return redirect('login')
+# def ChangePassword(request, Editempid):
+#
+# 		UserID = Employee.objects.get(Employee_ID=Editempid)
+# 		if request.user.is_authenticated:
+# 			form = PasswordForm(request.POST or None)
+#
+# 			old_password = request.POST.get("old_password")
+# 			new_password = request.POST.get("new_password")
+# 			re_new_password = request.POST.get("PasswordForm")
+# 			if request.POST.get("old_password"):
+#
+# 				user = Employee.objects.get(Employee_ID=Editempid)
+#
+# 				# User entered old password is checked against the password in the database below.
+# 				if user.check_password('{}'.format(old_password)) == False:
+# 					form.set_old_password_flag()
+#
+# 			if form.is_valid():
+#
+# 				user.set_password('{}'.format(new_password))
+# 				user.save()
+# 				update_session_auth_hash(request, user)
+#
+# 				return redirect('ChangePassword')
+#
+# 			else:
+# 				return render(request, 'users_profile.html', {"form": form})
+#
+# 		else:
+# 			return redirect('login')
 
 def logout(request):
 	request.session.flush()
