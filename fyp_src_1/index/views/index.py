@@ -1,3 +1,4 @@
+from django.contrib.auth import update_session_auth_hash
 from django.shortcuts import render, redirect
 from django.http import HttpResponse,HttpResponseRedirect,StreamingHttpResponse
 from django.contrib import messages
@@ -8,6 +9,7 @@ from django.core.mail import EmailMessage
 from django.views.decorators import gzip
 import cv2
 import threading
+from .form import PasswordForm
 
 # Create your views here.
 def index_home(request):
@@ -54,7 +56,7 @@ def index_login(request):
 
 def viewProfile(request):
 		ViewInfo = Employee.objects.get(Employee_ID = request.session['Employee_ID'])
-		print(ViewInfo)
+
 		Myinfo = Employee.objects.filter(Employee_ID = request.session['Employee_ID'])
 		context = {
 			'Employee_ID' : ViewInfo.Employee_ID,
@@ -62,14 +64,16 @@ def viewProfile(request):
 			'Role' : ViewInfo.Role.Role_Name,
 			'EmployeesInfo' : Myinfo,
 		}
+		print(Myinfo)
 		return render(request, 'index/users_profile.html',context)
 
-def UpdateProfile(request,Editempid):
-	#EmpId = Employee.objects.get(Employee_ID = request.session['Employee_ID'])
-	#EmployeeId = Employee.objects.filter(Employee_ID = empid).first()
-	
+
+def UpdateProfile(request, Editempid):
+	# EmpId = Employee.objects.get(Employee_ID = request.session['Employee_ID'])
+	# EmployeeId = Employee.objects.filter(Employee_ID = empid).first()
+
 	if (request.method == 'POST'):
-		UpdateProfile =Employee.objects.get(Employee_ID = Editempid)
+		UpdateProfile = Employee.objects.get(Employee_ID=Editempid)
 		FullName = request.POST.get('fullName')
 		Phone = request.POST.get('phone')
 		Email = request.POST.get('email')
@@ -78,6 +82,38 @@ def UpdateProfile(request,Editempid):
 		UpdateProfile.Email_Address = Email
 		UpdateProfile.save()
 	return redirect('Home')
+
+
+def ChangePassword(request, Editempid):
+
+		UserID = Employee.objects.get(Employee_ID=Editempid)
+		if request.user.is_authenticated:
+			form = PasswordForm(request.POST or None)
+
+			old_password = request.POST.get("old_password")
+			new_password = request.POST.get("new_password")
+			re_new_password = request.POST.get("PasswordForm")
+			if request.POST.get("old_password"):
+
+				user = Employee.objects.get(Employee_ID=Editempid)
+
+				# User entered old password is checked against the password in the database below.
+				if user.check_password('{}'.format(old_password)) == False:
+					form.set_old_password_flag()
+
+			if form.is_valid():
+
+				user.set_password('{}'.format(new_password))
+				user.save()
+				update_session_auth_hash(request, user)
+
+				return redirect('ChangePassword')
+
+			else:
+				return render(request, 'users_profile.html', {"form": form})
+
+		else:
+			return redirect('login')
 
 def logout(request):
 	request.session.flush()

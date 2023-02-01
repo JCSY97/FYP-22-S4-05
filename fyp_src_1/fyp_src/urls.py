@@ -42,6 +42,7 @@ urlpatterns = [
     path('employee/employee_home',employees.Employee_home, name='Home'),
     path('users_profile/',index.viewProfile, name='Profile'),
     path('users_profile/edit/<int:Editempid>/',index.UpdateProfile, name='EditProfile'),
+    path('users_profile/Password/<int:Editempid>/',index.ChangePassword, name='ChangePassword'),
     path('employee/schedule', employees.Employee_schedule, name='Employee_schedule'),
     path('check_in/', index.Check_In, name='Check_in'),
 ]
