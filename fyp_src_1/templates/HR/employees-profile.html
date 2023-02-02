@@ -15,7 +15,6 @@
         </ol>
       </nav>
     </div><!-- End Page Title -->
-    {% for emp in EmployeesInfo %}
     <section class="section profile">
       <div class="row">
         <div class="col-xl-4">
@@ -23,9 +22,9 @@
           <div class="card">
             <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
 
-              <img src="../../assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
-              <h2>{{emp.Full_Name}}</h2>
-              <h3>Web Designer</h3>
+              <img src="{{ PFP }}" alt="Profile" class="rounded-circle">
+              <h2>{{ Full_Name }}</h2>
+              <h3>{{ Jon_Title }}</h3>
               
             </div>
           </div>
@@ -43,12 +42,12 @@
 
                   <div class="row">
                     <div class="col-lg-3 col-md-4 label">Employee ID</div>
-                    <div class="col-lg-9 col-md-8">{{emp.Employee_ID}}</div>
+                    <div class="col-lg-9 col-md-8">{{Employee_ID}}</div>
                   </div>
 
                   <div class="row">
                     <div class="col-lg-3 col-md-4 label ">Full Name</div>
-                    <div class="col-lg-9 col-md-8">{{emp.Full_Name}}</div>
+                    <div class="col-lg-9 col-md-8">{{Full_Name}}</div>
                   </div>
 
                   <div class="row">
@@ -58,7 +57,7 @@
 
                   <div class="row">
                     <div class="col-lg-3 col-md-4 label">Positon</div>
-                    <div class="col-lg-9 col-md-8">Employee</div>
+                    <div class="col-lg-9 col-md-8">{{Job_Title}}</div>
                   </div>
 
                   <div class="row">
@@ -68,19 +67,19 @@
 
                   <div class="row">
                     <div class="col-lg-3 col-md-4 label">Phone</div>
-                    <div class="col-lg-9 col-md-8">{{ emp.Phone_Number }}</div>
+                    <div class="col-lg-9 col-md-8">{{ Phone }}</div>
                   </div>
 
                   <div class="row">
                     <div class="col-lg-3 col-md-4 label">Email</div>
-                    <div class="col-lg-9 col-md-8">{{ emp.Email_Address }}</div>
+                    <div class="col-lg-9 col-md-8">{{ Email }}</div>
                   </div>
 
                   <div class="col-lg-12">
                     <a href="{% url 'EmployeesPage' %}" class="btn btn-danger">Back</a>
-                    <a href="./change-status.html" class="btn btn-primary">Change Status</a>
-                    <a href="./employees-view-schedule.html" class="btn btn-primary">View Schedule</a>
-                    <a href="./upload-schedule.html" class="btn btn-primary float-end">Upload Schedule</a>
+                    <a href="{% url 'EmployeeStatus' %}" class="btn btn-primary">Change Status</a>
+                    <a href="{% url 'EmployeeSchedule' %}" class="btn btn-primary">View Schedule</a>
+                    <a href="{% url 'UpdateEmpSchedule' %}" class="btn btn-primary float-end">Upload Schedule</a>
                   </div>
                 </div>
                 
@@ -95,7 +94,6 @@
         </div>
       </div>
     </section>
-    {% endfor %}
   </main><!-- End #main -->
 
 

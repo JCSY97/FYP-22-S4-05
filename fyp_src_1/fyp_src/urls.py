@@ -36,17 +36,22 @@ urlpatterns = [
     path('sys_admin/user_profile/', sys_admin.user_profile, name='sys_admin_user_profile'),
     path('sys_admin/schedule/', sys_admin.schedule, name='sys_admin_schedule'),
     path('sys_admin/upload_img/', sys_admin.upload_img, name='sys_admin_upload_img'),
+
     path('HR/home/', HR.HR_home, name='HR_home'),
     path('HR/Profile/', HR.HR_Profile, name='HR_Profile'),
-    path('HR/Employees/', HR.HR_Employee, name='EmployeesPage'),
+    path('HR/Employees/', HR.HR_EmployeePage, name='EmployeesPage'),
     path(r'^HR/EmployeesProfile$', HR.HR_EmpProfile, name='EmployeesProfile'),
     path('HR/View_Schedule', HR.HR_View_Schedule, name='View_Schedule'),
+    path('HR/Employee/Status/', HR.Change_Status, name='EmployeeStatus'),
+    path('HR/Employee/Schedule/', HR.Employee_Schedule, name='EmployeeSchedule'),
+    path('HR/Employee/Update/Schedule/', HR.Emp_update_Schedule, name='UpdateEmpSchedule'),
+
     path('camera/', camera.index, name='camera'),
     path('camera/feed', camera.video_feed, name='video_feed'),
     path('check_in/', index.Check_In, name='Check_in'),
     path('employee/employee_home',employees.Employee_home, name='Home'),
-    path('employee_profile/',index.viewProfile, name='Profile'),
-    path('employee_profile/edit/<int:Editempid>/',index.UpdateProfile, name='EditProfile'),
+    path('employee_profile/',employees.viewProfile, name='Profile'),
+    path('employee_profile/edit/<int:Editempid>/',employees.UpdateProfile, name='EditProfile'),
     path('employee/schedule', employees.Employee_schedule, name='Employee_schedule'),
 
 ]

@@ -96,11 +96,12 @@ def UpdateProfile(request, Editempid):
 	return redirect('HR_Profile')
 
 
-def HR_Employee(request):
+def HR_EmployeePage(request):
 	currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
 	data = Employee.objects.all()
 	context = {
 		'Employee_ID' : currentEmployee.Employee_ID,
+		'Job_Title' : currentEmployee.Job_Title,
 		'Full_Name' : currentEmployee.Full_Name,
 		'data': data,
 	}
@@ -111,19 +112,48 @@ def HR_EmpProfile(request):
 	if request.method == 'GET':
 		EmpId = request.GET.get('id')
 		# print(EmpId,"testes")
-		ViewInfo = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
-		Myinfo = Employee.objects.filter(Employee_ID=EmpId)
+		
+		Myinfo = Employee.objects.get(Employee_ID = EmpId)
 		context = {
-			'Employee_ID': ViewInfo.Employee_ID,
-			'Full_Name': ViewInfo.Full_Name,
-			'Role': ViewInfo.Role.Role_Name,
-			'EmployeesInfo': Myinfo,
+			'Employee_ID': Myinfo.Employee_ID,
+			'Full_Name': Myinfo.Full_Name,
+			'Role': Myinfo.Role.Role_Name,
+			'Job_Title' : Myinfo.Job_Title,
+			'Email' : Myinfo.Email_Address,
+			'Phone' : Myinfo.Phone_Number,
+			'PFP' : Myinfo.Profile_Image.url,
 		}
 		return render(request, 'HR/employees-profile.html', context)
 	# return HttpResponse(EmpId)
 
 
 def HR_View_Schedule(request):
-	
+	if 'Employee_ID' in request.session:
+		currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
+		context = {
+			'Role' : currentEmployee.Role.Role_ID,
+			'Employee_ID' : currentEmployee.Employee_ID,
+			'Full_Name' : currentEmployee.Full_Name,
+			'Job_Title' : currentEmployee.Job_Title,
+			'PFP' : currentEmployee.Profile_Image.url,
+		}
 
-	return render(request, 'HR/schedule.html')
+		return render(request, 'HR/schedule.html', context)
+
+	else:
+		messages.error(request, 'Please login first')
+		return redirect('login')
+
+
+def Change_Status(request):
+	
+	return render(request, 'HR/change-status.html')
+
+
+def Employee_Schedule(request):
+
+	return render(request, 'HR/employeesview_schedule.html')
+
+def Emp_update_Schedule(request):
+
+	return render(request, 'HR/upload-schedule.html')

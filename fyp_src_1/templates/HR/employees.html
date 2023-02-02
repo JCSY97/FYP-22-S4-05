@@ -3,7 +3,7 @@
 {% block content %}
 {% include 'HR/HR_base.html'%}
 
-  <main id="main" class="main">
+<main id="main" class="main">
 
     <div class="pagetitle">
       <h1>Employees</h1>
@@ -30,7 +30,7 @@
               <table class="table table-borderless datatable">
                 <thead>
                   <tr>
-                    <th scope="col">#</th>
+                    <th scope="col"></th>
                     <th scope="col">Name</th>
                     <th scope="col">Position</th>
                     <th scope="col">Start Date</th>
@@ -69,17 +69,6 @@
 
 {% block script %}
 <script>
-//   $(".tr").click(function(){
-//    var a =$(this).attr("value");
-//    $.ajax({
-//     method:"POST",
-//     data:$(this).attr("value"),
-//     url : "{% url 'EmployeesProfile' %}",
-//     success: function(result){
-//         alert("Success");
-//       }
-//    })
-// });
 
 function setGetParameter(s){
   window.location.href = "{% url 'EmployeesProfile' %}" + "?id="+s;
