@@ -40,7 +40,7 @@ class Attendance(models.Model):
 	Employee_ID = models.ForeignKey(Employee,on_delete=models.DO_NOTHING)
 
 	DateNow = models.DateField(null=True)
-
+	Mark = models.CharField(max_length=100,null=True)
 	InTime = models.CharField(max_length=256, null=True, blank=True)
 	OutTime = models.CharField(max_length=256,null=True, blank=True)
 
