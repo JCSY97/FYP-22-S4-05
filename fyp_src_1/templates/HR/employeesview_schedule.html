@@ -1,0 +1,87 @@
+{% extends "index/base.html" %}
+{% load static %}
+{% block content %}
+{% include 'HR/HR_base.html'%}
+  <main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1>View Schedule for Employee name</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url 'HR_home' %}">Home</a></li>
+          <li class="breadcrumb-item ">Emplyees</li>
+          <li class="breadcrumb-item"><a href="./employees-profile.html">Employee ID</a></li>
+          <li class="breadcrumb-item active">View Schedule</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section">
+      <div class="row">
+        <div class="col-lg-12">
+
+          <div class="card recent-sales overflow-auto">
+
+            <div class="card-body">
+              <div class="col-lg-12 align-items-center justify-content-center card-title">
+                <h5 class="float-start"><b>View Shedule for Employee name</b></h5>
+                <br>
+              </div>
+
+              <table class="table table-borderless datatable">
+                <thead>
+                  <tr>
+                    <th scope="col">Date</th>
+                    <th scope="col">Clock In</th>
+                    <th scope="col">lock Out</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr onclick="document.location = './employee-edit-schedule.html'">
+                    
+                    <td>2016-05-25</td>
+                    <td>09:00</td>
+                    <td>17:00</td>
+                  </tr>
+                  <tr onclick="document.location = './employee-edit-schedule.html'">
+                    <td>2016-05-26</td>
+                    <td>09:00</td>
+                    <td>17:00</td>
+                  </tr>
+                  <tr onclick="document.location = './employee-edit-schedule.html'">
+                    <td>2016-05-27</td>
+                    <td>09:00</td>
+                    <td>17:00</td>
+                  </tr>
+                  <tr onclick="document.location = './employee-edit-schedule.html'">
+                    <td>2016-05-28</td>
+                    <td>09:00</td>
+                    <td>17:00</td>
+                  </tr>
+                  <tr onclick="document.location = './employee-edit-schedule.html'">
+                    <td>2016-05-29</td>
+                    <td>09:00</td>
+                    <td>17:00</td>
+                  </tr>
+                </tbody>
+              </table>
+              <a href="./employees-profile.html" class="btn btn-danger float-start">Back</a>
+            </div>
+
+          </div>
+
+          
+
+        </div>
+      </div>
+    </section>
+
+  </main><!-- End #main -->
+  
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+
+{% block script %}
+{% endblock script %}
+{% endblock content %}

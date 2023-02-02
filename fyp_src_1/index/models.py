@@ -19,7 +19,7 @@ class Role(models.Model):
 class Employee(models.Model):
 	Employee_ID = models.IntegerField(primary_key=True)
 	Full_Name = models.CharField(max_length=100)
-	# Job_Title = models.CharField(max_length=100)
+	Job_Title = models.CharField(max_length=100)
 	Phone_Number = models.CharField(max_length=100)
 	Email_Address = models.EmailField()
 	Role = models.ForeignKey(Role, on_delete=models.CASCADE)

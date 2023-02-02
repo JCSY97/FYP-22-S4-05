@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse,HttpResponseRedirect,StreamingHttpResponse
 from django.contrib import messages
 from django.urls import reverse
-from ..models import Employee
+from ..models import Employee,Role
 from . import form
 from django.core.mail import EmailMessage
 from django.views.decorators import gzip
@@ -55,17 +55,59 @@ def index_login(request):
 
 
 def viewProfile(request):
-		ViewInfo = Employee.objects.get(Employee_ID = request.session['Employee_ID'])
+	if 'Employee_ID' in request.session:
+		currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
 
-		Myinfo = Employee.objects.filter(Employee_ID = request.session['Employee_ID'])
-		context = {
-			'Employee_ID' : ViewInfo.Employee_ID,
-			'Full_Name' : ViewInfo.Full_Name,
-			'Role' : ViewInfo.Role.Role_Name,
-			'EmployeesInfo' : Myinfo,
-		}
+		if request.method == 'POST':
+			# for edit user profile form
+			if request.POST.get('form_type') == 'editProfile':
 
-		return render(request, 'index/users_profile.html',context)
+				if Role.objects.filter(Role_Name=request.POST.get('role_edit')) == 0:
+					messages.error(request, 'No such role')
+					return redirect('Profile')
+
+
+				currentEmployee.Full_Name = request.POST.get('fullName_edit')
+
+				currentEmployee.Phone_Number = request.POST.get('phone')
+				currentEmployee.Email_Address = request.POST.get('email')
+
+
+				currentEmployee.save()
+
+				return redirect('Profile')
+
+			# for change password form	
+			elif request.POST.get('form_type') == 'changePassword':
+
+				# make sure current password matches
+				if request.POST.get('password') == currentEmployee.Password:
+					currentEmployee.Password = request.POST.get('newpassword')
+					currentEmployee.save()
+
+					messages.info(request, 'Your password has been changed')
+					return redirect('Profile')
+
+				else:
+					messages.error(request, 'Your current password does not match')
+					return redirect('Profile')
+
+
+		else:
+			context = {
+				'Employee_ID' : currentEmployee.Employee_ID,
+				'Full_Name' : currentEmployee.Full_Name,
+				'Role' : currentEmployee.Role.Role_Name,
+				'Email' : currentEmployee.Email_Address,
+				'Phone' : currentEmployee.Phone_Number,
+				'Job_Title' : currentEmployee.Job_Title,
+				'PFP' : currentEmployee.Profile_Image.url,
+			}
+			return render(request, 'index/users_profile.html', context)
+	else:
+		messages.error(request, 'Please login')
+		return redirect('login')
+
 
 
 def UpdateProfile(request, Editempid):
