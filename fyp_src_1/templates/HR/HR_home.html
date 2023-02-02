@@ -118,43 +118,21 @@
                         <th scope="col">Status</th>
                       </tr>
                     </thead>
+                      {% for Ad in data %}
                     <tbody>
                       <tr>
-                        <th scope="row">2022-12-1</th>
-                        <td>9am - 9pm</td>
-                        <td><span class="badge bg-success">present</span></td>
-                      </tr>
-                      <tr>
-                        <th scope="row"><a href="#">2022-12-2</a></th>
-                        <td>9am - 9pm</td>
-                        <td><span class="badge bg-danger">absent</span></td>
-                      </tr>
-                      <tr>
-                        <th scope="row"><a href="#">2022-12-3</a></th>
-                        <td>9am - 9pm</td>
-                        <td><span class="badge bg-success">present</span></td>
-                      </tr>
-                      <tr>
-                        <th scope="row"><a href="#">2022-12-4</a></th>
-                        <td>9am - 9pm</td>
-                        <td><span class="badge bg-warning">pending</span></td>
-                      </tr>
-                      <tr>
-                        <th scope="row"><a href="#">2022-12-5</a></th>
-                        <td>9am - 9pm</td>
-                        <td><span class="badge bg-warning">pending</span></td>
-                      </tr>
-                      <tr>
-                        <th scope="row"><a href="#">2022-12-6</a></th>
-                        <td>9am - 9pm</td>
-                        <td><span class="badge bg-warning">pending</span></td>
-                      </tr>
-                      <tr>
-                        <th scope="row"><a href="#">2022-12-7</a></th>
-                        <td>9am - 9pm</td>
-                        <td><span class="badge bg-warning">pending</span></td>
+                        <th scope="row">{{ Ad.DateNow }}</th>
+                        <td>{{ Ad.InTime }}   --   {{ Ad.OutTime }}</td>
+                          {% if Ad.status == 1 %}
+                        <td><span class="badge bg-success">Present</span></td>
+                          {% elif  Ad.status == 2 %}
+                          <td><span class="badge bg-success">Absent</span></td>
+                          {% else %}
+                          <td><span class="badge bg-success">Pending</span></td>
+                          {% endif %}
                       </tr>
                     </tbody>
+                      {% endfor %}
                   </table>
 
                 </div>
@@ -188,64 +166,25 @@
               <h5 class="card-title">Schedule <span>| This week</span></h5>
 
               <div class="activity">
-
+                {% for Ad in data %}
+                    <span id="span1" style="display:none;">{{ Ad.DateNow }}</span>
                 <div class="activity-item d-flex">
-                  <div class="activite-label">Mon</div>
+
+                  <div class="activite-label"  id="week"></div>
                   <i class='bi bi-circle-fill activity-badge text-success align-self-start'></i>
                   <div class="activity-content">
-                    9am - 9pm <span class="text-success fw-bold">present</span>
-                  </div>
-                </div><!-- End activity item-->
-
-                <div class="activity-item d-flex">
-                  <div class="activite-label">Tue</div>
-                  <i class='bi bi-circle-fill activity-badge text-danger align-self-start'></i>
-                  <div class="activity-content">
-                    9am - 9pm <span class="text-danger fw-bold">absent</span>
-                  </div>
-                </div><!-- End activity item-->
-
-                <div class="activity-item d-flex">
-                  <div class="activite-label">Wed</div>
-                  <i class='bi bi-circle-fill activity-badge text-warning align-self-start'></i>
-                  <div class="activity-content">
-                    9am - 9pm <span class="text-warning fw-bold">pending</span>
-                  </div>
-                </div><!-- End activity item-->
-
-                <div class="activity-item d-flex">
-                  <div class="activite-label">Thu</div>
-                  <i class='bi bi-circle-fill activity-badge text-warning align-self-start'></i>
-                  <div class="activity-content">
-                    9am - 9pm <span class="text-warning fw-bold">pending</span>
+                      {{ Ad.InTime }} - {{ Ad.OutTime }} &#12288;
+                        {% if Ad.status == 1 %}
+                         <span class="text-success fw-bold">Present</span>
+                          {% elif  Ad.status == 2 %}
+                           <span class="text-success fw-bold">Absent</span>
+                          {% else %}
+                           <span class="text-success fw-bold">Pending</span>
+                          {% endif %}
 
                   </div>
                 </div><!-- End activity item-->
-
-                <div class="activity-item d-flex">
-                  <div class="activite-label">Fri</div>
-                  <i class='bi bi-circle-fill activity-badge text-warning align-self-start'></i>
-                  <div class="activity-content">
-                    9am - 9pm <span class="text-warning fw-bold">pending</span>
-                  </div>
-                </div><!-- End activity item-->
-
-                <div class="activity-item d-flex">
-                  <div class="activite-label">Sat</div>
-                  <i class='bi bi-circle-fill activity-badge text-warning align-self-start'></i>
-                  <div class="activity-content">
-                    9am - 9pm <span class="text-warning fw-bold">pending</span>
-                  </div>
-                </div><!-- End activity item-->
-
-                <div class="activity-item d-flex">
-                  <div class="activite-label">Sun</div>
-                  <i class='bi bi-circle-fill activity-badge text-warning align-self-start'></i>
-                  <div class="activity-content">
-                    9am - 9pm <span class="text-warning fw-bold">pending</span>
-                  </div>
-                </div><!-- End activity item-->
-
+                 {% endfor %}
               </div>
 
             </div>
@@ -263,5 +202,15 @@
 
 
 {% block script %}
+<script>
+const weekday = ["Sun","Mon","Tues","Wed","Thur","Fri","Sat"];
+
+var d = document.getElementById('span1').innerText;
+var newdate= new Date(d).getDay();
+let day = weekday[newdate];
+
+var e = document.getElementById("week").innerHTML = day;
+
+</script>
 {% endblock script %}
 {% endblock content %}

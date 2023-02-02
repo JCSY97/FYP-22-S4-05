@@ -3,10 +3,10 @@ from django.db import models
 # Create your models here.
 # all models are to be created in index.models
 def user_directory_path(instance, filename): 
-    name, ext = filename.split(".")
-    name = instance.Employee_ID+"_"+ instance.section
-    filename = name +'.'+ ext 
-    return 'Users_images/{}'.format(filename)
+	name, ext = filename.split(".")
+	name = instance.Employee_ID+"_"+ instance.section
+	filename = name +'.'+ ext
+	return 'Users_images/{}'.format(filename)
 
 
 class Role(models.Model):
@@ -39,7 +39,7 @@ class Attendance(models.Model):
 
 	Employee_ID = models.ForeignKey(Employee,on_delete=models.DO_NOTHING)
 
-	DateNow = models.DateField(null=True)
+	DateNow = models.DateField(auto_now=True)
 	Mark = models.CharField(max_length=100,null=True)
 	InTime = models.CharField(max_length=256, null=True, blank=True)
 	OutTime = models.CharField(max_length=256,null=True, blank=True)
@@ -56,7 +56,7 @@ class Attendance(models.Model):
 		return f'Employee_ID {self.Employee_ID}'
 
 	class Meta:
-	 	db_table = 'Attendance'
+		db_table = 'Attendance'
 
 class WorkSchedule(models.Model):
 

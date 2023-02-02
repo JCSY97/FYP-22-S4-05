@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from index.models import Employee, Role
+from index.models import Employee, Role,Attendance
 from django.contrib import messages
 
 from django.http import HttpResponse
@@ -8,13 +8,16 @@ from django.http import HttpResponse
 def HR_home(request):
 	if 'Employee_ID' in request.session:
 		currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
+		AttendanceData = Attendance.objects.filter(Employee_ID_id= request.session['Employee_ID'])
 		context = {
 			'Role' : currentEmployee.Role.Role_ID,
 			'Employee_ID' : currentEmployee.Employee_ID,
 			'Full_Name' : currentEmployee.Full_Name,
 			'Job_Title' : currentEmployee.Job_Title,
 			'PFP' : currentEmployee.Profile_Image.url,
+			'data':AttendanceData,
 		}
+
 
 		return render(request, 'HR/HR_home.html', context)
 
