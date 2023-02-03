@@ -11,7 +11,7 @@
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="{%  url 'HR_home' %}">Home</a></li>
           <li class="breadcrumb-item"><a href="{% url 'EmployeesPage' %}">Employees</a></li>
-          <li class="breadcrumb-item"><a href="./employees-profile.html"></a></li>
+          <li class="breadcrumb-item"><a  href="">{{ Name }}</a></li>
           <li class="breadcrumb-item active">Change Status</li>
         </ol>
       </nav>
@@ -28,7 +28,7 @@
               <h5 class="card-title">Change Status For Employee Name</h5>
               <form class="row g-3 needs-validation">
                 <!------------------------Start Date---------------------------->
-                {% for i in data %}
+
                 <div class="col-lg-5 row g-3">
                   <h6 class="title2 ">Select Date:</h6>
                 
@@ -36,7 +36,7 @@
                     <label for="yearselect" class="form-label">Year</label>
                     <div class="input-group has-validation">
                       <select class="form-select year" id="yearselect" name="yearselect" aria-label="Floating label select example" required >
-                          <option value="C++">{{ i.DateNow }}</option>
+                          <option value="C++"></option>
 
                       </select>
                     </div>
@@ -60,7 +60,7 @@
                     </div>
                   </div>
                 </div><!-----End of Start Date------>
-                {% endfor %}
+
 
                 
                 <div class="col-lg-3 row g-3">
@@ -94,7 +94,8 @@
                 <div class="col-lg-6">
                   <br>
                   <br>
-                  <a href="{% url 'EmployeesPage' %}" class="btn btn-danger">Back</a>
+
+                  <button onclick='setGetParameter( "{{ Emp_id}} ")' class="btn btn-danger" >Back</button>
                   <button type="submit" class="btn btn-primary float-end">Update</button>
                 </div>
 
@@ -119,5 +120,11 @@
 
 
 {% block script %}
+<script>
+
+function setGetParameter(s){
+  window.location.href = "{% url 'EmployeesProfile' %}" + "?id="+s;
+}
+</script>
 {% endblock script %}
 {% endblock content %}

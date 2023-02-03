@@ -20,7 +20,6 @@ def HR_home(request):
 			'data':AttendanceData,
 		}
 
-
 		return render(request, 'HR/HR_home.html', context)
 
 	else:
@@ -151,14 +150,18 @@ def HR_View_Schedule(request):
 
 
 def Change_Status(request, Editempid):
-	if request.method == 'POST':
-		EmpAttendance = Attendance.objects.filter(Employee_ID_id = Editempid)
-		print(EmpAttendance,'11111111')
+
+	if 'Employee_ID' in request.session:
+		currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
+		Emp = Employee.objects.get(Employee_ID=Editempid)
+		# if request.method=="POST":
 		context={
-		  	'data' : EmpAttendance,
+			"Emp_id" :Emp.Employee_ID,
+			'Name' : Emp.Full_Name,
 		}
-		print(context)
 		return render(request, 'HR/change-status.html',context)
+
+
 
 
 def Employee_Schedule(request):

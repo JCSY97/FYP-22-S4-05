@@ -156,7 +156,7 @@ def edit_employee(request, edit_employee_id):
 			edit_employee.Phone_Number = request.POST.get('phone')
 			edit_employee.Email_Address = request.POST.get('email')
 
-			edit_emplyee.save()
+			edit_employee.save()
 
 			return redirect('/sys_admin/view_employees/edit/' + str(edit_employee_id))
 
@@ -175,7 +175,7 @@ def edit_employee(request, edit_employee_id):
 					'PFP' : currentEmployee.Profile_Image.url,
 				}
 
-			return render(request, 'sys_admin/sys_admin_edit_employee.html', context)
+				return render(request, 'sys_admin/sys_admin_edit_employee.html', context)
 	else:
 		messages.error(request, 'Please login')
 		return redirect('login')
