@@ -177,36 +177,54 @@
                 <thead>
                   <tr>
                     <th scope="col">Date</th>
+                    <th scope="col">Start</th>
+                    <th scope="col">End</th>
                     <th scope="col">Clock In</th>
-                    <th scope="col">lock Out</th>
+                    <th scope="col">Clock Out</th>
+                    <th scope="col">Attendance</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr onclick="document.location = './employee-edit-schedule.html'">
+                  <tr onclick="document.location = './change-status.html'">
                     
                     <td>2016-05-25</td>
                     <td>09:00</td>
                     <td>17:00</td>
+                    <td class="text-success">09:00</td>
+                    <td class="text-success">17:00</td>
+                    <td class="text-success">Present</td> 
                   </tr>
-                  <tr onclick="document.location = './employee-edit-schedule.html'">
+                  <tr onclick="document.location = './change-status.html'">
                     <td>2016-05-26</td>
                     <td>09:00</td>
                     <td>17:00</td>
+                    <td class="text-danger">10:00</td>
+                    <td class="text-success">17:00</td>
+                    <td class="text-danger">Late</td>
                   </tr>
-                  <tr onclick="document.location = './employee-edit-schedule.html'">
+                  <tr onclick="document.location = './change-status.html'"></tr>
                     <td>2016-05-27</td>
                     <td>09:00</td>
                     <td>17:00</td>
+                    <td class="text-success">09:00</td>
+                    <td class="text-danger">16:00</td>
+                    <td class="text-danger">Early leave</td>
                   </tr>
-                  <tr onclick="document.location = './employee-edit-schedule.html'">
+                  <tr onclick="document.location = './change-status.html'">
                     <td>2016-05-28</td>
                     <td>09:00</td>
                     <td>17:00</td>
+                    <td  class="text-danger">--:--</td>
+                    <td  class="text-danger">--:--</td>
+                    <td class="text-danger">Absent</td>
                   </tr>
-                  <tr onclick="document.location = './employee-edit-schedule.html'">
+                  <tr onclick="document.location = './change-status.html'">
                     <td>2016-05-29</td>
                     <td>09:00</td>
                     <td>17:00</td>
+                    <td class="text-warning"></td>
+                    <td class="text-warning"></td>
+                    <td class="text-warning">pending</td>
                   </tr>
                 </tbody>
               </table>
