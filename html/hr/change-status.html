@@ -182,9 +182,9 @@
                     <div class="input-group has-validation">
                       <select class="form-select year" id="yearselect" name="yearselect" aria-label="Floating label select example" required >
                         <option value="C++">c++</option>
-  <option value="Placement">Placement</option>
-  <option value="Java">Java</option>
-  <option value="Python">Python</option>
+                        <option value="Placement">Placement</option>
+                        <option value="Java">Java</option>
+                        <option value="Python">Python</option>
                       </select>
                     </div>
                   </div>
@@ -210,14 +210,15 @@
 
 
                 
-                <div class="col-lg-3 row g-3">
-                  <h6 class="title2 ">Status:</h6>
+                <div class="col-lg-5 row g-3">
+                  <h6 class="title2 ">Change Status to:</h6>
                 
-                  <div class="col-md-6">
+                  <div class="col-md-3">
                     <label for="status" class="form-label">Status</label>
                     <div class="input-group has-validation">
-                      <select class="form-select" id="status" name="status" aria-label="Floating label select example" required onclick="checkstatus()">
+                      <select class="form-select" id="status" name="status" required onclick="checkstatus()">
                         <option value="" selected disabled>Choose</option>
+                        <option value="worktime">Work Time</option>
                         <option value="mc">MC</option>
                         <option value="off">Off</option>
                         <option value="halfday">Halfday</option>
@@ -225,15 +226,41 @@
                       </select>
                     </div>
                   </div>
-                  <div id="timenone" class="col-lg-6">
+
+                  <div id="timechange" class="col-lg-6">
+                    <div class="col-lg-12 row g-2">
+                      <div class="col-lg-6">
+                        <div class="col-md-12">
+                          <label for="timestartnew" class="form-label">Start Time:</label>
+                          <div class="input-group has-validation">
+                            <select class="form-select" id="timestartnew" name="timestartnew" required>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-lg-6">
+                        <div class="col-md-12">
+                          <label for="timeendnew" class="form-label">End Time:</label>
+                          <div class="input-group has-validation">
+                            <select class="form-select" id="timeendnew" name="timeendnew" required>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div id="timenone" class="col-lg-3">
                     <div class="col-md-12">
-                      <label for="timeendnew" class="form-label">End Time:</label>
+                      <label for="timeendnew2" class="form-label">End Time:</label>
                       <div class="input-group has-validation">
-                        <select class="form-select" id="timeendnew" name="timeendnew" aria-label="Floating label select example" required>
+                        <select class="form-select" id="timeendnew2" name="timeendnew2"  required>
                         </select>
                       </div>
                     </div>
                   </div>
+                  
+                  
 
                   
                 </div><!-----End of End Time------>

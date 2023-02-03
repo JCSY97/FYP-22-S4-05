@@ -330,8 +330,34 @@ function checkdate(){
 
 function checkstatus(){
   let status = document.getElementById("status").value;
-  if (status == "halfday"){
+  if (status == "worktime"){
     
+    let option2 = '<option value="" selected disabled>Choose</option>';
+    let option1 = '<option value="" selected disabled>Choose</option>';
+
+    for (let i = 0; i < 25; i++) {
+      // value day number with 0. 01 02 03 04..
+      let day = (i <= 9) ? '0' + i : i;
+
+      // or value day number 1 2 3 4..
+      // let day = i;
+      if (i == 24){
+        option1 += '<option value=23:59>23:59</option>';
+        option2 += '<option value=23:59>23:59</option>';
+        
+      }else{
+        option1 += '<option value="' + day + ':00"' + '>' + day + ':00</option>';
+        option1 += '<option value="' + day + ':30"' + '>' + day + ':30</option>';
+        option2 += '<option value="' + day + ':00"' + '>' + day + ':00</option>';
+        option2 += '<option value="' + day + ':30"' + '>' + day + ':30</option>';
+      }
+    }
+    document.getElementById("timestartnew").innerHTML = option1;
+    document.getElementById("timeendnew").innerHTML = option2;
+    document.getElementById("timechange").style.display = "block";
+    document.getElementById("timenone").style.display = "none";
+  }
+  else if (status == "halfday"){
     let option3 = '<option value="" selected disabled>Choose</option>';
 
     for (let i = 0; i < 25; i++) {
@@ -347,10 +373,13 @@ function checkstatus(){
         option3 += '<option value="' + day + ':30"' + '>' + day + ':30</option>';
       }
     }
-    document.getElementById("timeendnew").innerHTML = option3;
+    document.getElementById("timeendnew2").innerHTML = option3;
     document.getElementById("timenone").style.display = "block";
-  }else{
+    document.getElementById("timechange").style.display = "none";
+  }
+  else{
     document.getElementById("timenone").style.display = "none";
+    document.getElementById("timechange").style.display = "none";
   }
 }
 
