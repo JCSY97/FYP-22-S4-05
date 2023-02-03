@@ -61,18 +61,21 @@ class Attendance(models.Model):
 class WorkSchedule(models.Model):
 
 	WorkSchedule_id = models.BigAutoField(primary_key=True)
-	Employee_ID = models.ForeignKey(Employee,on_delete=models.DO_NOTHING)
+	Employee = models.ForeignKey(Employee,on_delete=models.DO_NOTHING)
 
 
-	DateTimeNow = models.DateTimeField()
-	status = models.CharField(max_length=256)
+	WorkDate = models.DateTimeField(auto_now=True)
+	Mark = models.CharField(max_length=256,null=True)
 
-	InTime = models.DateTimeField()
-	OutTime = models.DateTimeField()
+	StartDate = models.DateTimeField()
+	EndTime = models.DateTimeField()
 
 
 	def __str__(self):
-		return f'WorkSchedule {self.Employee_ID}'
+		return f'WorkSchedule {self.Employee}'
+
+	class Meta:
+		db_table = 'WorkSchedule'
 
 # class Admin(models.Model):
 # 	Admin_id = models.BigAutoField(primary_key=True)
