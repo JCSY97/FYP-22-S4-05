@@ -201,6 +201,14 @@
   });
 
 
+
+
+    
+
+})();
+
+function loaddata(){
+  
   var ys = document.getElementById("yearstart");
   var ms = document.getElementById("monthstart");
   var ds = document.getElementById("daystart");
@@ -283,12 +291,7 @@
     ds.innerHTML = option2;
     de.innerHTML = option2;
 
-
-
-    
-
-})();
-
+}
 
 
 
