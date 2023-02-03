@@ -43,7 +43,7 @@ urlpatterns = [
     path(r'^HR/EmployeesProfile$', HR.HR_EmpProfile, name='EmployeesProfile'),
     path('HR/View_Schedule', HR.HR_View_Schedule, name='View_Schedule'),
     path('HR/Employee/Status/<int:Editempid>/', HR.Change_Status, name='EmployeeStatus'),
-    path('HR/Employee/Schedule/', HR.Employee_Schedule, name='EmployeeSchedule'),
+    path('HR/Employee/Schedule/', HR.Employee_View_Schedule, name='EmployeeSchedule'),
     path('HR/Employee/Update/Schedule/', HR.Emp_update_Schedule, name='UpdateEmpSchedule'),
 
     path('camera/', camera.index, name='camera'),

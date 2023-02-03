@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from index.models import Employee, Role,Attendance
+from index.models import Employee, Role,Attendance,WorkSchedule
 from django.contrib import messages
 from django.db.models.functions import Extract
 from django.http import HttpResponse
@@ -164,9 +164,12 @@ def Change_Status(request, Editempid):
 
 
 
-def Employee_Schedule(request):
+def Employee_View_Schedule(request):
+	# if 'Employee_ID' in request.session:
+	# 	currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
 
-	return render(request, 'HR/employeesview_schedule.html')
+
+	return render(request, 'HR/employees-view-schedule.html')
 
 def Emp_update_Schedule(request):
 

@@ -63,9 +63,10 @@ class WorkSchedule(models.Model):
 	WorkSchedule_id = models.BigAutoField(primary_key=True)
 	Employee = models.ForeignKey(Employee,on_delete=models.DO_NOTHING)
 	Mark = models.CharField(max_length=256,null=True)
-
-	StartDate = models.DateTimeField()
-	EndDate = models.DateTimeField()
+	StartDate = models.DateField()
+	EndDate = models.DateField()
+	StartTime = models.TimeField(null=True)
+	EndTime = models.TimeField(null=True)
 
 
 	def __str__(self):

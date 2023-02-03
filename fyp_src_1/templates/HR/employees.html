@@ -39,7 +39,7 @@
                 {% for d in data  %}
                 
                 <tbody>
-                  <tr class="tr" value="{{ d.Employee_ID}}" onclick='setGetParameter( "{{ d.Employee_ID}} ")'>
+                  <tr class="tr" onclick='setGetParameter( "{{ d.Employee_ID}} ")'>
                     <th scope="row"> {{ forloop.counter }}</th>
                     <td>{{d.Full_Name}}</td>
                     <td>{{d.Position}}</td>
