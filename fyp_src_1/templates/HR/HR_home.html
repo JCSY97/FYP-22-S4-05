@@ -203,11 +203,10 @@
 {% block script %}
 <script>
 const weekday = ["Sun","Mon","Tues","Wed","Thur","Fri","Sat"];
-var d = document.getElementsByClassName(".span1").innerHTML;
-
+var d = document.querySelector(".span1").innerHTML;
 var newdate= new Date(d).getDay();
 let day = weekday[newdate];
-var e = document.querySelector("div .week").innerHTML = day;
+var e = document.querySelector("div.week").innerHTML = day;
 
 </script>
 {% endblock script %}
