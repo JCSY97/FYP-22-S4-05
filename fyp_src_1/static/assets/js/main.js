@@ -37,7 +37,7 @@
    * Sidebar toggle
    */
   if (select('.toggle-sidebar-btn')) {
-    on('click', '.toggle-sidebar-btn', function(e) {
+    on('click', '.toggle-sidebar-btn', function (e) {
       select('body').classList.toggle('toggle-sidebar')
     })
   }
@@ -46,7 +46,7 @@
    * Search bar toggle
    */
   if (select('.search-bar-toggle')) {
-    on('click', '.search-bar-toggle', function(e) {
+    on('click', '.search-bar-toggle', function (e) {
       select('.search-bar').classList.toggle('search-bar-show')
     })
   }
@@ -103,7 +103,7 @@
     onscroll(document, toggleBacktotop)
   }
 
- 
+
 
   /**
    * Initiate Bootstrap validation check
@@ -111,8 +111,8 @@
   var needsValidation = document.querySelectorAll('.needs-validation')
 
   Array.prototype.slice.call(needsValidation)
-    .forEach(function(form) {
-      form.addEventListener('submit', function(event) {
+    .forEach(function (form) {
+      form.addEventListener('submit', function (event) {
         if (!form.checkValidity()) {
           event.preventDefault()
           event.stopPropagation()
@@ -136,7 +136,7 @@
   const mainContainer = select('#main');
   if (mainContainer) {
     setTimeout(() => {
-      new ResizeObserver(function() {
+      new ResizeObserver(function () {
         select('.echart', true).forEach(getEchart => {
           echarts.getInstanceByDom(getEchart).resize();
         })
@@ -201,6 +201,13 @@
   });
 
 
+
+
+})();
+
+
+function loaddata() {
+
   var ys = document.getElementById("yearstart");
   var ms = document.getElementById("monthstart");
   var ds = document.getElementById("daystart");
@@ -219,80 +226,75 @@
 
     // or value day number 1 2 3 4..
     // let day = i;
-    if (i == 24){
+    if (i == 24) {
       option3 += '<option value=23:59>23:59</option>';
-    }else{
+    } else {
       option3 += '<option value="' + day + ':00"' + '>' + day + ':00</option>';
       option3 += '<option value="' + day + ':30"' + '>' + day + ':30</option>';
     }
   }
   document.getElementById("timestart").innerHTML = option3;
   document.getElementById("timeend").innerHTML = option3;
-  
+
 
 
   let year_start = (new Date).getFullYear();
   let year_end = (new Date).getFullYear() + 1; // current year
   let year_selected = (new Date).getFullYear();
 
-    let option = '';
+  let option = '';
 
-    for (let i = year_start; i <= year_end; i++) {
-        let selected = (i === year_selected ? ' selected' : '');
-        option += '<option value="' + i + '"' + selected + '>' + i + '</option>';
-    }
+  for (let i = year_start; i <= year_end; i++) {
+    let selected = (i === year_selected ? ' selected' : '');
+    option += '<option value="' + i + '"' + selected + '>' + i + '</option>';
+  }
 
-    ys.innerHTML = option;
-    ye.innerHTML = option;
+  ys.innerHTML = option;
+  ye.innerHTML = option;
 
-    var month_selected = (new Date).getMonth(); // current month
-    var option1 = '';
+  var month_selected = (new Date).getMonth(); // current month
+  var option1 = '';
 
-    for (let i = 0; i < 12; i++) {
-        let month_number = (i + 1);
+  for (let i = 0; i < 12; i++) {
+    let month_number = (i + 1);
 
-        // value month number with 0. [01 02 03 04..]
-        let month = (month_number <= 9) ? '0' + month_number : month_number;
+    // value month number with 0. [01 02 03 04..]
+    let month = (month_number <= 9) ? '0' + month_number : month_number;
 
-        // or value month number. [1 2 3 4..]
-        // let month = month_number;
+    // or value month number. [1 2 3 4..]
+    // let month = month_number;
 
-        // or value month names. [January February]
-        // let month = months[i];
+    // or value month names. [January February]
+    // let month = months[i];
 
-        let selected = (i === month_selected ? ' selected' : '');
-        option1 += '<option value="' + month + '"' + selected + '>' + month + '</option>';
-    }
-    ms.innerHTML = option1;
-    me.innerHTML = option1;
-
-
-    let day_selected = (new Date).getDate(); // current day
-    let option2 = '';
-
-    for (let i = 1; i < 32; i++) {
-        // value day number with 0. 01 02 03 04..
-        let day = (i <= 9) ? '0' + i : i;
-
-        // or value day number 1 2 3 4..
-        // let day = i;
-
-        let selected = (i === day_selected ? ' selected' : '');
-        option2 += '<option value="' + day + '"' + selected + '>' + day + '</option>';
-    }
-    ds.innerHTML = option2;
-    de.innerHTML = option2;
+    let selected = (i === month_selected ? ' selected' : '');
+    option1 += '<option value="' + month + '"' + selected + '>' + month + '</option>';
+  }
+  ms.innerHTML = option1;
+  me.innerHTML = option1;
 
 
+  let day_selected = (new Date).getDate(); // current day
+  let option2 = '';
 
-    
+  for (let i = 1; i < 32; i++) {
+    // value day number with 0. 01 02 03 04..
+    let day = (i <= 9) ? '0' + i : i;
 
-})();
+    // or value day number 1 2 3 4..
+    // let day = i;
+
+    let selected = (i === day_selected ? ' selected' : '');
+    option2 += '<option value="' + day + '"' + selected + '>' + day + '</option>';
+  }
+  ds.innerHTML = option2;
+  de.innerHTML = option2;
+
+}
 
 
 
-
-function checkdate(){
+function checkdate() {
   var ys = document.getElementById("yearstart");
   var ms = document.getElementById("monthstart");
   var ds = document.getElementById("daystart");
@@ -302,33 +304,60 @@ function checkdate(){
   var de = document.getElementById("dayend");
 
   let startyear = parseInt(ys.value, 10),
-  startmonth = parseInt(ms.value, 10),
-  startday = parseInt(ds.value, 10);
+    startmonth = parseInt(ms.value, 10),
+    startday = parseInt(ds.value, 10);
 
   let endyear = parseInt(ye.value, 10),
-  endmonth = parseInt(me.value, 10),
-  endday = parseInt(de.value, 10);
+    endmonth = parseInt(me.value, 10),
+    endday = parseInt(de.value, 10);
 
   const startdate = new Date([startyear, startmonth, startday].join('-'));
   const enddate = new Date([endyear, endmonth, endday].join('-'));
 
-  
+
   const diffTime = Math.abs(enddate - startdate);
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   console.log(diffDays);
 
-  if (diffDays >= 7){
+  if (diffDays >= 7) {
     document.getElementById("javachanged").style.display = "block";
-  }else{
+  } else {
     document.getElementById("javachanged").style.display = "none";
   }
 
 }
 
-function checkstatus(){
+
+function checkstatus() {
   let status = document.getElementById("status").value;
-  if (status == "halfday"){
-    
+  if (status == "worktime") {
+
+    let option2 = '<option value="" selected disabled>Choose</option>';
+    let option1 = '<option value="" selected disabled>Choose</option>';
+
+    for (let i = 0; i < 25; i++) {
+      // value day number with 0. 01 02 03 04..
+      let day = (i <= 9) ? '0' + i : i;
+
+      // or value day number 1 2 3 4..
+      // let day = i;
+      if (i == 24) {
+        option1 += '<option value=23:59>23:59</option>';
+        option2 += '<option value=23:59>23:59</option>';
+
+      } else {
+        option1 += '<option value="' + day + ':00"' + '>' + day + ':00</option>';
+        option1 += '<option value="' + day + ':30"' + '>' + day + ':30</option>';
+        option2 += '<option value="' + day + ':00"' + '>' + day + ':00</option>';
+        option2 += '<option value="' + day + ':30"' + '>' + day + ':30</option>';
+      }
+    }
+    document.getElementById("timestartnew").innerHTML = option1;
+    document.getElementById("timeendnew").innerHTML = option2;
+    document.getElementById("timechange").style.display = "block";
+    document.getElementById("timenone").style.display = "none";
+  }
+  else if (status == "halfday") {
     let option3 = '<option value="" selected disabled>Choose</option>';
 
     for (let i = 0; i < 25; i++) {
@@ -337,17 +366,20 @@ function checkstatus(){
 
       // or value day number 1 2 3 4..
       // let day = i;
-      if (i == 24){
+      if (i == 24) {
         option3 += '<option value=23:59>23:59</option>';
-      }else{
+      } else {
         option3 += '<option value="' + day + ':00"' + '>' + day + ':00</option>';
         option3 += '<option value="' + day + ':30"' + '>' + day + ':30</option>';
       }
     }
-    document.getElementById("timeendnew").innerHTML = option3;
+    document.getElementById("timeendnew2").innerHTML = option3;
     document.getElementById("timenone").style.display = "block";
-  }else{
+    document.getElementById("timechange").style.display = "none";
+  }
+  else {
     document.getElementById("timenone").style.display = "none";
+    document.getElementById("timechange").style.display = "none";
   }
 }
 
@@ -359,8 +391,8 @@ function checkstatus(){
 var password = document.getElementById("newPassword")
   , confirm_password = document.getElementById("renewPassword");
 
-function validatePassword(){
-  if(password.value != confirm_password.value) {
+function validatePassword() {
+  if (password.value != confirm_password.value) {
     confirm_password.setCustomValidity("Passwords Don't Match");
   } else {
     confirm_password.setCustomValidity('');
