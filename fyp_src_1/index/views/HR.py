@@ -1,9 +1,12 @@
+import json
 from django.shortcuts import render, redirect
 from index.models import Employee, Role,Attendance,WorkSchedule
 from django.contrib import messages
 from django.db.models.functions import Extract
+from django.core import serializers
 from django.http import HttpResponse
-
+from django.http import JsonResponse
+from django.core.serializers import serialize
 
 def HR_home(request):
 	if 'Employee_ID' in request.session:
@@ -134,20 +137,39 @@ def HR_EmpProfile(request):
 def HR_View_Schedule(request):
 	if 'Employee_ID' in request.session:
 		currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
-		context = {
-			'Role' : currentEmployee.Role.Role_ID,
-			'Employee_ID' : currentEmployee.Employee_ID,
-			'Full_Name' : currentEmployee.Full_Name,
-			'Job_Title' : currentEmployee.Job_Title,
-			'PFP' : currentEmployee.Profile_Image.url,
-		}
+		data = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID'])
 
-		return render(request, 'HR/schedule.html', context)
+		context = {
+			'Role': currentEmployee.Role.Role_ID,
+			'Employee_ID': currentEmployee.Employee_ID,
+			'Full_Name': currentEmployee.Full_Name,
+			'Job_Title': currentEmployee.Job_Title,
+			'PFP': currentEmployee.Profile_Image.url,
+
+		}
+		js_data = serializers.serialize('json',data)
+
+
+		return render(request, 'HR/schedule.html', {'context':context},{'js_data':js_data})
 
 	else:
 		messages.error(request, 'Please login first')
 		return redirect('login')
 
+
+def Jsontest(request):
+	if 'Employee_ID' in request.session:
+		currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
+		data = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID'])
+		context = {
+			'Role': currentEmployee.Role.Role_ID,
+			'Employee_ID': currentEmployee.Employee_ID,
+			'Full_Name': currentEmployee.Full_Name,
+			'Job_Title': currentEmployee.Job_Title,
+			'PFP': currentEmployee.Profile_Image.url,
+		}
+		js_data = serializers.serialize('json',data)
+		return HttpResponse(js_data)
 
 def Change_Status(request, Editempid):
 
@@ -165,9 +187,6 @@ def Change_Status(request, Editempid):
 
 
 def Employee_View_Schedule(request):
-	# if 'Employee_ID' in request.session:
-	# 	currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
-
 
 	return render(request, 'HR/employees-view-schedule.html')
 
