@@ -49,27 +49,101 @@
 
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
+  {% endblock content %}
 {% block script %}
 
   <!-- Template Main JS File -->
 
   <script>
   {#'{{js_data|escapejs}}'#}
+  $(document).ready(function() {
 
-   var json_data = ('{{js_data|escapejs}}');
-   var result = JSON.parse(json_data);
-   var model = JSON.stringify(result,null,2);
+          var json_data = ('{{js_data|escapejs}}');
+          var result = JSON.parse(json_data);
+          var model = JSON.stringify(result,null,2);
+          var start = "";
+          var end = "";
+          var count = 0;
+          var listings ="[";
+          var strings ="";
+          var listingsnum =0 ;
+          var item = "";
 
-   //alert(model)
-  //以上是可以用的代码
+          JSON.parse(json_data, function (key, value) {
+            //console.log(`${key}, ${value}`); // 输出当前的属性名，从而得知遍历顺序是从内向外的，
+              //最后一个属性名会是个空字符串。
+            //返回原始属性值，相当于没有传递 reviver 参数。
+            //console.log(`${value}`);
+            
+            if (`${key}` == "StartDate" ){
+              
+              start = start + '{"start":"' +`${value}`;
+            
+            } 
+            else if(`${key}` == "EndDate")
+            {
+              end = end + '"end":"' +`${value}` ;
+            } 
+            else if(`${key}` == "StartTime" )
+            {
+              if (`${value}` != "null"){
+                start = start +'T' +`${value}` +'",';
+              }
+              else{
+                start = start + '",';
+              }
 
-  //JSON.parse(json_data, function (key, value) {
-   // console.log(`${key}, ${value}`); // 输出当前的属性名，从而得知遍历顺序是从内向外的，
-       //最后一个属性名会是个空字符串。
-      //返回原始属性值，相当于没有传递 reviver 参数。
-//});
+              
+            }
+            else if(`${key}` == "EndTime")
+            {
+              if (`${value}` != "null"){
+                end = end +'T' +`${value}` +'"},';
+              }
+              else{
+                end = end + '"},';
+              }
+              strings =start + end;
+              listings = listings + strings;
+              
+              start ="";
+              end = "";
+              count ++;
+            }
+            ;
+          }); 
+          listings = listings.substring(0, listings.length - 1);
+
+          listings = listings + "]";
+
+          listingsnum =listings.length ;
+          
+          console.log(listings);
+
+          listings = JSON.parse(listings);
+          
 
 
+        $('#calendar').fullCalendar({
+          header: {
+            left: 'prev,next today',
+            center: 'title',
+            end: 'dayGridMonth,dayGridWeek,listWeek'
+          },
+          defaultDate: moment().format("YYYY-MM-DD"),
+          navLinks: true, // can click day/week names to navigate views
+          editable: false,
+          eventLimit: true, // allow "more" link when too many events
+          initialView: 'dayGridMonth',
+          
+          
+          
+
+          events: listings
+          
+     
+    });
+  });
 
    {#$(document).ready(function() {#}
    {##}
@@ -99,4 +173,3 @@
 
   </script>
 {% endblock script %}
-{% endblock content %}
