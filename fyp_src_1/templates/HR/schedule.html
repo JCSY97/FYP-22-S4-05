@@ -2,7 +2,7 @@
 {% load static %}
 {% block content %}
 {% include 'HR/HR_base.html'%}
-  <main id="main" class="main"  >
+  <main id="main" class="main">
 
     <div class="pagetitle">
       <h1>Schedule</h1>
@@ -53,33 +53,50 @@
 
   <!-- Template Main JS File -->
 
-  <script type="text/javascript">
-    $(document).ready(function() {
+  <script>
+  {#'{{js_data|escapejs}}'#}
 
-      $('#calendar').fullCalendar({
-        header: {
-          left: 'prev,next today',
-          center: 'title',
-          right: 'month,basicWeek,basicDay'
-        },
-        defaultDate: moment().format("YYYY-MM-DD"),
-        navLinks: true, // can click day/week names to navigate views
-        editable: false,
-        eventLimit: true, // allow "more" link when too many events
-        {%  for i in js_data %}
-        events: [
-          {
-            title: {{ i.Mark }},
-            start: {{ i.StartDate }},
-              end: {{ i.EndDate }}
+   var json_data = ('{{js_data|escapejs}}');
+   var result = JSON.parse(json_data);
+   var model = JSON.stringify(result,null,2);
 
-          },
-        ],
+   //alert(model)
+  //以上是可以用的代码
 
-      {% endfor %}
-      });
+  //JSON.parse(json_data, function (key, value) {
+   // console.log(`${key}, ${value}`); // 输出当前的属性名，从而得知遍历顺序是从内向外的，
+       //最后一个属性名会是个空字符串。
+      //返回原始属性值，相当于没有传递 reviver 参数。
+//});
 
-    });
+
+
+   {#$(document).ready(function() {#}
+   {##}
+   {#   $('#calendar').fullCalendar({#}
+   {#     header: {#}
+   {#       left: 'prev,next today',#}
+   {#       center: 'title',#}
+   {#       right: 'month,basicWeek,basicDay'#}
+   {#     },#}
+   {#     defaultDate: moment().format("YYYY-MM-DD"),#}
+   {#     navLinks: true, // can click day/week names to navigate views#}
+   {#     editable: false,#}
+   {#     eventLimit: true, // allow "more" link when too many events#}
+   {#     events: [#}
+   {##}
+   {#       {#}
+   {#         title: 'Long Event',#}
+   {#         start: JSON.stringify(result,['fields','StartDate']),#}
+   {#         end: d,#}
+   {#       },#}
+   {#     ]#}
+   {#   });#}
+   {##}
+   {# });#}
+
+
+
   </script>
 {% endblock script %}
 {% endblock content %}

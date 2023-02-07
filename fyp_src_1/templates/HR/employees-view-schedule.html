@@ -10,8 +10,8 @@
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="{% url 'HR_home' %}">Home</a></li>
           <li class="breadcrumb-item "><a href="{% url 'EmployeesPage' %}">Employees</a></li>
-          <li class="breadcrumb-item"><a href="">Employee ID</a></li>
-          <li class="breadcrumb-item active">View Schedule</li>
+          <li class="breadcrumb-item"><a href="">{{ Name }}</a></li>
+            <li class="breadcrumb-item active"><a href="{% url 'EmployeeSchedule' Emp_id %}">View Schedule</a></li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
@@ -51,9 +51,8 @@
                     <td class="text-success">Present</td> 
                   </tr>
                 </tbody>
-
               </table>
-              <a href="./employees-profile.html" class="btn btn-danger float-start">Back</a>
+                <button onclick='setGetParameter( "{{ Emp_id}} ")' class="btn btn-danger" >Back</button>
             </div>
 
           </div>
@@ -71,5 +70,12 @@
 
 
 {% block script %}
+
+<script>
+
+function setGetParameter(s){
+  window.location.href = "{% url 'EmployeesProfile' %}" + "?id="+s;
+}
+</script>
 {% endblock script %}
 {% endblock content %}
