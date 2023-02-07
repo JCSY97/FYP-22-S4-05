@@ -207,40 +207,54 @@
 
 })();
 
+function loaddata() {
 
-
-function checkdate() {
   var ys = document.getElementById("yearstart");
   var ms = document.getElementById("monthstart");
-  var ds = document.getElementById("daystart");
-
-  var ye = document.getElementById("yearend");
-  var me = document.getElementById("monthend");
-  var de = document.getElementById("dayend");
-
-  let startyear = parseInt(ys.value, 10),
-    startmonth = parseInt(ms.value, 10),
-    startday = parseInt(ds.value, 10);
-
-  let endyear = parseInt(ye.value, 10),
-    endmonth = parseInt(me.value, 10),
-    endday = parseInt(de.value, 10);
-
-  const startdate = new Date([startyear, startmonth, startday].join('-'));
-  const enddate = new Date([endyear, endmonth, endday].join('-'));
 
 
-  const diffTime = Math.abs(enddate - startdate);
-  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-  console.log(diffDays);
+  let option3 = '<option value="" selected disabled>Choose</option>';
 
-  if (diffDays >= 7) {
-    document.getElementById("javachanged").style.display = "block";
-  } else {
-    document.getElementById("javachanged").style.display = "none";
+  for (let i = 0; i < 25; i++) {
+    // value day number with 0. 01 02 03 04..
+    let day = (i <= 9) ? '0' + i : i;
+
+    // or value day number 1 2 3 4..
+    // let day = i;
+    if (i == 24) {
+      option3 += '<option value=23:59>23:59</option>';
+    } else {
+      option3 += '<option value="' + day + ':00"' + '>' + day + ':00</option>';
+      option3 += '<option value="' + day + ':30"' + '>' + day + ':30</option>';
+    }
+  }
+  document.getElementById("timestart").innerHTML = option3;
+  document.getElementById("timeend").innerHTML = option3;
+
+
+  ys.value = (new Date).getFullYear();
+
+
+  let month_start = (new Date).getMonth() + 1;
+  let month_end = (new Date).getMonth() + 2; // current year
+  var month_selected = (new Date).getMonth() + 1; // current month
+  var option1 = '';
+
+  for (let i = month_start; i <= month_end; i++) {
+    let selected = (i === month_selected ? ' selected' : '');
+    option1 += '<option value="' + i + '"' + selected + '>' + i + '</option>';
   }
 
+
+  ms.innerHTML = option1;
+
+
+
 }
+
+
+
+
 
 function checkstatus() {
   let status = document.getElementById("status").value;

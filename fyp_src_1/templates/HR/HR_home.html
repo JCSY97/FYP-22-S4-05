@@ -165,12 +165,12 @@
             <div class="card-body">
               <h5 class="card-title">Schedule <span>| This week</span></h5>
 
-              <div class="activity">
+              <div class="activity" id="activity">
                 {% for Ad in data %}
-                <span class="span1" id="span1" style="display:none;">{{ Ad.DateNow}}</span>
+                <p class="titledisplay span{{ forloop.counter }} " id="span{{ forloop.counter }}" style="display:none;">{{ Ad.DateNow}}</p>
                 <div class="activity-item d-flex">
 
-                  <div class="activite-label week" ></div>
+                  <div class="activite-label week{{ forloop.counter }}" id="day{{ forloop.counter }}"></div>
                   <i class='bi bi-circle-fill activity-badge text-success align-self-start'></i>
                   <div class="activity-content">
                       {{ Ad.InTime }} - {{ Ad.OutTime }} &#12288;
@@ -199,15 +199,26 @@
   </main><!-- End #main -->
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
-
+{% endblock content %}
 {% block script %}
 <script>
-const weekday = ["Sun","Mon","Tues","Wed","Thur","Fri","Sat"];
-var d = document.querySelector(".span1").innerHTML;
-var newdate= new Date(d).getDay();
-let day = weekday[newdate];
-var e = document.querySelector("div.week").innerHTML = day;
+const weekdays = ["Sun","Mon","Tues","Wed","Thur","Fri","Sat"];
+
+var d;
+var newdate
+var e;
+var day;
+{% for Ad in data %}
+d = document.querySelector(".span{{ forloop.counter }}").innerHTML;
+
+console.log(d);
+newdate= new Date(d).getDay();
+day = weekdays[newdate];
+e = document.querySelector("div.week{{ forloop.counter }}").innerHTML = day;
+{% endfor %}
+
+
+
 
 </script>
 {% endblock script %}
-{% endblock content %}
