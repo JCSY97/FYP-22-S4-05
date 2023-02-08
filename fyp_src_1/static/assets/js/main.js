@@ -207,38 +207,7 @@
 
 
 
-function checkdate() {
-  var ys = document.getElementById("yearstart");
-  var ms = document.getElementById("monthstart");
-  var ds = document.getElementById("daystart");
 
-  var ye = document.getElementById("yearend");
-  var me = document.getElementById("monthend");
-  var de = document.getElementById("dayend");
-
-  let startyear = parseInt(ys.value, 10),
-    startmonth = parseInt(ms.value, 10),
-    startday = parseInt(ds.value, 10);
-
-  let endyear = parseInt(ye.value, 10),
-    endmonth = parseInt(me.value, 10),
-    endday = parseInt(de.value, 10);
-
-  const startdate = new Date([startyear, startmonth, startday].join('-'));
-  const enddate = new Date([endyear, endmonth, endday].join('-'));
-
-
-  const diffTime = Math.abs(enddate - startdate);
-  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-  console.log(diffDays);
-
-  if (diffDays >= 7) {
-    document.getElementById("javachanged").style.display = "block";
-  } else {
-    document.getElementById("javachanged").style.display = "none";
-  }
-
-}
 
 
 $('#status').on('change', function () {

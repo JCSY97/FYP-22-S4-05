@@ -34,16 +34,26 @@
 
 
                   <div class="col-md-6">
-                    <label for="yearmonth" class="form-label">Year & Month</label>
+                    <label for="yearselect" class="form-label">Year</label>
                     <div class="input-group has-validation">
-                      <select class="form-select" id="yearmonth" name="yearmonth"
-                        aria-label="Floating label select example" required onchange="checkdate()" required>
+                      <select class="form-select" id="yearselect" name="yearselect"
+                        aria-label="Floating label select example" required >
 
                       </select>
                       <div class="invalid-feedback">Please select position.</div>
                     </div>
                   </div>
+                  
+                  <div class="col-md-6">
+                    <label for="monthselect" class="form-label"> Month</label>
+                    <div class="input-group has-validation">
+                      <select class="form-select" id="monthselect" name="monthselect"
+                        aria-label="Floating label select example" required >
 
+                      </select>
+                      <div class="invalid-feedback">Please select position.</div>
+                    </div>
+                  </div>
 
                 </div><!-----End of Start Date------>
 
@@ -197,7 +207,8 @@
   
   $(document).ready(function(){
    
-    var ms = document.getElementById("yearmonth");
+    var ms = document.getElementById("monthselect");
+    var ys = document.getElementById("yearselect");
 
 
     let option3 = '<option value="" selected disabled>Choose</option>';
@@ -223,28 +234,51 @@
   
     const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
   
-    let month_start = (new Date).getMonth() + 1;
+    let month_start =(new Date).getMonth() + 1;
     let month_end; // current year
     var month_selected = (new Date).getMonth() + 1; // current month
     var option1 = '';
+    var option2 = '';
     var monthnow = "";
     if (month_start == 12) {
       month_end = 12;
-      option1 += '<option value="' + yearnow + '-' + 12 + '"' + 'selected' + '>' + yearnow + ' ' + months[11] + '</option>';
+      option2 += '<option value="'  + yearnow + '"' + 'selected' + '>' +yearnow + '</option>';
+      option1 += '<option id="option1" value="12"' + 'selected' + '>'+ months[11] + '</option>';
       yearnow = yearnow + 1;
-      option1 += '<option value="' + yearnow + '-' + 1 + '"' + '>' + yearnow + ' ' + months[0] + '</option>';
+      option2 += '<option value="' + yearnow + '"'  + '>' +yearnow + '</option>';
     } else {
       month_end = (new Date).getMonth() + 2;
       for (let i = month_start; i <= month_end; i++) {
         monthnow = months[i - 1];
         let selected = (i === month_selected ? ' selected' : '');
-        option1 += '<option value="' + yearnow + '-' + i + '"' + selected + '>' + yearnow + ' ' + monthnow + '</option>';
+        option1 += '<option value="' + i + '"' + selected + '>'+ monthnow + '</option>';
+        
       }
+      option2 += '<option value="'  + yearnow + '"' + 'selected' + '>' +yearnow + '</option>';
     }
   
     ms.innerHTML = option1;
+    ys.innerHTML = option2;
 
 
+  });
+
+  $('#yearselect').on('change', function () {
+    let month_start = (new Date).getMonth() + 1;
+    if(month_start ==12){
+      var yearnow = (new Date).getFullYear();
+      let status = document.getElementById("yearselect").value;
+      var ms = document.getElementById("monthselect");
+      var option1 = '';
+      console.log(status);
+      if (status == yearnow+1){
+        document.getElementById("option1").value = "1";
+        document.getElementById("option1").innerHTML = "January";
+      }else{
+        document.getElementById("option1").value = "12";
+        document.getElementById("option1").innerHTML = "December";
+      }
+    }
   });
 </script>
 {% endblock script %}
