@@ -209,8 +209,7 @@
 
 function loaddata() {
 
-  var ys = document.getElementById("yearstart");
-  var ms = document.getElementById("monthstart");
+  var ms = document.getElementById("yearmonth");
 
 
   let option3 = '<option value="" selected disabled>Choose</option>';
@@ -232,19 +231,28 @@ function loaddata() {
   document.getElementById("timeend").innerHTML = option3;
 
 
-  ys.value = (new Date).getFullYear();
+  var yearnow = (new Date).getFullYear();
 
+  const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
   let month_start = (new Date).getMonth() + 1;
-  let month_end = (new Date).getMonth() + 2; // current year
+  let month_end; // current year
   var month_selected = (new Date).getMonth() + 1; // current month
   var option1 = '';
-
-  for (let i = month_start; i <= month_end; i++) {
-    let selected = (i === month_selected ? ' selected' : '');
-    option1 += '<option value="' + i + '"' + selected + '>' + i + '</option>';
+  var monthnow = "";
+  if (month_start == 12) {
+    month_end = 12;
+    option1 += '<option value="' + yearnow + '-' + 12 + '"' + 'selected' + '>' + yearnow + ' ' + months[11] + '</option>';
+    yearnow = yearnow + 1;
+    option1 += '<option value="' + yearnow + '-' + 1 + '"' + '>' + yearnow + ' ' + months[0] + '</option>';
+  } else {
+    month_end = (new Date).getMonth() + 2;
+    for (let i = month_start; i <= month_end; i++) {
+      monthnow = months[i - 1];
+      let selected = (i === month_selected ? ' selected' : '');
+      option1 += '<option value="' + yearnow + '-' + i + '"' + selected + '>' + yearnow + ' ' + monthnow + '</option>';
+    }
   }
-
 
   ms.innerHTML = option1;
 
