@@ -10,7 +10,8 @@ from django.core import serializers
 from django.http import HttpResponse
 from django.http import JsonResponse
 from django.core.serializers import serialize
-from django.db.models import Count
+from datetime import date,datetime, timedelta
+
 
 
 def HR_home(request):
@@ -144,7 +145,7 @@ def HR_View_Schedule(request):
 		template = loader.get_template('HR/schedule.html')
 		currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
 		data = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID'])
-		js_data =serializers.serialize('json',data,fields=['StartDate','EndDate','StartTime','EndTime'])
+		js_data =serializers.serialize('json',data,fields=['StartDate','EndDate','StartTime','EndTime','Mark'])
 		json_data=json.loads(js_data)
 		for d in json_data:
 			del d['pk']
@@ -204,8 +205,6 @@ def Change_Status(request, Editempid):
 
 
 
-
-
 def Employee_View_Schedule(request,Editempid):
 
 	if 'Employee_ID' in request.session:
@@ -219,13 +218,59 @@ def Employee_View_Schedule(request,Editempid):
 
 		return render(request, 'HR/employees-view-schedule.html',context)
 
+def weeknum(dayname):
+	if dayname == 'Monday':
+		return 7
+	if dayname == 'Tuesday':
+		return 1
+	if dayname == 'Wednesday':
+		return 2
+	if dayname == 'Thursday':
+		return 3
+	if dayname == 'Friday':
+		return 4
+	if dayname == 'Saturday':
+		return 5
+	if dayname == 'Sunday':
+		return 6
+def alldays(year,month,Inputday,whichDayYouWant):
+	d = date(year,month,Inputday)
+	d += timedelta(days = (weeknum(whichDayYouWant) - d.weekday()))
+	while d.month == month:
+		yield d
+		d += timedelta(days = 7)
+
+weekdays = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
 def Emp_update_Schedule(request,Editempid):
 	if 'Employee_ID' in request.session:
 		currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
 		Emp = Employee.objects.get(Employee_ID=Editempid)
-		# if request.method=="POST":
-		context={
+		currentMonth = datetime.now().month
+		currentYear = datetime.now().year
+		currenDay = datetime.now().day
+		if request.method=="POST":
+			SchedduleYear = request.POST.get('yearselect')
+			SchedduleMonth =request.POST.get('monthselect')
+			StartTime = request.POST.get('timestart')
+			EndTime = request.POST.get('timeend')
+			if currentYear<int(SchedduleYear) or int(SchedduleMonth)>currentMonth:
+				for weeks in weekdays:
+					for d in alldays(int(SchedduleYear), int(SchedduleMonth), currenDay, weeks):
+						WeeksDay = request.POST.get(str(weeks))
+						WordSche = WorkSchedule(StartDate=d,EndDate=d,StartTime=StartTime,EndTime=EndTime,Employee_id=Editempid,Mark=WeeksDay)
+						WordSche.save()
+			else:
+				for weeks in weekdays:
+					WeeksDay = request.POST.get(str(weeks))
+					for d in alldays(currentYear, currentMonth, currenDay, weeks):
+						WordSche = WorkSchedule(StartDate=d,EndDate=d,StartTime=StartTime,EndTime=EndTime,Employee_id=Editempid,Mark=WeeksDay)
+						WordSche.save()
+
+
+			return  redirect('EmployeesPage')
+		else:
+			context={
 			"Emp_id" :Emp.Employee_ID,
 			'Name' : Emp.Full_Name,
 		}
-		return render(request, 'HR/upload-schedule.html',context)
+			return render(request, 'HR/upload-schedule.html',context)

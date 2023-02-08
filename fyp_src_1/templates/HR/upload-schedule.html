@@ -25,7 +25,8 @@
             <div class="card-body">
              
               <h5 class="card-title">Upload Schedule For Employee Name</h5>
-              <form class="row g-3 needs-validation">
+              <form class="row g-3 needs-validation" method="POST">
+                    {% csrf_token %}
                 <!------------------------Start Date---------------------------->
 
                 <div class="col-lg-5 row g-3">
@@ -67,78 +68,78 @@
                   
 
                     <div class="col-md-1" >
-                      <label for="mon" class="form-label">Monday</label>
+                      <label for="Monday" class="form-label" >Monday</label>
                       <div class="input-group has-validation">
-                        <select class="form-select" id="mon" name="mon" aria-label="Floating label select example" required>
+                        <select class="form-select" id="mon" name="Monday" aria-label="Floating label select example" required>
                           <option value="" selected disabled>Choose</option>
                           <option value="working">Working</option>
-                          <option value="working">Off</option>
+                          <option value="Off">Off</option>
                         </select>
                       </div>
                     </div>
 
                     <div class="col-md-1" >
-                      <label for="tue" class="form-label">Tuesday</label>
+                      <label for="Tuesday" class="form-label">Tuesday</label>
                       <div class="input-group has-validation">
-                        <select class="form-select" id="tue" name="tue" aria-label="Floating label select example" required>
+                        <select class="form-select" id="tue" name="Tuesday" aria-label="Floating label select example" required>
                           <option value="" selected disabled>Choose</option>
                           <option value="working">Working</option>
-                          <option value="working">Off</option>
+                          <option value="Off">Off</option>
                         </select>
                       </div>
                     </div>
 
                     <div class="col-md-1" >
-                      <label for="wed" class="form-label">Wednesday</label>
+                      <label for="Wednesday" class="form-label">Wednesday</label>
                       <div class="input-group has-validation">
-                        <select class="form-select" id="wed" name="wed" aria-label="Floating label select example" required>
+                        <select class="form-select" id="wed" name="Wednesday" aria-label="Floating label select example" required>
                           <option value="" selected disabled>Choose</option>
                           <option value="working">Working</option>
-                          <option value="working">Off</option>
+                          <option value="Off">Off</option>
                         </select>
                       </div>
                     </div>
 
                     <div class="col-md-1">
-                      <label for="thu" class="form-label">Thursday</label>
+                      <label for="Thursday" class="form-label">Thursday</label>
                       <div class="input-group has-validation">
-                        <select class="form-select" id="thu" name="thu" aria-label="Floating label select example" required>
+                        <select class="form-select" id="thu" name="Thursday" aria-label="Floating label select example" required>
                           <option value="" selected disabled>Choose</option>
                           <option value="working">Working</option>
-                          <option value="working">Off</option>
+                          <option value="Off">Off</option>
                         </select>
                       </div>
                     </div>
 
                     <div class="col-md-1" >
-                      <label for="fri" class="form-label">Friday</label>
+                      <label for="Friday" class="form-label">Friday</label>
                       <div class="input-group has-validation">
-                        <select class="form-select" id="fri" name="fri" aria-label="Floating label select example" required>
+                        <select class="form-select" id="fri" name="Friday" aria-label="Floating label select example" required>
                           <option value="" selected disabled>Choose</option>
                           <option value="working">Working</option>
-                          <option value="working">Off</option>
+                          <option value="Off">Off</option>
                         </select>
                       </div>
                     </div>
 
                     <div class="col-md-1" >
-                      <label for="sat" class="form-label">Saturday</label>
+                      <label for="Saturday" class="form-label">Saturday</label>
                       <div class="input-group has-validation">
-                        <select class="form-select" id="sat" name="sat" aria-label="Floating label select example" required>
+                        <select class="form-select" id="sat" name="Saturday" aria-label="Floating label select example" required>
                           <option value="" selected disabled>Choose</option>
                           <option value="working">Working</option>
-                          <option value="working">Off</option>
+                          <option value="Off">Off</option>
                         </select>
                       </div>
                     </div>
 
                     <div class="col-md-1" >
-                      <label for="sun" class="form-label">Sunday</label>
+                      <label for="Sunday" class="form-label">Sunday</label>
                       <div class="input-group has-validation">
-                        <select class="form-select" id="sun" name="sun" aria-label="Floating label select example" required>
+                        <select class="form-select" id="sun" name="Sunday" aria-label="Floating label select example" required>
                           <option value="" selected disabled>Choose</option>
                           <option value="working">Working</option>
-                          <option value="working">Off</option>
+                          <option value="Off">Off</option>
                         </select>
                       </div>
                     </div>
@@ -179,7 +180,7 @@
                 <div class="col-lg-12 text-center">
                   <br>
                   <br>
-                  <a href="./employees-profile.html" class="btn btn-danger float-start">Back</a>
+                   <button onclick='setGetParameter( "{{ Emp_id}} ")' class="btn btn-danger" >Back</button>
                   <button type="submit" class="btn btn-primary">Upload</button>
                 </div>
 
@@ -280,5 +281,9 @@
       }
     }
   });
+
+  function setGetParameter(s){
+  window.location.href = "{% url 'EmployeesProfile' %}" + "?id="+s;
+}
 </script>
 {% endblock script %}
