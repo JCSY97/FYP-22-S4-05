@@ -24,7 +24,7 @@
 
               <img src="{{ PFP }}" alt="Profile" class="rounded-circle">
               <h2>{{ Full_Name }}</h2>
-              <h3>{{ Jon_Title }}</h3>
+              <h3>{{ Job_Title }}</h3>
               
             </div>
           </div>
@@ -51,18 +51,8 @@
                   </div>
 
                   <div class="row">
-                    <div class="col-lg-3 col-md-4 label">Company</div>
-                    <div class="col-lg-9 col-md-8">Lueilwitz, Wisoky and Leuschke</div>
-                  </div>
-
-                  <div class="row">
                     <div class="col-lg-3 col-md-4 label">Positon</div>
                     <div class="col-lg-9 col-md-8">{{Job_Title}}</div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-lg-3 col-md-4 label">Country</div>
-                    <div class="col-lg-9 col-md-8">USA</div>
                   </div>
 
                   <div class="row">
@@ -79,7 +69,7 @@
                     <a href="{% url 'EmployeesPage' %}" class="btn btn-danger">Back</a>
                     <a href="{% url 'EmployeeStatus' Employee_ID %}" class="btn btn-primary">Change Status</a>
                     <a href="{% url 'EmployeeSchedule' Employee_ID %}" class="btn btn-primary">View Schedule</a>
-                    <a href="{% url 'UpdateEmpSchedule' %}" class="btn btn-primary float-end">Upload Schedule</a>
+                    <a href="{% url 'UpdateEmpSchedule' Employee_ID %}" class="btn btn-primary float-end">Upload Schedule</a>
                   </div>
                 </div>
                 
@@ -98,7 +88,6 @@
 
 
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
-
+{% endblock content %}
 {% block script %}
 {% endblock script %}
-{% endblock content %}

@@ -11,7 +11,7 @@
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="{%  url 'HR_home' %}">Home</a></li>
           <li class="breadcrumb-item"><a href="{% url 'EmployeesPage' %}">Employees</a></li>
-          <li class="breadcrumb-item"><a  href="">{{ Name }}</a></li>
+          <li class="breadcrumb-item"><a href="javascript:" onclick='setGetParameter( "{{ Emp_id}} ")'>{{ Name }}</a></li>
           <li class="breadcrumb-item active">Change Status</li>
         </ol>
       </nav>
@@ -24,49 +24,32 @@
           <div class="card recent-sales overflow-auto">
 
             <div class="card-body">
-             
-              <h5 class="card-title">Change Status For Employee Name</h5>
-              <form class="row g-3 needs-validation">
+                <h5 class="card-title">Change Status For Employee Name</h5>
+              <form  method="POST" class="row g-3 needs-validation" action = "">
+               {% csrf_token %}
                 <!------------------------Start Date---------------------------->
-
                 <div class="col-lg-5 row g-3">
                   <h6 class="title2 ">Select Date:</h6>
-                
-                  <div class="col-md-3">
-                    <label for="yearselect" class="form-label">Year</label>
+                  <div class="col-md-9">
+                    <label for="dateselected" class="form-label">Date</label>
                     <div class="input-group has-validation">
-                      <select class="form-select year" id="yearselect" name="yearselect" aria-label="Floating label select example" required >
-                          <option value="C++"></option>
 
+                      <select class="form-select year" id="dateselected" name="dateselected" aria-label="Floating label select example" required >
+                            {% for i in Data %}
+                          <option  name="attenid" value="{{ i.Attendance_id }}">{{ i.DateNow }}</option>
+                            {% endfor %}
                       </select>
                     </div>
                   </div>
 
-                  <div class="col-md-3">
-                    <label for="monthselect" class="form-label">Month</label>
-                    <div class="input-group has-validation">
-                      <select class="form-select" id="monthselect" name="monthselect" aria-label="Floating label select example" required>
-                        
-                      </select>
-                    </div>
-                  </div>
-
-                  <div class="col-md-3">
-                    <label for="dayselect" class="form-label">Day</label>
-                    <div class="input-group has-validation">
-                      <select class="form-select" id="dayselect" name="dayselect" aria-label="Floating label select example" required>
-                        
-                      </select>
-                    </div>
-                  </div>
                 </div><!-----End of Start Date------>
 
 
                 
-                <div class="col-lg-3 row g-3">
+                <div class="col-lg-5 row g-3">
                   <h6 class="title2 ">Status:</h6>
                 
-                  <div class="col-md-6">
+                  <div class="col-md-4">
                     <label for="status" class="form-label">Status</label>
                     <div class="input-group has-validation">
                       <select class="form-select" id="status" name="status" aria-label="Floating label select example" required onclick="checkstatus()">
@@ -74,17 +57,16 @@
                         <option value="worktime">Work Time</option>
                         <option value="mc">MC</option>
                         <option value="off">Off</option>
-                        <option value="halfday">Halfday</option>
                         
                       </select>
                     </div>
                   </div>
                   
-                  <div id="timechange" class="col-lg-6">
+                  <div id="timechange" class="col-lg-8">
                     <div class="col-lg-12 row g-2">
                       <div class="col-lg-6">
                         <div class="col-md-12">
-                          <label for="timestartnew" class="form-label">Start Time:</label>
+                          <label for="timestartnew" class="form-label">Start Time: </label>
                           <div class="input-group has-validation">
                             <select class="form-select" id="timestartnew" name="timestartnew" required>
                             </select>
@@ -103,15 +85,7 @@
                     </div>
                   </div>
 
-                  <div id="timenone" class="col-lg-3">
-                    <div class="col-md-12">
-                      <label for="timeendnew2" class="form-label">End Time:</label>
-                      <div class="input-group has-validation">
-                        <select class="form-select" id="timeendnew2" name="timeendnew2"  required>
-                        </select>
-                      </div>
-                    </div>
-                  </div>
+
                   
                   
                 </div><!-----End of End Time------>
@@ -119,7 +93,6 @@
                 <div class="col-lg-6">
                   <br>
                   <br>
-
                   <button onclick='setGetParameter( "{{ Emp_id}} ")' class="btn btn-danger" >Back</button>
                   <button type="submit" class="btn btn-primary float-end">Update</button>
                 </div>
@@ -143,13 +116,13 @@
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
 
-
+{% endblock content %}
 {% block script %}
 <script>
+
 
 function setGetParameter(s){
   window.location.href = "{% url 'EmployeesProfile' %}" + "?id="+s;
 }
 </script>
 {% endblock script %}
-{% endblock content %}

@@ -43,14 +43,7 @@ class Attendance(models.Model):
 	Mark = models.CharField(max_length=100,null=True)
 	InTime = models.CharField(max_length=256, null=True, blank=True)
 	OutTime = models.CharField(max_length=256,null=True, blank=True)
-
-	LOAN_STATUS = (
-		(0, 'Pending'),
-		(1, 'Present'),
-		(2, 'Absent'),
-	)
-
-	status = models.IntegerField(default=0,choices=LOAN_STATUS)
+	status = models.IntegerField(default=0)
 
 	def __str__(self):
 		return f'Employee_ID {self.Employee_ID}'

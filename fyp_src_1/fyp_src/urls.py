@@ -44,7 +44,7 @@ urlpatterns = [
     path('HR/View_Schedule', HR.HR_View_Schedule, name='View_Schedule'),
     path('HR/Employee/Status/<int:Editempid>/', HR.Change_Status, name='EmployeeStatus'),
     path('HR/Employee/Schedule/<int:Editempid>/', HR.Employee_View_Schedule, name='EmployeeSchedule'),
-    path('HR/Employee/Update/Schedule/', HR.Emp_update_Schedule, name='UpdateEmpSchedule'),
+    path('HR/Employee/Update/Schedule/<int:Editempid>/', HR.Emp_update_Schedule, name='UpdateEmpSchedule'),
 
     path('camera/', camera.index, name='camera'),
     path('camera/feed', camera.video_feed, name='video_feed'),

@@ -241,7 +241,7 @@ function checkdate() {
 }
 
 
-function checkstatus() {
+$('#status').on('change', function() {
   let status = document.getElementById("status").value;
   if (status == "worktime") {
 
@@ -268,33 +268,33 @@ function checkstatus() {
     document.getElementById("timestartnew").innerHTML = option1;
     document.getElementById("timeendnew").innerHTML = option2;
     document.getElementById("timechange").style.display = "block";
-    document.getElementById("timenone").style.display = "none";
+    //document.getElementById("timenone").style.display = "none";
   }
-  else if (status == "halfday") {
-    let option3 = '<option value="" selected disabled>Choose</option>';
-
-    for (let i = 0; i < 25; i++) {
-      // value day number with 0. 01 02 03 04..
-      let day = (i <= 9) ? '0' + i : i;
-
-      // or value day number 1 2 3 4..
-      // let day = i;
-      if (i == 24) {
-        option3 += '<option value=23:59>23:59</option>';
-      } else {
-        option3 += '<option value="' + day + ':00"' + '>' + day + ':00</option>';
-        option3 += '<option value="' + day + ':30"' + '>' + day + ':30</option>';
-      }
-    }
-    document.getElementById("timeendnew2").innerHTML = option3;
-    document.getElementById("timenone").style.display = "block";
-    document.getElementById("timechange").style.display = "none";
-  }
+  // else if (status == "halfday") {
+  //   let option3 = '<option value="" selected disabled>Choose</option>';
+  //
+  //   for (let i = 0; i < 25; i++) {
+  //     // value day number with 0. 01 02 03 04..
+  //     let day = (i <= 9) ? '0' + i : i;
+  //
+  //     // or value day number 1 2 3 4..
+  //     // let day = i;
+  //     if (i == 24) {
+  //       option3 += '<option value=23:59>23:59</option>';
+  //     } else {
+  //       option3 += '<option value="' + day + ':00"' + '>' + day + ':00</option>';
+  //       option3 += '<option value="' + day + ':30"' + '>' + day + ':30</option>';
+  //     }
+  //}
+  //   document.getElementById("timeendnew2").innerHTML = option3;
+  //   document.getElementById("timenone").style.display = "block";
+  //   document.getElementById("timechange").style.display = "none";
+  // }
   else {
-    document.getElementById("timenone").style.display = "none";
+    // document.getElementById("timenone").style.display = "none";
     document.getElementById("timechange").style.display = "none";
   }
-}
+});
 
 
 /**

@@ -1,4 +1,6 @@
 import json
+import sqlite3
+
 from django.shortcuts import render, redirect
 from index.models import Employee, Role,Attendance,WorkSchedule
 from django.contrib import messages
@@ -8,6 +10,8 @@ from django.core import serializers
 from django.http import HttpResponse
 from django.http import JsonResponse
 from django.core.serializers import serialize
+from django.db.models import Count
+
 
 def HR_home(request):
 	if 'Employee_ID' in request.session:
@@ -140,11 +144,11 @@ def HR_View_Schedule(request):
 		template = loader.get_template('HR/schedule.html')
 		currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
 		data = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID'])
-		json_data =serializers.serialize('json',data)
-		json_data=json.loads(json_data)
-		# for d in json_data:
-		# 	del d['pk']
-		# 	del d['model']
+		js_data =serializers.serialize('json',data,fields=['StartDate','EndDate','StartTime','EndTime'])
+		json_data=json.loads(js_data)
+		for d in json_data:
+			del d['pk']
+			del d['model']
 
 		js_data = json.dumps(json_data,ensure_ascii=False)
 
@@ -156,7 +160,6 @@ def HR_View_Schedule(request):
 			'PFP': currentEmployee.Profile_Image.url,
 		}
 
-		print(js_data)
 		return render(request, 'HR/schedule.html', {'context':context,'js_data':js_data})
 		# return HttpResponse(template.render(context, request))
 	else:
@@ -166,16 +169,39 @@ def HR_View_Schedule(request):
 
 
 def Change_Status(request, Editempid):
-
 	if 'Employee_ID' in request.session:
 		currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
 		Emp = Employee.objects.get(Employee_ID=Editempid)
-		# if request.method=="POST":
-		context={
-			"Emp_id" :Emp.Employee_ID,
-			'Name' : Emp.Full_Name,
-		}
-		return render(request, 'HR/change-status.html',context)
+		Atten = Attendance.objects.filter(Employee_ID_id=Editempid)
+		if request.method=='POST':
+			print('yeas')
+			Aid = request.POST.get('dateselected')
+			UpdateAttendance = Attendance.objects.get(Attendance_id=request.POST.get('dateselected'))
+			NewStatus =request.POST.get('status')
+			StatusName ='worktime'
+			if NewStatus == StatusName:
+				UpdateAttendance.Mark = NewStatus
+				UpdateAttendance.InTime =request.POST.get('timestartnew')
+				UpdateAttendance.OutTime =request.POST.get('timeendnew')
+				UpdateAttendance.save()
+			else:
+				UpdateAttendance.Mark = NewStatus
+				UpdateAttendance.save()
+			return redirect('EmployeesPage')
+		else:
+			context={
+				'Role': currentEmployee.Role.Role_ID,
+				'Employee_ID': currentEmployee.Employee_ID,
+				'Full_Name': currentEmployee.Full_Name,
+				'Job_Title': currentEmployee.Job_Title,
+				'PFP': currentEmployee.Profile_Image.url,
+				"Emp_id" :Emp.Employee_ID,
+				'Name' : Emp.Full_Name,
+				'Data':Atten,
+			}
+			return render(request, 'HR/change-status.html',context)
+
+
 
 
 
@@ -193,6 +219,13 @@ def Employee_View_Schedule(request,Editempid):
 
 		return render(request, 'HR/employees-view-schedule.html',context)
 
-def Emp_update_Schedule(request):
-
-	return render(request, 'HR/upload-schedule.html')
+def Emp_update_Schedule(request,Editempid):
+	if 'Employee_ID' in request.session:
+		currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
+		Emp = Employee.objects.get(Employee_ID=Editempid)
+		# if request.method=="POST":
+		context={
+			"Emp_id" :Emp.Employee_ID,
+			'Name' : Emp.Full_Name,
+		}
+		return render(request, 'HR/upload-schedule.html',context)
