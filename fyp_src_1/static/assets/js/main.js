@@ -241,7 +241,7 @@ function checkdate() {
 }
 
 
-$('#status').on('change', function() {
+$('#status').on('change', function () {
   let status = document.getElementById("status").value;
   if (status == "worktime") {
 
@@ -269,6 +269,8 @@ $('#status').on('change', function() {
     document.getElementById("timeendnew").innerHTML = option2;
     document.getElementById("timechange").style.display = "block";
     //document.getElementById("timenone").style.display = "none";
+    document.getElementById("timestartnew").setAttribute('required', '');
+    document.getElementById("timeendnew").setAttribute('required', '');
   }
   // else if (status == "halfday") {
   //   let option3 = '<option value="" selected disabled>Choose</option>';
@@ -293,6 +295,8 @@ $('#status').on('change', function() {
   else {
     // document.getElementById("timenone").style.display = "none";
     document.getElementById("timechange").style.display = "none";
+    document.getElementById("timestartnew").removeAttribute('required');
+    document.getElementById("timeendnew").removeAttribute('required');
   }
 });
 
