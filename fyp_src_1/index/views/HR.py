@@ -142,26 +142,25 @@ def HR_EmpProfile(request):
 
 def HR_View_Schedule(request):
 	if 'Employee_ID' in request.session:
-		template = loader.get_template('HR/schedule.html')
+		# template = loader.get_template('HR/schedule.html')
 		currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
 		data = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID'])
-		js_data =serializers.serialize('json',data,fields=['StartDate','EndDate','StartTime','EndTime','Mark'])
+		js_data =serializers.serialize('json',data,fields=['StartDate','EndDate','StartTime','EndTime'])
 		json_data=json.loads(js_data)
 		for d in json_data:
 			del d['pk']
 			del d['model']
 
 		js_data = json.dumps(json_data,ensure_ascii=False)
-
 		context = {
-			'Role': currentEmployee.Role.Role_ID,
-			'Employee_ID': currentEmployee.Employee_ID,
-			'Full_Name': currentEmployee.Full_Name,
-			'Job_Title': currentEmployee.Job_Title,
+			'Employee_ID' : currentEmployee.Employee_ID,
+			'Job_Title' : currentEmployee.Job_Title,
+			'Full_Name' : currentEmployee.Full_Name,
 			'PFP': currentEmployee.Profile_Image.url,
+			'js_data': js_data,
 		}
 
-		return render(request, 'HR/schedule.html', {'context':context,'js_data':js_data})
+		return render(request, 'HR/schedule.html',context)
 		# return HttpResponse(template.render(context, request))
 	else:
 		messages.error(request, 'Please login first')
@@ -210,10 +209,20 @@ def Employee_View_Schedule(request,Editempid):
 	if 'Employee_ID' in request.session:
 		currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
 		Emp = Employee.objects.get(Employee_ID=Editempid)
+		Emp_Atten = Attendance.objects.filter(Employee_ID_id=Editempid).order_by('DateNow')
+		Emp_workShcedule = WorkSchedule.objects.filter(Employee_id=Editempid).order_by('StartDate')
 		# if request.method=="POST":
+
 		context={
-			"Emp_id" :Emp.Employee_ID,
-			'Name' : Emp.Full_Name,
+		'Employee_ID': currentEmployee.Employee_ID,
+		'Job_Title': currentEmployee.Job_Title,
+		'Full_Name': currentEmployee.Full_Name,
+		"Emp_id" :Emp.Employee_ID,
+		'Name' : Emp.Full_Name,
+		'AttenData':Emp_Atten,
+
+		'EmpWorkDate':Emp_workShcedule,
+
 		}
 
 		return render(request, 'HR/employees-view-schedule.html',context)
@@ -270,7 +279,10 @@ def Emp_update_Schedule(request,Editempid):
 			return  redirect('EmployeesPage')
 		else:
 			context={
+			'Employee_ID': currentEmployee.Employee_ID,
+			'Job_Title': currentEmployee.Job_Title,
+			'Full_Name': currentEmployee.Full_Name,
 			"Emp_id" :Emp.Employee_ID,
 			'Name' : Emp.Full_Name,
-		}
-			return render(request, 'HR/upload-schedule.html',context)
+	}
+		return render(request, 'HR/upload-schedule.html',context)

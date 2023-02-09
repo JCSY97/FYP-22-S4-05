@@ -70,11 +70,7 @@
           var item = "";
 
           JSON.parse(json_data, function (key, value) {
-            //console.log(`${key}, ${value}`); // 输出当前的属性名，从而得知遍历顺序是从内向外的，
-              //最后一个属性名会是个空字符串。
-            //返回原始属性值，相当于没有传递 reviver 参数。
-            //console.log(`${value}`);
-            
+
             if (`${key}` == "StartDate" ){
               
               start = start + '{"start":"' +`${value}`;
@@ -142,30 +138,6 @@
      
     });
   });
-
-   {#$(document).ready(function() {#}
-   {##}
-   {#   $('#calendar').fullCalendar({#}
-   {#     header: {#}
-   {#       left: 'prev,next today',#}
-   {#       center: 'title',#}
-   {#       right: 'month,basicWeek,basicDay'#}
-   {#     },#}
-   {#     defaultDate: moment().format("YYYY-MM-DD"),#}
-   {#     navLinks: true, // can click day/week names to navigate views#}
-   {#     editable: false,#}
-   {#     eventLimit: true, // allow "more" link when too many events#}
-   {#     events: [#}
-   {##}
-   {#       {#}
-   {#         title: 'Long Event',#}
-   {#         start: JSON.stringify(result,['fields','StartDate']),#}
-   {#         end: d,#}
-   {#       },#}
-   {#     ]#}
-   {#   });#}
-   {##}
-   {# });#}
 
 
 

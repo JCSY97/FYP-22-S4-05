@@ -41,15 +41,17 @@
                 </thead>
 
                 <tbody>
+                {% for Atten in EmpWorkDate %}
                   <tr onclick="document.location = './change-status.html'">
                     
-                    <td>250</td>
+                    <td>{{ Atten.StartDate }}</td>
                     <td>09:00</td>
                     <td>17:00</td>
                     <td class="text-success">09:00</td>
                     <td class="text-success">17:00</td>
                     <td class="text-success">Present</td> 
                   </tr>
+                {% endfor %}
                 </tbody>
               </table>
                 <button onclick='setGetParameter( "{{ Emp_id}} ")' class="btn btn-danger" >Back</button>
