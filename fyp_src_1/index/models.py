@@ -59,7 +59,6 @@ class WorkSchedule(models.Model):
 	AttendanDate = models.DateField(null=True)
 	InTime = models.CharField(max_length=256, null=True, blank=True)
 	OutTime = models.CharField(max_length=256, null=True, blank=True)
-	status = models.IntegerField(default=0)
 
 	Mark = models.CharField(max_length=256,null=True)
 	StartDate = models.DateField()

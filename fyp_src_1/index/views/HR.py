@@ -1,5 +1,6 @@
 import json
 
+from django.db.models import Q
 
 from django.shortcuts import render, redirect
 from index.models import Employee, Role,WorkSchedule
@@ -11,7 +12,7 @@ from django.http import HttpResponse
 from django.http import JsonResponse
 from django.core.serializers import serialize
 from datetime import date,datetime, timedelta
-
+from django.utils import timezone
 
 
 def HR_home(request):
@@ -29,7 +30,9 @@ def HR_home(request):
 			'Redata': RecentData,
 			'data':AttendanceData,
 		}
-
+		# if WorkSchedule.objects.filter(StartDate=currentDate,AttendanDate=currentDate).exists():
+		# 	print("yes")
+		print(timezone.now().date())
 		return render(request, 'HR/HR_home.html', context)
 
 	else:
@@ -90,7 +93,6 @@ def HR_Profile(request):
 	else:
 		messages.error(request, 'Please login')
 		return redirect('login')
-
 
 
 
@@ -168,7 +170,6 @@ def HR_View_Schedule(request):
 		return redirect('login')
 
 
-
 def Change_Status(request, Editempid):
 	if 'Employee_ID' in request.session:
 		currentDate = datetime.now().strftime("%Y-%m-%d")
@@ -176,15 +177,13 @@ def Change_Status(request, Editempid):
 		Emp = Employee.objects.get(Employee_ID=Editempid)
 		Atten = WorkSchedule.objects.filter(Employee_id=Editempid).filter(AttendanDate__lte=currentDate)
 		if request.method=='POST':
-			print('yeas')
-			Aid = request.POST.get('dateselected')
 			UpdateAttendance = WorkSchedule.objects.get(WorkSchedule_id=request.POST.get('dateselected'))
 			NewStatus =request.POST.get('status')
-			StatusName ='worktime'
+			StatusName ='null'
 			if NewStatus == StatusName:
 				UpdateAttendance.Mark = NewStatus
-				UpdateAttendance.InTime =request.POST.get('timestartnew')
-				UpdateAttendance.OutTime =request.POST.get('timeendnew')
+				UpdateAttendance.StartTime =request.POST.get('timestartnew')
+				UpdateAttendance.EndTime =request.POST.get('timeendnew')
 				UpdateAttendance.save()
 			else:
 				UpdateAttendance.Mark = NewStatus
@@ -256,25 +255,50 @@ def Emp_update_Schedule(request,Editempid):
 		currentMonth = datetime.now().month
 		currentYear = datetime.now().year
 		currenDay = datetime.now().day
+
 		if request.method=="POST":
 			SchedduleYear = request.POST.get('yearselect')
 			SchedduleMonth =request.POST.get('monthselect')
 			StartTime = request.POST.get('timestart')
 			EndTime = request.POST.get('timeend')
-			if currentYear<int(SchedduleYear) or int(SchedduleMonth)>currentMonth:
-				for weeks in weekdays:
-					for d in alldays(int(SchedduleYear), int(SchedduleMonth), currenDay, weeks):
+
+			for weeks in weekdays:
+				if currentYear < int(SchedduleYear) or int(SchedduleMonth) > currentMonth:
+					for d in alldays(int(SchedduleYear), int(SchedduleMonth), 1, weeks):
 						WeeksDay = request.POST.get(str(weeks))
 						WordSche = WorkSchedule(StartDate=d,EndDate=d,StartTime=StartTime,EndTime=EndTime,Employee_id=Editempid,Mark=WeeksDay)
 						WordSche.save()
-			else:
-				for weeks in weekdays:
+				else:
 					WeeksDay = request.POST.get(str(weeks))
 					for d in alldays(currentYear, currentMonth, currenDay, weeks):
-						WordSche = WorkSchedule(StartDate=d,EndDate=d,StartTime=StartTime,EndTime=EndTime,Employee_id=Editempid,Mark=WeeksDay)
-						WordSche.save()
+						AttenId = WorkSchedule.objects.filter(Employee_id=Editempid, AttendanDate=d)
+						Start = WorkSchedule.objects.filter(Employee_id=Editempid,StartDate=d)
+						if AttenId.exists() or Start.exists():
+							WorkId = WorkSchedule.objects.get(Q(Employee_id=Editempid, StartDate=d)|Q(Employee_id=Editempid, AttendanDate=d))
+							UpdateWork = WorkSchedule.objects.get(WorkSchedule_id=WorkId.WorkSchedule_id)
+							UpdateWork.StartTime=StartTime
+							UpdateWork.EndTime=EndTime
+							UpdateWork.Mark=WeeksDay
+							UpdateWork.save()
+						else:
+							WeeksDay = request.POST.get(str(weeks))
+							WordSche = WorkSchedule(StartDate=d,EndDate=d,StartTime=StartTime,EndTime=EndTime,Employee_id=Editempid,Mark=WeeksDay)
+							WordSche.save()
 
 
+			# if currentYear<int(SchedduleYear) or int(SchedduleMonth)>currentMonth:
+			# 	for weeks in weekdays:
+			# 		for d in alldays(int(SchedduleYear), int(SchedduleMonth), currenDay, weeks):
+			# 			WeeksDay = request.POST.get(str(weeks))
+			# 			AttenDate = WorkSchedule.objects.filter()
+			# 			WordSche = WorkSchedule(StartDate=d,EndDate=d,StartTime=StartTime,EndTime=EndTime,Employee_id=Editempid,Mark=WeeksDay)
+			# 			WordSche.save()
+			# else:
+			# 	for weeks in weekdays:
+			# 		WeeksDay = request.POST.get(str(weeks))
+			# 		for d in alldays(currentYear, currentMonth, currenDay, weeks):
+			# 			WordSche = WorkSchedule(StartDate=d,EndDate=d,StartTime=StartTime,EndTime=EndTime,Employee_id=Editempid,Mark=WeeksDay)
+			# 			WordSche.save()
 			return  redirect('EmployeesPage')
 		else:
 			context={

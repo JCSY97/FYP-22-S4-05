@@ -49,11 +49,11 @@
                     <td class="text-success">{{ Atten.InTime }}</td>
                     <td class="text-success">{{ Atten.OutTime }}</td>
                       {% if Atten.status == 1 %}
-                    <td class="text-success">Present</td>
+                    <td class="text-warning">Present</td>
                       {%  elif Atten.status == 2 %}
                       <td class="text-success">Pending</td>
                       {% else %}
-                      <td class="text-success">Absent</td>
+                      <td class="text-danger">Absent</td>
                       {% endif %}
                   </tr>
                   {% endfor %}

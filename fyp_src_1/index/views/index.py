@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse,HttpResponseRedirect,StreamingHttpResponse
 from django.contrib import messages
 from django.urls import reverse
-from ..models import Employee,Role
+from ..models import Employee,Role,WorkSchedule
 from . import form
 from django.core.mail import EmailMessage
 from django.views.decorators import gzip
@@ -53,37 +53,6 @@ def index_login(request):
 	else:
 		return render(request, 'index/login.html')
 
-
-# def ChangePassword(request, Editempid):
-#
-# 		UserID = Employee.objects.get(Employee_ID=Editempid)
-# 		if request.user.is_authenticated:
-# 			form = PasswordForm(request.POST or None)
-#
-# 			old_password = request.POST.get("old_password")
-# 			new_password = request.POST.get("new_password")
-# 			re_new_password = request.POST.get("PasswordForm")
-# 			if request.POST.get("old_password"):
-#
-# 				user = Employee.objects.get(Employee_ID=Editempid)
-#
-# 				# User entered old password is checked against the password in the database below.
-# 				if user.check_password('{}'.format(old_password)) == False:
-# 					form.set_old_password_flag()
-#
-# 			if form.is_valid():
-#
-# 				user.set_password('{}'.format(new_password))
-# 				user.save()
-# 				update_session_auth_hash(request, user)
-#
-# 				return redirect('ChangePassword')
-#
-# 			else:
-# 				return render(request, 'users_profile.html', {"form": form})
-#
-# 		else:
-# 			return redirect('login')
 
 def logout(request):
 	request.session.flush()
