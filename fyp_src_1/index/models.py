@@ -34,27 +34,33 @@ class Employee(models.Model):
 		return f'Employee {self.Employee_ID}'
 
 
-class Attendance(models.Model):
-	Attendance_id = models.BigAutoField(primary_key=True)
-
-	Employee_ID = models.ForeignKey(Employee,on_delete=models.DO_NOTHING)
-
-	DateNow = models.DateField()
-	Mark = models.CharField(max_length=100,null=True)
-	InTime = models.CharField(max_length=256, null=True, blank=True)
-	OutTime = models.CharField(max_length=256,null=True, blank=True)
-	status = models.IntegerField(default=0)
-
-	def __str__(self):
-		return f'Employee_ID {self.Employee_ID}'
-
-	class Meta:
-		db_table = 'Attendance'
+# class Attendance(models.Model):
+# 	Attendance_id = models.BigAutoField(primary_key=True)
+#
+# 	Employee_ID = models.ForeignKey(Employee,on_delete=models.DO_NOTHING)
+#
+# 	AttendanDate = models.DateField()
+# 	Mark = models.CharField(max_length=100,null=True)
+# 	InTime = models.CharField(max_length=256, null=True, blank=True)
+# 	OutTime = models.CharField(max_length=256,null=True, blank=True)
+# 	status = models.IntegerField(default=0)
+#
+# 	def __str__(self):
+# 		return f'Employee_ID {self.Employee_ID}'
+#
+# 	class Meta:
+# 		db_table = 'Attendance'
 
 class WorkSchedule(models.Model):
 
 	WorkSchedule_id = models.BigAutoField(primary_key=True)
 	Employee = models.ForeignKey(Employee,on_delete=models.DO_NOTHING)
+
+	AttendanDate = models.DateField(null=True)
+	InTime = models.CharField(max_length=256, null=True, blank=True)
+	OutTime = models.CharField(max_length=256, null=True, blank=True)
+	status = models.IntegerField(default=0)
+
 	Mark = models.CharField(max_length=256,null=True)
 	StartDate = models.DateField()
 	EndDate = models.DateField()

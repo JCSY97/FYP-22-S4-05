@@ -1,15 +1,25 @@
 from django.shortcuts import render, redirect, reverse
-from index.models import Employee, Role
+from index.models import Employee, Role,WorkSchedule
 from django.contrib import messages
+from datetime import date,datetime, timedelta
+import json
+from django.core import serializers
 
 # Create your views here.
 def sys_admin_home(request):
 	if 'Employee_ID' in request.session:
+		currentDate = datetime.now().strftime("%Y-%m-%d")
 		currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
+		RecentData = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID']).filter(
+			AttendanDate__lte=currentDate).order_by('AttendanDate', 'EndDate')
+		AttendanceData = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID']).filter(
+			AttendanDate__lte=currentDate)[:5]
 		context = {
 			'Employee_ID' : currentEmployee.Employee_ID,
 			'Full_Name' : currentEmployee.Full_Name,
 			'PFP' : currentEmployee.Profile_Image.url,
+			'Redata': RecentData,
+			'data': AttendanceData,
 		}
 
 		return render(request, 'sys_admin/sys_admin_home.html', context)
@@ -181,8 +191,31 @@ def edit_employee(request, edit_employee_id):
 		return redirect('login')
 
 def schedule(request):
+	if 'Employee_ID' in request.session:
+		# template = loader.get_template('HR/schedule.html')
+		currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
+		data = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID'])
+		js_data =serializers.serialize('json',data,fields=['StartDate','EndDate','StartTime','EndTime'])
+		json_data=json.loads(js_data)
+		for d in json_data:
+			del d['pk']
+			del d['model']
 
-	return render(request, 'sys_admin/sys_admin_schedule.html')
+		js_data = json.dumps(json_data,ensure_ascii=False)
+		context = {
+			'Employee_ID' : currentEmployee.Employee_ID,
+			'Job_Title' : currentEmployee.Job_Title,
+			'Full_Name' : currentEmployee.Full_Name,
+			'PFP': currentEmployee.Profile_Image.url,
+			'js_data': js_data,
+		}
+
+		return render(request, 'sys_admin/sys_admin_schedule.html',context)
+		# return HttpResponse(template.render(context, request))
+	else:
+		messages.error(request, 'Please login first')
+		return redirect('login')
+
 
 def upload_img(request):
 	return render(request, 'sys_admin/sys_admin_upload_img.html')

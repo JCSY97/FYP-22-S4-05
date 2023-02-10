@@ -1,8 +1,8 @@
 import json
-import sqlite3
+
 
 from django.shortcuts import render, redirect
-from index.models import Employee, Role,Attendance,WorkSchedule
+from index.models import Employee, Role,WorkSchedule
 from django.contrib import messages
 from django.template import loader
 from django.db.models.functions import Extract
@@ -16,9 +16,10 @@ from datetime import date,datetime, timedelta
 
 def HR_home(request):
 	if 'Employee_ID' in request.session:
+		currentDate = datetime.now().strftime("%Y-%m-%d")
 		currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
-		RecentData = Attendance.objects.filter(Employee_ID_id=request.session['Employee_ID'])
-		AttendanceData = Attendance.objects.filter(Employee_ID_id= request.session['Employee_ID'])[:5]
+		RecentData = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID']).filter(AttendanDate__lte=currentDate).order_by('AttendanDate','EndDate')
+		AttendanceData = WorkSchedule.objects.filter(Employee_id= request.session['Employee_ID']).filter(AttendanDate__lte=currentDate)[:5]
 		context = {
 			'Role' : currentEmployee.Role.Role_ID,
 			'Employee_ID' : currentEmployee.Employee_ID,
@@ -170,13 +171,14 @@ def HR_View_Schedule(request):
 
 def Change_Status(request, Editempid):
 	if 'Employee_ID' in request.session:
+		currentDate = datetime.now().strftime("%Y-%m-%d")
 		currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
 		Emp = Employee.objects.get(Employee_ID=Editempid)
-		Atten = Attendance.objects.filter(Employee_ID_id=Editempid)
+		Atten = WorkSchedule.objects.filter(Employee_id=Editempid).filter(AttendanDate__lte=currentDate)
 		if request.method=='POST':
 			print('yeas')
 			Aid = request.POST.get('dateselected')
-			UpdateAttendance = Attendance.objects.get(Attendance_id=request.POST.get('dateselected'))
+			UpdateAttendance = WorkSchedule.objects.get(WorkSchedule_id=request.POST.get('dateselected'))
 			NewStatus =request.POST.get('status')
 			StatusName ='worktime'
 			if NewStatus == StatusName:
@@ -207,11 +209,11 @@ def Change_Status(request, Editempid):
 def Employee_View_Schedule(request,Editempid):
 
 	if 'Employee_ID' in request.session:
+		currentDate = datetime.now().strftime("%Y-%m-%d")
 		currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
 		Emp = Employee.objects.get(Employee_ID=Editempid)
-		Emp_Atten = Attendance.objects.filter(Employee_ID_id=Editempid).order_by('DateNow')
-		Emp_workShcedule = WorkSchedule.objects.filter(Employee_id=Editempid).order_by('StartDate')
-		# if request.method=="POST":
+		Emp_Atten = WorkSchedule.objects.filter(Employee_id=Editempid,AttendanDate__lte=currentDate).order_by('AttendanDate')
+
 
 		context={
 		'Employee_ID': currentEmployee.Employee_ID,
@@ -220,9 +222,6 @@ def Employee_View_Schedule(request,Editempid):
 		"Emp_id" :Emp.Employee_ID,
 		'Name' : Emp.Full_Name,
 		'AttenData':Emp_Atten,
-
-		'EmpWorkDate':Emp_workShcedule,
-
 		}
 
 		return render(request, 'HR/employees-view-schedule.html',context)

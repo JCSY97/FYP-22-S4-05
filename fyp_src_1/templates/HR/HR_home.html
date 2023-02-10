@@ -121,14 +121,14 @@
                       {% for Ad in Redata %}
                     <tbody>
                       <tr>
-                        <th scope="row">{{ Ad.DateNow }}</th>
+                        <th scope="row">{{ Ad.AttendanDate }}</th>
                         <td>{{ Ad.InTime }}   --   {{ Ad.OutTime }}</td>
                           {% if Ad.status == 1 %}
                         <td><span class="badge bg-success">Present</span></td>
                           {% elif  Ad.status == 2 %}
-                          <td><span class="badge bg-danger">Absent</span></td>
+                          <td><span class="badge bg-danger">Pending</span></td>
                           {% else %}
-                          <td><span class="badge bg-warning">Pending</span></td>
+                          <td><span class="badge bg-warning">Absent</span></td>
                           {% endif %}
                       </tr>
                     </tbody>
@@ -167,7 +167,7 @@
 
               <div class="activity" id="activity">
                 {% for Ad in data %}
-                <span class="titledisplay span{{ forloop.counter }} "  style="display:none;">{{ Ad.DateNow}}</span>
+               <span class="titledisplay span{{ forloop.counter }} "  style="display:none;">{{ Ad.AttendanDate}}</span>
                 <div class="activity-item d-flex">
 
                   <div class="activite-label week{{ forloop.counter }}" ></div>
@@ -175,11 +175,11 @@
                   <div class="activity-content">
                       {{ Ad.InTime }} - {{ Ad.OutTime }} &#12288;
                         {% if Ad.status == 1 %}
-                         <span class="text-success fw-bold">Present</span>
+                         <span class="text-success fw-bold" >Present</span>
                           {% elif  Ad.status == 2 %}
-                           <span class="text-danger fw-bold">Absent</span>
+                           <span class="text-danger fw-bold">Pending</span>
                           {% else %}
-                           <span class="text-warning fw-bold">Pending</span>
+                           <span class="text-warning fw-bold">Absent</span>
                           {% endif %}
                   </div>
                 </div><!-- End activity item-->

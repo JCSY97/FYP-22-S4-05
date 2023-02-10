@@ -1,19 +1,25 @@
 from django.shortcuts import render, redirect
-from index.models import Employee, Role
+from index.models import Employee, Role,WorkSchedule
 from django.contrib import messages
 # Create your views here.
-
+from datetime import date,datetime, timedelta
+from django.core import serializers
+import json
 
 def Employee_home(request):
 	if 'Employee_ID' in request.session:
+		currentDate = datetime.now().strftime("%Y-%m-%d")
 		currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
+		RecentData = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID']).filter(AttendanDate__lte=currentDate).order_by('AttendanDate', 'EndDate')
+		AttendanceData = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID']).filter(AttendanDate__lte=currentDate)[:5]
 		context = {
 		    'Employee_ID' : currentEmployee.Employee_ID,
 			'Full_Name' : currentEmployee.Full_Name,
 			'Job_Title' : currentEmployee.Job_Title,
 			'Role' : currentEmployee.Role.Role_ID,
 			'PFP' : currentEmployee.Profile_Image.url,
-           
+			'Redata': RecentData,
+			'data': AttendanceData,
 		}
 
 		return render(request, 'employee/employee_home.html', context)
@@ -24,13 +30,29 @@ def Employee_home(request):
 
 def Employee_schedule(request):
 	if 'Employee_ID' in request.session:
+		# template = loader.get_template('HR/schedule.html')
 		currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
+		data = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID'])
+		js_data = serializers.serialize('json', data, fields=['StartDate', 'EndDate', 'StartTime', 'EndTime'])
+		json_data = json.loads(js_data)
+		for d in json_data:
+			del d['pk']
+			del d['model']
+
+		js_data = json.dumps(json_data, ensure_ascii=False)
 		context = {
-		    'Employee_ID' : currentEmployee.Employee_ID,
-			'Full_Name' : currentEmployee.Full_Name,
+			'Employee_ID': currentEmployee.Employee_ID,
+			'Job_Title': currentEmployee.Job_Title,
+			'Full_Name': currentEmployee.Full_Name,
+			'PFP': currentEmployee.Profile_Image.url,
+			'js_data': js_data,
 		}
 
-		return render(request, 'employee/schedule.html')
+		return render(request, 'employee/schedule.html',context)
+
+	else:
+		messages.error(request, 'Please login first')
+		return redirect('login')
 
 
 def viewProfile(request):

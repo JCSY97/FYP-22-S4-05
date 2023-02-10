@@ -9,7 +9,7 @@
       <h1>Schedule</h1>
       <nav>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="./admin-home.html">Home</a></li>
+          <li class="breadcrumb-item"><a href="{%  url 'sys_admin_home' %}">Home</a></li>
           <li class="breadcrumb-item active">Schedule</li>
         </ol>
       </nav>
@@ -50,88 +50,99 @@
 
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
- {% endblock content %}
-  {% block script %}
-  <script type="text/javascript">
-   
-    $(document).ready(function() {
-      
-      $('#calendar').fullCalendar({
-        header: {
-          left: 'prev,next today',
-          center: 'title',
-          right: 'month,basicWeek,basicDay'
-        },
-        defaultDate: moment().format("YYYY-MM-DD"),
-        navLinks: true, // can click day/week names to navigate views
-        editable: false,
-        eventLimit: true, // allow "more" link when too many events
-        events: [
-          {
-            title: 'All Day Event',
-            start: '2022-12-01'
+  {% endblock content %}
+{% block script %}
+
+  <!-- Template Main JS File -->
+
+  <script>
+  {#'{{js_data|escapejs}}'#}
+  $(document).ready(function() {
+
+          var json_data = ('{{js_data|escapejs}}');
+          var result = JSON.parse(json_data);
+          var model = JSON.stringify(result,null,2);
+          var start = "";
+          var end = "";
+          var count = 0;
+          var listings ="[";
+          var strings ="";
+          var listingsnum =0 ;
+          var item = "";
+
+          JSON.parse(json_data, function (key, value) {
+
+            if (`${key}` == "StartDate" ){
+
+              start = start + '{"start":"' +`${value}`;
+
+            }
+            else if(`${key}` == "EndDate")
+            {
+              end = end + '"end":"' +`${value}` ;
+            }
+            else if(`${key}` == "StartTime" )
+            {
+              if (`${value}` != "null"){
+                start = start +'T' +`${value}` +'",';
+              }
+              else{
+                start = start + '",';
+              }
+
+
+            }
+            else if(`${key}` == "EndTime")
+            {
+              if (`${value}` != "null"){
+                end = end +'T' +`${value}` +'"},';
+              }
+              else{
+                end = end + '"},';
+              }
+              strings =start + end;
+              listings = listings + strings;
+
+              start ="";
+              end = "";
+              count ++;
+            }
+            ;
+          });
+          listings = listings.substring(0, listings.length - 1);
+
+          listings = listings + "]";
+
+          listingsnum =listings.length ;
+
+          listings = JSON.parse(listings);
+
+
+
+        $('#calendar').fullCalendar({
+          header: {
+            left: 'prev,next today',
+            center: 'title',
+            end: 'dayGridMonth,dayGridWeek,listWeek'
           },
-          {
-            title: 'Long Event',
-            start: '2022-12-07',
-            end: '2022-12-10'
-          },
-          {
-            id: 999,
-            title: 'Clock In',
-            start: '2022-12-09T09:00:00'
-          },
-          {
-            id: 999,
-            title: 'Repeating Event',
-            start: '2022-12-16T16:00:00'
-          },
-          {
-            title: 'Conference',
-            start: '2022-12-11',
-            end: '2022-12-13'
-          },
-          {
-            title: 'Meeting',
-            start: '2022-12-12T10:30:00',
-            end: '2022-12-12T12:30:00'
-          },
-          {
-            title: 'Lunch',
-            start: '2022-12-12T12:00:00'
-          },
-          {
-            title: 'Meeting',
-            start: '2022-12-12T14:30:00'
-          },
-          {
-            title: 'Happy Hour',
-            start: '2022-12-12'
-          },
-          {
-            title: 'Dinner',
-            start: '2022-12-12T20:00:00'
-          },
-          {
-            title: 'Birthday Party',
-            start: '2022-12-13T07:00:00'
-          },
-          {
-            title: 'Click for Google',
-            url: 'https://google.com/',
-            start: '2022-12-28'
-          }
-        ]
-      });
-      
+          defaultDate: moment().format("YYYY-MM-DD"),
+          navLinks: true, // can click day/week names to navigate views
+          editable: false,
+          eventLimit: true, // allow "more" link when too many events
+          initialView: 'dayGridMonth',
+
+
+
+
+          events: listings
+
+
     });
+  });
+
+
+
   </script>
-
-
-
 {% endblock script %}
-
-
-
 
 

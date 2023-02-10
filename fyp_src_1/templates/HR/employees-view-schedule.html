@@ -41,14 +41,20 @@
                 </thead>
 
                 <tbody id="bodyitem">
-                  {% for Atten in EmpWorkDate %}
-                  <tr onclick="document.location = "./change-status.html"">
-                    <td>{{ Atten.StartDate }}</td>
-                    <td>09:00</td>
-                    <td>17:00</td>
-                    <td class="text-success">09:00</td>
-                    <td class="text-success">17:00</td>
+                  {% for Atten in AttenData %}
+                  <tr onclick="document.location ='{% url 'EmployeeStatus' Emp_id %}'">
+                    <td>{{ Atten.AttendanDate }}</td>
+                    <td>{{ Atten.StartTime }}</td>
+                    <td>{{ Atten.EndTime }}</td>
+                    <td class="text-success">{{ Atten.InTime }}</td>
+                    <td class="text-success">{{ Atten.OutTime }}</td>
+                      {% if Atten.status == 1 %}
                     <td class="text-success">Present</td>
+                      {%  elif Atten.status == 2 %}
+                      <td class="text-success">Pending</td>
+                      {% else %}
+                      <td class="text-success">Absent</td>
+                      {% endif %}
                   </tr>
                   {% endfor %}
                
@@ -73,19 +79,19 @@
 {% endblock content %}
 {% block script %}
 <script type="text/javascript">
-  /**var items ;
-  {% for Atten in EmpWorkDate %}
-       items +=' <tr onclick="document.location = "./change-status.html"">'+
-                    '<td>{{ Atten.StartDate }}</td>'+
-                    '<td>09:00</td>'+
-                    '<td>17:00</td>'+
-                    '<td class="text-success">09:00</td>'+
-                    '<td class="text-success">17:00</td>'+
-                    '<td class="text-success">Present</td>' +
-                 ' </tr>'
-  {% endfor %}
-        var bodyitem = document.getElementById("bodyitem");
-        bodyitem.innerHTML=items;**/
+{#  /**var items ;#}
+{#  {% for Atten in EmpWorkDate %}#}
+{#       items +=' <tr onclick="document.location = "./change-status.html"">'+#}
+{#                    '<td>{{ Atten.StartDate }}</td>'+#}
+{#                    '<td>09:00</td>'+#}
+{#                    '<td>17:00</td>'+#}
+{#                    '<td class="text-success">09:00</td>'+#}
+{#                    '<td class="text-success">17:00</td>'+#}
+{#                    '<td class="text-success">Present</td>' +#}
+{#                 ' </tr>'#}
+{#  {% endfor %}#}
+{#        var bodyitem = document.getElementById("bodyitem");#}
+{#        bodyitem.innerHTML=items;**/#}
   function setGetParameter(s){
     window.location.href = "{% url 'EmployeesProfile' %}" + "?id="+s;
   }
