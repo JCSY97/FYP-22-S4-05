@@ -40,18 +40,18 @@
                   </tr>
                 </thead>
 
-                <tbody>
-                {% for Atten in EmpWorkDate %}
-                  <tr onclick="document.location = './change-status.html'">
-                    
+                <tbody id="bodyitem">
+                  {% for Atten in EmpWorkDate %}
+                  <tr onclick="document.location = "./change-status.html"">
                     <td>{{ Atten.StartDate }}</td>
                     <td>09:00</td>
                     <td>17:00</td>
                     <td class="text-success">09:00</td>
                     <td class="text-success">17:00</td>
-                    <td class="text-success">Present</td> 
+                    <td class="text-success">Present</td>
                   </tr>
-                {% endfor %}
+                  {% endfor %}
+               
                 </tbody>
               </table>
                 <button onclick='setGetParameter( "{{ Emp_id}} ")' class="btn btn-danger" >Back</button>
@@ -72,11 +72,22 @@
 
 {% endblock content %}
 {% block script %}
-
-<script>
-
-function setGetParameter(s){
-  window.location.href = "{% url 'EmployeesProfile' %}" + "?id="+s;
-}
+<script type="text/javascript">
+  /**var items ;
+  {% for Atten in EmpWorkDate %}
+       items +=' <tr onclick="document.location = "./change-status.html"">'+
+                    '<td>{{ Atten.StartDate }}</td>'+
+                    '<td>09:00</td>'+
+                    '<td>17:00</td>'+
+                    '<td class="text-success">09:00</td>'+
+                    '<td class="text-success">17:00</td>'+
+                    '<td class="text-success">Present</td>' +
+                 ' </tr>'
+  {% endfor %}
+        var bodyitem = document.getElementById("bodyitem");
+        bodyitem.innerHTML=items;**/
+  function setGetParameter(s){
+    window.location.href = "{% url 'EmployeesProfile' %}" + "?id="+s;
+  }
 </script>
 {% endblock script %}
