@@ -8,10 +8,10 @@
       <h1>Edit Schedule For Employee Name</h1>
       <nav>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="./hr-home.html">Home</a></li>
-          <li class="breadcrumb-item"><a href="./employees.html">Employees</a></li>
+          <li class="breadcrumb-item"><a href="{% url 'HR_home' %}">Home</a></li>
+          <li class="breadcrumb-item"><a href="{% url 'EmployeesPage' %}">Employees</a></li>
           <li class="breadcrumb-item"><a href="./employees-profile.html">Employee ID</a></li>
-          <li class="breadcrumb-item"><a href="./employees-view-schedule.html"> View Schedule</a></li>
+          <li class="breadcrumb-item"><a href="javascript:" onclick='setGetParameter( "{{ Emp_id}} ")'>{{ Name }}</a></li>
           <li class="breadcrumb-item active">Edit Schedule</li>
         </ol>
       </nav>

@@ -142,7 +142,11 @@
                       <i class="bi bi-box-arrow-in-right"></i>
                     </div>
                     <div class="ps-3">
-                      <h6 class="text-success">present</h6>
+                     {% if CheckIn in 'Absent' %}
+                     <h6 class="text-danger">{{ CheckIn }}</h6>
+                        {% else %}
+                         <h6 class="text-success">{{ CheckIn }}</h6>
+                        {% endif %}
                      
                     </div>
                   </div>
@@ -163,7 +167,11 @@
                       <i class="bi bi-box-arrow-right"></i>
                     </div>
                     <div class="ps-3">
-                      <h6 class="text-danger">absent</h6>
+                        {% if CheckOut in 'Absent' %}
+                     <h6 class="text-danger">{{ CheckOut }}</h6>
+                        {% else %}
+                         <h6 class="text-success">{{ CheckOut }}</h6>
+                        {% endif %}
 
                     </div>
                   </div>
@@ -226,18 +234,14 @@
                         <th scope="col">Status</th>
                       </tr>
                     </thead>
-                    {% for Ad in Redata %}
+                      {% for Ad in Redata %}
                     <tbody>
                       <tr>
                         <th scope="row">{{ Ad.AttendanDate }}</th>
                         <td>{{ Ad.InTime }}   --   {{ Ad.OutTime }}</td>
-                          {% if Ad.status == 1 %}
-                        <td><span class="badge bg-success">Present</span></td>
-                          {% elif  Ad.status == 2 %}
-                          <td><span class="badge bg-danger">Pending</span></td>
-                          {% else %}
-                          <td><span class="badge bg-warning">Absent</span></td>
-                          {% endif %}
+
+                        <td><span class="badge bg-success">{{ Ad.Mark }}</span></td>
+
                       </tr>
                     </tbody>
                       {% endfor %}
@@ -274,22 +278,18 @@
               <h5 class="card-title">Schedule <span>| This week</span></h5>
 
               <div class="activity" id="activity">
-                {% for Ad in data %}
-               <span class="titledisplay span{{ forloop.counter }} "  style="display:none;">{{ Ad.AttendanDate}}</span>
+                {% for Ad in ScheduleWeek %}
+               <span class="titledisplay span{{ forloop.counter }}"  style="display:none;">{{ Ad.StartDate}}</span>
                 <div class="activity-item d-flex">
 
                   <div class="activite-label week{{ forloop.counter }}" ></div>
-                  <i class='bi bi-circle-fill activity-badge text-success align-self-start'></i>
-                  <div class="activity-content">
-                      {{ Ad.InTime }} - {{ Ad.OutTime }} &#12288;
-                        {% if Ad.status == 1 %}
-                         <span class="text-success fw-bold" >Present</span>
-                          {% elif  Ad.status == 2 %}
-                           <span class="text-danger fw-bold">Pending</span>
-                          {% else %}
-                           <span class="text-warning fw-bold">Absent</span>
-                          {% endif %}
-                  </div>
+                        <i class='bi bi-circle-fill activity-badge text-success align-self-start'></i>
+                        <div class="activity-content">
+                        {{ Ad.StartTime }} - {{ Ad.EndTime }} &#12288;
+                         <span class="text-success fw-bold" ></span>
+                            </div>
+
+
                 </div><!-- End activity item-->
                  {% endfor %}
               </div>
@@ -308,7 +308,9 @@
 
   
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
 {% endblock content %}
+
 {% block script %}
     <script>
 const weekdays = ["Sun","Mon","Tues","Wed","Thur","Fri","Sat"];
@@ -317,7 +319,7 @@ var d;
 var newdate
 var e;
 var day;
-{% for Ad in data %}
+{% for Ad in ScheduleWeek %}
 d = document.querySelector(".span{{ forloop.counter }}").innerHTML;
 
 newdate= new Date(d).getDay();

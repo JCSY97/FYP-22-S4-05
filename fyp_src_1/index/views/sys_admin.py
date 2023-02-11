@@ -4,22 +4,56 @@ from django.contrib import messages
 from datetime import date,datetime, timedelta
 import json
 from django.core import serializers
+from django.db.models import Q
+
+currentDate = datetime.now().strftime("%Y-%m-%d")
+currentTime =  datetime.now().strftime('%H:%M:%S')
 
 # Create your views here.
 def sys_admin_home(request):
+	dt = datetime.strptime(currentDate, '%Y-%m-%d')
+	start = dt - timedelta(days=dt.weekday() + 1)
+	end = start + timedelta(days=6)
+	startDate = start.strftime('%Y-%m-%d')
+	endDate = end.strftime('%Y-%m-%d')
 	if 'Employee_ID' in request.session:
-		currentDate = datetime.now().strftime("%Y-%m-%d")
+		fourdates = date.today() - timedelta(days=4)
 		currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
-		RecentData = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID']).filter(
-			AttendanDate__lte=currentDate).order_by('AttendanDate', 'EndDate')
-		AttendanceData = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID']).filter(
-			AttendanDate__lte=currentDate)[:5]
+
+		currentAtten = WorkSchedule.objects.get(AttendanDate=currentDate, Employee_id=request.session['Employee_ID'])
+
+		CheckIn = ''
+		CheckOut = ''
+		Marklist = ['off', 'mc']
+		scheduleWeek = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID'], StartDate__lte=endDate,
+												   StartDate__gte=startDate).exclude(Mark__in=Marklist).order_by(
+			'StartDate')
+
+		RecentData = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID'],
+												 AttendanDate__lte=currentDate).exclude(Mark__in=Marklist).order_by(
+			'AttendanDate', 'EndDate')
+		if currentAtten.Mark.lower() != 'off' or currentAtten.Mark.lower() != 'mc':
+			if currentTime > '12:00:00' and currentAtten.InTime == '' or currentAtten.InTime is None or currentAtten.InTime == 'null':
+				CheckIn = 'Absent'
+				if currentTime > '16:00:00' and currentAtten.OutTime == '' or currentAtten.OutTime is None or currentAtten.OutTime == 'null':
+					CheckOut = 'Absent'
+			else:
+				CheckIn = currentAtten.InTime
+				CheckOut = currentAtten.OutTime
+		else:
+			CheckIn = 'OFF'
+			CheckOut = 'OFF'
+
 		context = {
-			'Employee_ID' : currentEmployee.Employee_ID,
-			'Full_Name' : currentEmployee.Full_Name,
-			'PFP' : currentEmployee.Profile_Image.url,
+			'Role': currentEmployee.Role.Role_ID,
+			'Employee_ID': currentEmployee.Employee_ID,
+			'Full_Name': currentEmployee.Full_Name,
+			'Job_Title': currentEmployee.Job_Title,
+			'PFP': currentEmployee.Profile_Image.url,
 			'Redata': RecentData,
-			'data': AttendanceData,
+			'ScheduleWeek': scheduleWeek,
+			'CheckIn': CheckIn,
+			'CheckOut': CheckOut,
 		}
 
 		return render(request, 'sys_admin/sys_admin_home.html', context)

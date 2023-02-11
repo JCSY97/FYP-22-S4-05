@@ -2,27 +2,66 @@ from django.shortcuts import render, redirect
 from index.models import Employee, Role,WorkSchedule
 from django.contrib import messages
 # Create your views here.
+from django.core.exceptions import ObjectDoesNotExist
+
 from datetime import date,datetime, timedelta
 from django.core import serializers
 import json
 
-def Employee_home(request):
-	if 'Employee_ID' in request.session:
-		currentDate = datetime.now().strftime("%Y-%m-%d")
-		currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
-		RecentData = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID']).filter(AttendanDate__lte=currentDate).order_by('AttendanDate', 'EndDate')
-		AttendanceData = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID']).filter(AttendanDate__lte=currentDate)[:5]
-		context = {
-		    'Employee_ID' : currentEmployee.Employee_ID,
-			'Full_Name' : currentEmployee.Full_Name,
-			'Job_Title' : currentEmployee.Job_Title,
-			'Role' : currentEmployee.Role.Role_ID,
-			'PFP' : currentEmployee.Profile_Image.url,
-			'Redata': RecentData,
-			'data': AttendanceData,
-		}
+currentDate = datetime.now().strftime("%Y-%m-%d")
+currentTime =  datetime.now().strftime('%H:%M:%S')
 
+def Employee_home(request):
+	dt = datetime.strptime(currentDate, '%Y-%m-%d')
+	start = dt - timedelta(days=dt.weekday() + 1)
+	end = start + timedelta(days=6)
+	startDate = start.strftime('%Y-%m-%d')
+	endDate = end.strftime('%Y-%m-%d')
+	if 'Employee_ID' in request.session:
+		fourdates = date.today() - timedelta(days=4)
+		currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
+
+		currentAtten = WorkSchedule.objects.get(AttendanDate=currentDate,Employee_id=request.session['Employee_ID'])
+
+		CheckIn = ''
+		CheckOut = ''
+		Marklist = ['off', 'mc']
+		scheduleWeek = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID'], StartDate__lte=endDate,StartDate__gte=startDate).exclude(Mark__in=Marklist).order_by('StartDate')
+
+		RecentData = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID'],
+												 AttendanDate__lte=currentDate).exclude(Mark__in=Marklist).order_by(
+			'AttendanDate', 'EndDate')
+		if currentAtten is None:
+			print('yes')
+		if currentAtten.Mark.lower() != 'off' or currentAtten.Mark.lower() != 'mc':
+			if currentTime > '12:00:00' and currentAtten.InTime == '' or currentAtten.InTime is None or currentAtten.InTime == 'null':
+				CheckIn = 'Absent'
+				if currentTime > '16:00:00' and currentAtten.OutTime == '' or currentAtten.OutTime is None or currentAtten.OutTime == 'null':
+					CheckOut = 'Absent'
+			else:
+				CheckIn = currentAtten.InTime
+				CheckOut = currentAtten.OutTime
+		else:
+			CheckIn = 'OFF'
+			CheckOut = 'OFF'
+
+		context = {
+			'Role': currentEmployee.Role.Role_ID,
+			'Employee_ID': currentEmployee.Employee_ID,
+			'Full_Name': currentEmployee.Full_Name,
+			'Job_Title': currentEmployee.Job_Title,
+			'PFP': currentEmployee.Profile_Image.url,
+			'Redata': RecentData,
+			'ScheduleWeek': scheduleWeek,
+			'CheckIn': CheckIn,
+			'CheckOut': CheckOut,
+		}
+	# posts = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID'], AttendanDate__gte=(now-timedelta(days=5)).date()).values("WorkSchedule_id")
+
+	# if WorkSchedule.objects.filter(StartDate=currentDate,AttendanDate=currentDate).exists():
+	# 	print("yes")
 		return render(request, 'employee/employee_home.html', context)
+
 
 	else:
 		messages.error(request, 'Please login first')

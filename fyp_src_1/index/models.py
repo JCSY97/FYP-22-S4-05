@@ -57,8 +57,8 @@ class WorkSchedule(models.Model):
 	Employee = models.ForeignKey(Employee,on_delete=models.DO_NOTHING)
 
 	AttendanDate = models.DateField(null=True)
-	InTime = models.CharField(max_length=256, null=True, blank=True)
-	OutTime = models.CharField(max_length=256, null=True, blank=True)
+	InTime = models.TimeField(max_length=256, null=True, blank=True)
+	OutTime = models.TimeField(max_length=256, null=True, blank=True)
 
 	Mark = models.CharField(max_length=256,null=True)
 	StartDate = models.DateField()

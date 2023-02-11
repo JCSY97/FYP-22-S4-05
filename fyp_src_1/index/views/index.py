@@ -9,6 +9,9 @@ from django.core.mail import EmailMessage
 from django.views.decorators import gzip
 import cv2
 import threading
+from django.db.models import Q
+
+from datetime import date,datetime, timedelta
 from .form import PasswordForm
 
 # Create your views here.
@@ -17,6 +20,10 @@ def index_home(request):
 
 def Check_In(request):
 	return render(request, 'index/camera.html')
+
+
+currentDate = datetime.now().strftime("%Y-%m-%d")
+
 
 def index_login(request):
 

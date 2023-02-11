@@ -10,7 +10,7 @@
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="{% url 'HR_home' %}">Home</a></li>
           <li class="breadcrumb-item "><a href="{% url 'EmployeesPage' %}">Employees</a></li>
-          <li class="breadcrumb-item"><a href="">{{ Name }}</a></li>
+          <li class="breadcrumb-item"><a href="javascript:" onclick='setGetParameter( "{{ Emp_id}} ")'>{{ Name }}</a></li>
             <li class="breadcrumb-item active"><a href="{% url 'EmployeeSchedule' Emp_id %}">View Schedule</a></li>
         </ol>
       </nav>
@@ -46,15 +46,11 @@
                     <td>{{ Atten.AttendanDate }}</td>
                     <td>{{ Atten.StartTime }}</td>
                     <td>{{ Atten.EndTime }}</td>
-                    <td class="text-success">{{ Atten.InTime }}</td>
-                    <td class="text-success">{{ Atten.OutTime }}</td>
-                      {% if Atten.status == 1 %}
-                    <td class="text-warning">Present</td>
-                      {%  elif Atten.status == 2 %}
-                      <td class="text-success">Pending</td>
-                      {% else %}
-                      <td class="text-danger">Absent</td>
-                      {% endif %}
+                    <td class="text-warning">{{ Atten.InTime }}</td>
+                    <td class="text-warning">{{ Atten.OutTime }}</td>
+                    <td class="text-success">{{ Atten.Mark }}</td>
+
+
                   </tr>
                   {% endfor %}
                
