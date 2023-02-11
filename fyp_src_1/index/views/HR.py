@@ -1,25 +1,40 @@
 import json
-
 from django.db.models import Q
-
+from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, redirect
 from index.models import Employee, Role,WorkSchedule
 from django.contrib import messages
-from django.template import loader
-from django.db.models.functions import Extract
 from django.core import serializers
-from django.http import HttpResponse
-from django.http import JsonResponse
-from django.core.serializers import serialize
 from datetime import date,datetime, timedelta
-from django.utils import timezone
-import index
+
+
+
 currentDate = datetime.now().strftime("%Y-%m-%d")
 currentTime =  datetime.now().strftime('%H:%M:%S')
 
 
+def updateMark():
+	UserStatus = WorkSchedule.objects.filter(Q(StartDate__lte=currentDate) | Q(AttendanDate__lte=currentDate))
+	for i in UserStatus:
+		WorksId = WorkSchedule.objects.get(WorkSchedule_id=i.WorkSchedule_id)
+		if WorksId.Mark.lower()!='off' or WorksId.Mark.lower()!='mc':
+			if  WorksId.InTime=='' or WorksId.InTime is None or WorksId.OutTime is None or WorksId.OutTime=='':
+				WorksId.Mark ='Absent'
+				WorksId.save()
+			elif WorksId.StartTime < WorksId.InTime and WorksId.EndTime > WorksId.OutTime:
+				WorksId.Mark='Late & leave early'
+				WorksId.save()
+			elif WorksId.StartTime >= WorksId.InTime and WorksId.EndTime > WorksId.OutTime:
+				WorksId.Mark='leave early'
+				WorksId.save()
+			elif WorksId.StartTime < WorksId.InTime and WorksId.EndTime <= WorksId.OutTime:
+				WorksId.Mark='late'
+				WorksId.save()
+			else:
+				WorksId.Mark='Present'
+				WorksId.save()
 
-
+updateMark()
 
 def HR_home(request):
 	dt = datetime.strptime(currentDate, '%Y-%m-%d')
@@ -29,29 +44,36 @@ def HR_home(request):
 	endDate = end.strftime('%Y-%m-%d')
 	if 'Employee_ID' in request.session:
 		fourdates = date.today() - timedelta(days=4)
+
 		currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
-
-		currentAtten = WorkSchedule.objects.get(AttendanDate=currentDate, Employee_id=request.session['Employee_ID'])
-
 		CheckIn=''
 		CheckOut=''
 		Marklist = ['off','mc']
+
+		try:
+			currentAtten = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID']).filter(Q(AttendanDate=currentDate)|Q(StartDate=currentDate))
+
+			if currentAtten.Mark.lower() != 'off' or currentAtten.Mark.lower() != 'mc':
+				CheckIn = currentAtten.InTime
+				CheckOut = currentAtten.OutTime
+			else:
+				CheckIn = 'OFF'
+				CheckOut='OFF'
+		except (AttributeError,ObjectDoesNotExist):
+			CheckIn = 'Waiting'
+			CheckOut = 'Waiting'
+
+
+
 		scheduleWeek = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID'], StartDate__lte=endDate,
 												   StartDate__gte=startDate).exclude(Mark__in=Marklist).order_by('StartDate')
+		# CountAsent = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID'],AttendanDate__lte=currentDate, AttendanDate__gte=startDate)\
+		# 	.filter(Q(InTime__isnull=True)|Q(EndTime__isnull=True)).exclude(Mark__in=Marklist).count()
+
+		CountAsent = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID'],AttendanDate__lte=currentDate, AttendanDate__gte=startDate).filter(Mark='Absent').count()
 
 		RecentData = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID'],
 												 AttendanDate__lte=currentDate).exclude(Mark__in=Marklist).order_by('AttendanDate', 'EndDate')
-		if currentAtten.Mark.lower() !='off' or currentAtten.Mark.lower()!='mc':
-			if currentTime > '12:00:00' and currentAtten.InTime=='' or currentAtten.InTime is None or currentAtten.InTime=='null':
-				CheckIn = 'Absent'
-				if currentTime > '16:00:00' and currentAtten.OutTime=='' or currentAtten.OutTime is None or currentAtten.OutTime=='null':
-					CheckOut = 'Absent'
-			else:
-				CheckIn = currentAtten.InTime
-				CheckOut = currentAtten.OutTime
-		else:
-			CheckIn = 'OFF'
-			CheckOut = 'OFF'
 
 		context = {
 			'Role' : currentEmployee.Role.Role_ID,
@@ -60,14 +82,12 @@ def HR_home(request):
 			'Job_Title' : currentEmployee.Job_Title,
 			'PFP' : currentEmployee.Profile_Image.url,
 			'Redata': RecentData,
+			'count':CountAsent,
 			'ScheduleWeek':scheduleWeek,
 			'CheckIn':CheckIn,
 			'CheckOut':CheckOut,
 		}
-		# posts = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID'], AttendanDate__gte=(now-timedelta(days=5)).date()).values("WorkSchedule_id")
 
-		# if WorkSchedule.objects.filter(StartDate=currentDate,AttendanDate=currentDate).exists():
-		# 	print("yes")
 		return render(request, 'HR/HR_home.html', context)
 
 	else:

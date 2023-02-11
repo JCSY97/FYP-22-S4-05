@@ -3,6 +3,7 @@ from index.models import Employee, Role,WorkSchedule
 from django.contrib import messages
 from datetime import date,datetime, timedelta
 import json
+from django.core.exceptions import ObjectDoesNotExist
 from django.core import serializers
 from django.db.models import Q
 
@@ -20,29 +21,41 @@ def sys_admin_home(request):
 		fourdates = date.today() - timedelta(days=4)
 		currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
 
-		currentAtten = WorkSchedule.objects.get(AttendanDate=currentDate, Employee_id=request.session['Employee_ID'])
-
 		CheckIn = ''
 		CheckOut = ''
 		Marklist = ['off', 'mc']
-		scheduleWeek = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID'], StartDate__lte=endDate,
-												   StartDate__gte=startDate).exclude(Mark__in=Marklist).order_by(
-			'StartDate')
+		try:
+			currentAtten = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID']).filter(Q(AttendanDate=currentDate)|Q(StartDate=currentDate))
 
-		RecentData = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID'],
-												 AttendanDate__lte=currentDate).exclude(Mark__in=Marklist).order_by(
-			'AttendanDate', 'EndDate')
-		if currentAtten.Mark.lower() != 'off' or currentAtten.Mark.lower() != 'mc':
-			if currentTime > '12:00:00' and currentAtten.InTime == '' or currentAtten.InTime is None or currentAtten.InTime == 'null':
-				CheckIn = 'Absent'
-				if currentTime > '16:00:00' and currentAtten.OutTime == '' or currentAtten.OutTime is None or currentAtten.OutTime == 'null':
-					CheckOut = 'Absent'
-			else:
+			if currentAtten.Mark.lower() != 'off' or currentAtten.Mark.lower() != 'mc':
 				CheckIn = currentAtten.InTime
 				CheckOut = currentAtten.OutTime
-		else:
-			CheckIn = 'OFF'
-			CheckOut = 'OFF'
+			else:
+				CheckIn = 'OFF'
+				CheckOut = 'OFF'
+			# if currentAtten.Mark.lower() != 'off' or currentAtten.Mark.lower() != 'mc':
+			# 	if currentTime > '12:00:00' and currentAtten.InTime == '' or currentAtten.InTime is None or currentAtten.InTime == 'null':
+			# 		CheckIn = 'Absent'
+			# 		if currentTime > '16:00:00' and currentAtten.OutTime == '' or currentAtten.OutTime is None or currentAtten.OutTime == 'null':
+			# 			CheckOut = 'Absent'
+			# 	else:
+			# 		CheckIn = currentAtten.InTime
+			# 		CheckOut = currentAtten.OutTime
+
+		except (AttributeError, ObjectDoesNotExist):
+				CheckIn = 'Waiting'
+				CheckOut = 'Waiting'
+
+		scheduleWeek = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID'], StartDate__lte=endDate,
+												   StartDate__gte=startDate).exclude(Mark__in=Marklist).order_by('StartDate')
+
+		CountAsent = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID'],
+												 AttendanDate__lte=currentDate, AttendanDate__gte=startDate).filter(Mark='Absent').count()
+
+		RecentData = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID'],
+												 AttendanDate__lte=currentDate).exclude(Mark__in=Marklist).order_by('AttendanDate', 'EndDate')
+
+
 
 		context = {
 			'Role': currentEmployee.Role.Role_ID,
@@ -52,6 +65,7 @@ def sys_admin_home(request):
 			'PFP': currentEmployee.Profile_Image.url,
 			'Redata': RecentData,
 			'ScheduleWeek': scheduleWeek,
+			'count':CountAsent,
 			'CheckIn': CheckIn,
 			'CheckOut': CheckOut,
 		}
