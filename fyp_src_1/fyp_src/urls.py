@@ -16,7 +16,7 @@ Including another URLconf
 
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from index.views import index,camera,HR,sys_admin,employees
 from django.conf.urls.static import static
 from django.conf import settings

@@ -65,7 +65,9 @@
 
               <h1 style="width: 700px;text-align:center;font-weight:bold;">Please stay still for the system to recognise you</h1>
               <br>
-
+              <h1>input employee id here</h1>
+              <input type="text"></text>
+              <h1 id="result"></h1> 
               <div class=" boxborder">
 
               <video autoplay playsinline id="videoElement"></video>
@@ -106,6 +108,7 @@
 
   var canvas = document.getElementById('canvas');
   var context = canvas.getContext('2d');
+  var resultTemp = document.getElementById("result");
   const video = document.querySelector("#videoElement");
 
   video.width = 400;
@@ -136,18 +139,21 @@
           width = video.width;
           height = video.height;
           context.drawImage(video, 0, 0, width, height);
-          var dataa = canvas.toDataURL('image/jpeg', 1);
+          var dataTemp = canvas.toDataURL('image/jpeg', 1);
           context.clearRect(0, 0, width, height);
 
           $.ajax({
                   type: 'POST',
                   url: "{% url 'camera'  %}",
                   data: {
-                      'image': dataa,
+                      'image': dataTemp,
                       csrfmiddlewaretoken: '{{ csrf_token }}'
                   },
                   success: function(data) {
-                      console.log(data)
+                      console.log(data);
+                      console.log(data.valid);
+                      document.getElementById("result").innerHTML = data.valid;
+
                   },
                   error: function(response) {
                       console.log('Err0r')
@@ -158,8 +164,10 @@
       }
   }
 
+
+  // set timer
   var timeLeft = 45;
-  var timerId = setInterval(countdown, 1000);
+  var timerId = setInterval(countdown, 2000);
 
   </script>
 

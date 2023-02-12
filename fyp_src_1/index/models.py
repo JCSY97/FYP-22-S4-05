@@ -24,6 +24,7 @@ class Employee(models.Model):
 	Email_Address = models.EmailField()
 	Role = models.ForeignKey(Role, on_delete=models.CASCADE)
 	Profile_Image = models.ImageField(null=True, upload_to='media/profile_pics/')
+	
 	# change to password hashes later
 	Password = models.CharField(max_length=256)
 	Start_Date = models.DateField(auto_now_add=True)

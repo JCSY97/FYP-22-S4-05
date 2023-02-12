@@ -2,10 +2,24 @@ import cv2
 from django.http import HttpResponse , StreamingHttpResponse, request
 from django.shortcuts import render
 from flask import Flask, render_template,Response
+
+from index.views.facialRec import FR_class
+
+from rest_framework.decorators import api_view
+
+from django.http import JsonResponse
+
+
 import base64
 
 
 app = Flask(__name__)
+
+FR = FR_class("siamesemodelv2.h5")
+
+verified = True
+
+
 
 class VideoCamera(object):
     def __init__(self):
@@ -44,7 +58,7 @@ class VideoCamera(object):
 
 @app.route('/')
 def index(request):
-    if (request.method == 'POST'):
+    if request.method == 'POST':
         try:
             frame_ = request.POST.get('image')
             frame_=str(frame_)
@@ -56,7 +70,15 @@ def index(request):
             with open(filename, 'wb') as f:
                 f.write(imgdata)
 
-            
+
+            results, verified = FR.verify(0.5, 0.5)
+
+            #print(results)
+            print(verified)
+
+
+
+            return JsonResponse({"valid": str(verified)}, status = 200)
 
         except:
             print('Error')
@@ -77,6 +99,15 @@ def video_feed(request):
     return StreamingHttpResponse (gen(VideoCamera()), content_type='multipart/x-mixed-replace; boundary=frame')
 
 
+@api_view(['GET'])
+def return_verified(request):
+
+    return reponse(verified)
+
+
 if __name__ == 'main':
     app.run()
+
+
+
 
