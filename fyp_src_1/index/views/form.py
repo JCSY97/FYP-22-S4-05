@@ -9,7 +9,7 @@ class UserForm(forms.Form):
 class PasswordForm(forms.Form):
     old_password_flag = True
     old_password = forms.CharField(label="Old Password", min_length=8, widget=forms.PasswordInput())
-    new_password = forms.CharField(label="New Password", min_length=8, widget=forms.PasswordInput())
+    new_password = forms.CharField(label="New Password", min_length=8, widget=forms.PasswordInput()) 
     c = forms.CharField(label="Re-type New Password", min_length=8, widget=forms.PasswordInput())
 
     def set_old_password(self):

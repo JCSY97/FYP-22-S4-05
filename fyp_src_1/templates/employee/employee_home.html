@@ -1,4 +1,5 @@
 {% extends "index/base.html" %}
+{% load static %}
 {% load crispy_forms_tags %}
 
 {% block content %}
@@ -7,7 +8,7 @@
 
     <div class="d-flex align-items-center justify-content-between">
       <a href="{% url 'Home' %}" class="logo d-flex align-items-center">
-        <img src="{{ PFP }}" alt="">
+        <img src="{% static 'assets/img/logo.png' %}" alt="">
         <span class="d-none d-lg-block">FYP-22-S4-05</span>
       </a>
       <i class="bi bi-list toggle-sidebar-btn"></i>

@@ -1,12 +1,23 @@
 from django.shortcuts import render, redirect
 from index.models import Employee, Role,WorkSchedule
 from django.contrib import messages
-# Create your views here.
+import os
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 from datetime import date,datetime, timedelta
 from django.core import serializers
 import json
+import hashlib
+import random
+import string
+
+import os
+
+
+def get_MD5(Password):
+	md5 = hashlib.md5()
+	md5.update(Password.encode('utf-8'))
+	return md5.hexdigest()
 
 currentDate = datetime.now().strftime("%Y-%m-%d")
 currentTime =  datetime.now().strftime('%H:%M:%S')
@@ -103,16 +114,17 @@ def viewProfile(request):
 			# for edit user profile form
 			if request.POST.get('form_type') == 'editProfile':
 
-				if Role.objects.filter(Role_Name=request.POST.get('role_edit')) == 0:
-					messages.error(request, 'No such role')
-					return redirect('Profile')
+				if request.FILES.get('Pic') is not None:
+					New_p = request.FILES['Pic']
+					if currentEmployee.Profile_Image:
+						if os.path.isfile(currentEmployee.Profile_Image.path):
+							os.remove(currentEmployee.Profile_Image.path)
 
+					currentEmployee.Profile_Image = New_p
 
 				currentEmployee.Full_Name = request.POST.get('fullName_edit')
-
 				currentEmployee.Phone_Number = request.POST.get('phone')
 				currentEmployee.Email_Address = request.POST.get('email')
-
 
 				currentEmployee.save()
 
@@ -120,18 +132,27 @@ def viewProfile(request):
 
 			# for change password form	
 			elif request.POST.get('form_type') == 'changePassword':
-
-				# make sure current password matches
-				if request.POST.get('password') == currentEmployee.Password:
-					currentEmployee.Password = request.POST.get('newpassword')
+				Random_salt = ''.join(random.sample(string.ascii_letters + string.digits + string.punctuation, 4))
+				New_salt = Random_salt
+				old_Password = request.POST.get('password')
+				new_passWord =request.POST.get('newpassword')
+				new_password_2 =request.POST.get('renewpassword')
+				Update_pssword = get_MD5(new_passWord+New_salt)
+				old_pss = get_MD5(old_Password + currentEmployee.salt)
+				if new_passWord ==new_password_2 and old_pss == currentEmployee.Password:
+					currentEmployee.Password = Update_pssword
+					currentEmployee.salt=New_salt
 					currentEmployee.save()
-
 					messages.info(request, 'Your password has been changed')
+					return redirect('Profile')
+				elif new_passWord != new_password_2:
+					messages.info(request, 'password is different')
 					return redirect('Profile')
 
 				else:
 					messages.error(request, 'Your current password does not match')
 					return redirect('Profile')
+
 
 
 		else:
@@ -150,19 +171,4 @@ def viewProfile(request):
 		return redirect('login')
 
 
-
-def UpdateProfile(request, Editempid):
-	# EmpId = Employee.objects.get(Employee_ID = request.session['Employee_ID'])
-	# EmployeeId = Employee.objects.filter(Employee_ID = empid).first()
-
-	if (request.method == 'POST'):
-		UpdateProfile = Employee.objects.get(Employee_ID=Editempid)
-		FullName = request.POST.get('fullName')
-		Phone = request.POST.get('phone')
-		Email = request.POST.get('email')
-		UpdateProfile.Full_Name = FullName
-		UpdateProfile.Phone_Number = Phone
-		UpdateProfile.Email_Address = Email
-		UpdateProfile.save()
-	return redirect('Home')
 

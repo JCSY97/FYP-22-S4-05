@@ -3,12 +3,24 @@ from index.models import Employee, Role,WorkSchedule
 from django.contrib import messages
 from datetime import date,datetime, timedelta
 import json
+import random
+import string
+import hashlib
+import os
 from django.core.exceptions import ObjectDoesNotExist
 from django.core import serializers
 from django.db.models import Q
+from django.contrib.auth.hashers import make_password
+
 
 currentDate = datetime.now().strftime("%Y-%m-%d")
 currentTime =  datetime.now().strftime('%H:%M:%S')
+
+def get_MD5(Password):
+	md5 = hashlib.md5()
+	md5.update(Password.encode('utf-8'))
+	return md5.hexdigest()
+
 
 # Create your views here.
 def sys_admin_home(request):
@@ -97,6 +109,7 @@ def sys_admin_view_employees(request):
 def sys_admin_create_user(request):
 	if request.method == 'POST':
 		New_Employee_Full_Name = request.POST.get('name')
+		New_Employee_Job_Title = request.POST.get('Job_title')
 		New_Employee_ID = request.POST.get('EmployeeID')
 		New_Phone_Number = request.POST.get('phone')
 		New_Email_Address = request.POST.get('email')
@@ -105,28 +118,31 @@ def sys_admin_create_user(request):
 		# do password hash later
 		New_Password = request.POST.get('password')
 		New_Password_2 = request.POST.get('password2')
-
-
+		Random_salt = ''.join(random.sample(string.ascii_letters + string.digits+string.punctuation, 4))
+		New_salt=Random_salt
+		Encry_Pass = get_MD5(New_Password+New_salt)
+		Encry_Pass_2 = get_MD5(New_Password_2+New_salt)
+		
 
 		#if employee_ID is taken
 		if Employee.objects.filter(Employee_ID=New_Employee_ID).exists():
 			messages.error(request, 'There already exist such Employee ID')
 			return redirect('sys_admin_create_user')
 
-		elif New_Password != New_Password_2:
+		elif Encry_Pass != Encry_Pass_2:
 			messages.error(request, 'Your passwords does not match')
 			return redirect('sys_admin_create_user')
 		else:
 			New_Role = Role.objects.get(Role_Name=New_Role_Name)
-
+			
 			# if have PFP
 			if request.FILES['profilepic']:
 				New_PFP = request.FILES['profilepic']
 				new_employee = Employee(Employee_ID=New_Employee_ID, Full_Name=New_Employee_Full_Name, Phone_Number=New_Phone_Number,
-									 Email_Address=New_Email_Address, Role=New_Role, Password=New_Password, Profile_Image=New_PFP)
+									 Email_Address=New_Email_Address, Role=New_Role,salt=New_salt, Job_Title=New_Employee_Job_Title ,Password=Encry_Pass, Profile_Image=New_PFP)
 			else:
 				new_employee = Employee(Employee_ID=New_Employee_ID, Full_Name=New_Employee_Full_Name, Phone_Number=New_Phone_Number,
-									 Email_Address=New_Email_Address, Role=New_Role, Password=New_Password)
+									 Email_Address=New_Email_Address, Job_Title=New_Employee_Job_Title, salt=New_salt,Role=New_Role, Password=Encry_Pass)
 			new_employee.save()
 			messages.success(request, 'New account has been created')
 			return redirect('sys_admin_create_user')
@@ -153,20 +169,17 @@ def user_profile(request):
 			# for edit user profile form
 			if request.POST.get('form_type') == 'editProfile':
 
-				if Role.objects.filter(Role_Name=request.POST.get('role_edit')) == 0:
-					messages.error(request, 'No such role')
-					return redirect('sys_admin_user_profile')
+				if request.FILES.get('Pic') is not None:
+					New_p = request.FILES['Pic']
+					if currentEmployee.Profile_Image:
+						if os.path.isfile(currentEmployee.Profile_Image.path):
+							os.remove(currentEmployee.Profile_Image.path)
 
+					currentEmployee.Profile_Image = New_p
 
 				currentEmployee.Full_Name = request.POST.get('fullName_edit')
-				
-				Role_edit = Role.objects.get(Role_Name=request.POST.get('role_edit'))
-				currentEmployee.Role = Role_edit
-
 				currentEmployee.Phone_Number = request.POST.get('phone_edit')
 				currentEmployee.Email_Address = request.POST.get('email_edit')
-
-
 				currentEmployee.save()
 
 				return redirect('sys_admin_user_profile')
@@ -174,17 +187,27 @@ def user_profile(request):
 			# for change password form	
 			elif request.POST.get('form_type') == 'changePassword':
 
-				# make sure current password matches
-				if request.POST.get('password') == currentEmployee.Password:
-					currentEmployee.Password = request.POST.get('newpassword')
+				Random_salt = ''.join(random.sample(string.ascii_letters + string.digits + string.punctuation, 4))
+				New_salt = Random_salt
+				old_Password = request.POST.get('password')
+				new_passWord = request.POST.get('newpassword')
+				new_password_2 = request.POST.get('renewpassword')
+				Update_pssword = get_MD5(new_passWord + New_salt)
+				old_pss = get_MD5(old_Password + currentEmployee.salt)
+				if new_passWord == new_password_2 and old_pss == currentEmployee.Password:
+					currentEmployee.Password = Update_pssword
+					currentEmployee.salt = New_salt
 					currentEmployee.save()
-
 					messages.info(request, 'Your password has been changed')
+					return redirect('sys_admin_user_profile')
+				elif new_passWord != new_password_2:
+					messages.info(request, 'password is different')
 					return redirect('sys_admin_user_profile')
 
 				else:
 					messages.error(request, 'Your current password does not match')
 					return redirect('sys_admin_user_profile')
+
 
 
 		else:

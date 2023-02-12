@@ -27,6 +27,7 @@ urlpatterns = [
     path('', index.index_home, name='index'),
     path('login/', index.index_login, name='login'),
     path('logout/', index.logout,name='logout'),
+    path('employee/DeletedPicture/<int:Editempid>/', index.DeletedButton, name='DeletePic'),
 
     path('admin/', admin.site.urls),
     path('sys_admin/home/', sys_admin.sys_admin_home, name='sys_admin_home'), 
@@ -52,7 +53,6 @@ urlpatterns = [
     path('check_in/', index.Check_In, name='Check_in'),
     path('employee/employee_home',employees.Employee_home, name='Home'),
     path('employee_profile/',employees.viewProfile, name='Profile'),
-    path('employee_profile/edit/<int:Editempid>/',employees.UpdateProfile, name='EditProfile'),
     path('employee/schedule', employees.Employee_schedule, name='Employee_schedule'),
 
 ]

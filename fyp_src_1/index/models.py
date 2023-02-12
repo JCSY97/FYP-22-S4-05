@@ -21,9 +21,10 @@ class Employee(models.Model):
 	Full_Name = models.CharField(max_length=100)
 	Job_Title = models.CharField(max_length=100)
 	Phone_Number = models.CharField(max_length=100)
+	salt = models.CharField(max_length=50, null=True)
 	Email_Address = models.EmailField()
 	Role = models.ForeignKey(Role, on_delete=models.CASCADE)
-	Profile_Image = models.ImageField(null=True, upload_to='media/profile_pics/')
+	Profile_Image = models.ImageField(null=True,blank=True, upload_to='profile_pics/')
 	
 	# change to password hashes later
 	Password = models.CharField(max_length=256)

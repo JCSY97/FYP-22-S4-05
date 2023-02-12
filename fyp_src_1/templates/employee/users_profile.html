@@ -7,7 +7,7 @@
 
     <div class="d-flex align-items-center justify-content-between">
       <a href="{% url 'Home' %}" class="logo d-flex align-items-center">
-        <img src="{% static '/img/logo.png' %}" alt="">
+        <img src="{% static 'assets/img/logo.png' %}" alt="">
         <span class="d-none d-lg-block">FYP-22-S4-05</span>
       </a>
       <i class="bi bi-list toggle-sidebar-btn"></i>
@@ -202,7 +202,7 @@
                 <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
 
                   <!-- Profile Edit Form -->
-                  <form action="" method="POST">
+                  <form action="" method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
                   <input type="hidden" name="form_type" value="editProfile">
                   <div class="row mb-3">
@@ -210,8 +210,10 @@
                     <div class="col-md-8 col-lg-9">
                       <img src="{{ PFP }}" alt="Profile">
                       <div class="pt-2">
-                        <a href="#" class="btn btn-primary btn-sm" title="Upload new profile image"><i class="bi bi-upload"></i></a>
-                        <a href="#" class="btn btn-danger btn-sm" title="Remove my profile image"><i class="bi bi-trash"></i></a>
+                      <label  class="btn btn-primary btn-sm">
+                             <input  type="file" id="yourProfile" name="Pic" accept="image/*" style="display: none;"><i class="bi bi-upload" style="color: #f6f9ff">
+                            </i></label>
+                        <a href="{% url 'DeletePic' Employee_ID %}" class="btn btn-danger btn-sm" title="Remove my profile image"><i class="bi bi-trash"></i></a>
                       </div>
                     </div>
                   </div>
@@ -227,14 +229,6 @@
                     <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Full Name</label>
                     <div class="col-md-8 col-lg-9">
                       <input name="fullName_edit" type="text" class="form-control" id="fullName" value="{{ Full_Name }}">
-                    </div>
-                  </div>
-
-
-                  <div class="row mb-3">
-                    <label for="Job" class="col-md-4 col-lg-3 col-form-label">Position</label>
-                    <div class="col-md-8 col-lg-9">
-                      <input name="job" type="text" class="form-control" id="Job" value="{{ Job_Title }}" disabled>
                     </div>
                   </div>
 
@@ -270,6 +264,13 @@
                   <!-- Change Password Form -->
                   <form method="POST">
                     {% csrf_token %}
+                      <input type="hidden" name="form_type" value="changePassword">
+                      <div class="row mb-3">
+                      <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">Current Password</label>
+                      <div class="col-md-8 col-lg-9">
+                        <input name="password" type="password" class="form-control" id="currentPassword">
+                      </div>
+                    </div>
 
                     <div class="row mb-3">
                       <label for="newPassword" class="col-md-4 col-lg-3 col-form-label">New Password</label>
@@ -286,7 +287,7 @@
                     </div>
 
                     <div class="text-center">
-                      <button type="submit" class="btn btn-primary" onclick="matchpassword()">Change Password</button>
+                      <button type="submit" class="btn btn-primary" >Change Password</button>
                     </div>
                   </form><!-- End Change Password Form -->
 
@@ -297,9 +298,7 @@
 
             </div>
           </div>
-          {% for message in messages%}
-          <h5>{{ message }}</h5>
-        {% endfor %}
+
         </div>
       </div>
     </section>
@@ -312,4 +311,9 @@
 
 {% endblock content %}
 {% block script %}
+    <script>
+     {% for message in messages%}
+         alert('{{ message }}');
+     {% endfor %}
+</script>
 {% endblock script %}
