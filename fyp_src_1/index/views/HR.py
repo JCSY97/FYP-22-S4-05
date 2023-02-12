@@ -13,29 +13,6 @@ currentDate = datetime.now().strftime("%Y-%m-%d")
 currentTime =  datetime.now().strftime('%H:%M:%S')
 
 
-def updateMark():
-	UserStatus = WorkSchedule.objects.filter(Q(StartDate__lte=currentDate) | Q(AttendanDate__lte=currentDate))
-	for i in UserStatus:
-		WorksId = WorkSchedule.objects.get(WorkSchedule_id=i.WorkSchedule_id)
-		if WorksId.Mark.lower()!='off' or WorksId.Mark.lower()!='mc':
-			if  WorksId.InTime=='' or WorksId.InTime is None or WorksId.OutTime is None or WorksId.OutTime=='':
-				WorksId.Mark ='Absent'
-				WorksId.save()
-			elif WorksId.StartTime < WorksId.InTime and WorksId.EndTime > WorksId.OutTime:
-				WorksId.Mark='Late & leave early'
-				WorksId.save()
-			elif WorksId.StartTime >= WorksId.InTime and WorksId.EndTime > WorksId.OutTime:
-				WorksId.Mark='leave early'
-				WorksId.save()
-			elif WorksId.StartTime < WorksId.InTime and WorksId.EndTime <= WorksId.OutTime:
-				WorksId.Mark='late'
-				WorksId.save()
-			else:
-				WorksId.Mark='Present'
-				WorksId.save()
-
-updateMark()
-
 def HR_home(request):
 	dt = datetime.strptime(currentDate, '%Y-%m-%d')
 	start = dt - timedelta(days=dt.weekday() + 1)
