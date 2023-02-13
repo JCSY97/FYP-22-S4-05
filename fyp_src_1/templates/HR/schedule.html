@@ -70,24 +70,26 @@
           var listingsnum =0 ;
           var item = "";
 
+          var mark="" ;
           JSON.parse(json_data, function (key, value) {
 
             if (`${key}` == "StartDate" ){
               
-              start = start + '{"start":"' +`${value}`;
+              start = start + '"start":"' +`${value}` +'",';
+              end = end + '"end":"' +`${value}` +'"},';
+              mark = mark + '{"title": "' + `${value}` ;
+              
+            } 
             
-            } 
-            else if(`${key}` == "EndDate")
-            {
-              end = end + '"end":"' +`${value}` ;
-            } 
             else if(`${key}` == "StartTime" )
             {
               if (`${value}` != "null"){
-                start = start +'T' +`${value}` +'",';
+                //start = start +'T' +`${value}` +'",';
+                mark = mark + ' ' + `${value} ` ;
               }
               else{
-                start = start + '",';
+               // start = start + '",';
+                mark = mark;
               }
 
               
@@ -95,16 +97,20 @@
             else if(`${key}` == "EndTime")
             {
               if (`${value}` != "null"){
-                end = end +'T' +`${value}` +'"},';
+                //end = end +'T' +`${value}` +'"},';
+                
+                mark = mark + '-' + `${value}` + '",';
               }
               else{
-                end = end + '"},';
+               // end = end + '"},';
+                mark = mark + '",';
               }
-              strings =start + end;
+              strings = mark + start + end;
               listings = listings + strings;
               
               start ="";
               end = "";
+              mark = "";
               count ++;
             }
             ;
