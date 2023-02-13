@@ -36,7 +36,7 @@
 
                       <select class="form-select year" id="dateselected" name="dateselected" aria-label="Floating label select example" required >
                             {% for i in Data %}
-                          <option  name="attenid" value="{{ i.WorkSchedule_id }}">{{ i.AttendanDate }}</option>
+                          <option  name="attenid" value="{{ i.WorkSchedule_id }}">{{ i.StartDate }}</option>
                             {% endfor %}
                       </select>
                     </div>

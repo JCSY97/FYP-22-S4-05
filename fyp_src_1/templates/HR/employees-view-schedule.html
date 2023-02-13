@@ -44,7 +44,7 @@
                   {% for Atten in AttenData %}
                   
                   <tr onclick="document.location ='{% url 'EmployeeStatus' Emp_id %}'">
-                    <td>{{ Atten.AttendanDate }}</td>
+                    <td>{{ Atten.StartDate }}</td>
                     <td>{{ Atten.StartTime }}</td>
                     <td>{{ Atten.EndTime }}</td>
                     {% if Atten.Mark in 'Present' %}

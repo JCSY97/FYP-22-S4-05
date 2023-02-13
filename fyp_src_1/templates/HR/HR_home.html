@@ -130,7 +130,7 @@
                       {% for Ad in Redata %}
                     <tbody>
                       <tr>
-                        <th scope="row">{{ Ad.AttendanDate }}</th>
+                        <th scope="row">{{ Ad.StartDate }}</th>
                         {% if Ad.Mark in 'Present' %}
                         
                         <td><span class ="text-success">{{ Ad.InTime |date:"G:i" }}   --   {{ Ad.OutTime |date:"G:i" }}</span></td>
