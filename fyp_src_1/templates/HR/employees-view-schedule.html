@@ -42,13 +42,32 @@
 
                 <tbody id="bodyitem">
                   {% for Atten in AttenData %}
+                  
                   <tr onclick="document.location ='{% url 'EmployeeStatus' Emp_id %}'">
                     <td>{{ Atten.AttendanDate }}</td>
                     <td>{{ Atten.StartTime }}</td>
                     <td>{{ Atten.EndTime }}</td>
+                    {% if Atten.Mark in 'Present' %}
+                    <td class="text-success">{{ Atten.InTime }}</td>
+                    <td class="text-success">{{ Atten.OutTime }}</td>
+                    <td class="text-success">{{ Atten.Mark }}</td>
+                    {% elif Atten.Mark in 'Late' %}
+                    <td class="text-danger">{{ Atten.InTime }}</td>
+                    <td class="text-success">{{ Atten.OutTime }}</td>
+                    <td class="text-danger">{{ Atten.Mark }}</td>
+                    {% elif Atten.Mark in 'leave early' %}
+                    <td class="text-success">{{ Atten.InTime }}</td>
+                    <td class="text-danger">{{ Atten.OutTime }}</td>
+                    <td class="text-danger">{{ Atten.Mark }}</td>
+                    {% elif Atten.Mark in 'Pending' %}
                     <td class="text-warning">{{ Atten.InTime }}</td>
                     <td class="text-warning">{{ Atten.OutTime }}</td>
-                    <td class="text-success">{{ Atten.Mark }}</td>
+                    <td class="text-warning">{{ Atten.Mark }}</td>
+                    {% else %}
+                    <td class="text-danger">{{ Atten.InTime }}</td>
+                    <td class="text-danger">{{ Atten.OutTime }}</td>
+                    <td class="text-danger">{{ Atten.Mark }}</td>
+                    {% endif %}
 
 
                   </tr>
