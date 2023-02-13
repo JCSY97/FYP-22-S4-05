@@ -10,7 +10,7 @@ class RoleAdmin(admin.ModelAdmin):
 	list_display = ('Role_ID', 'Role_Name')
 
 class WorkScheduleAdmin(admin.ModelAdmin):
-	list_display = ('WorkSchedule_id', 'Employee', 'Mark', 'StartDate', 'EndDate', 'StartTime','EndTime','AttendanDate','InTime','OutTime')
+	list_display = ('WorkSchedule_id', 'Employee', 'Mark', 'StartDate',  'StartTime','EndTime','InTime','OutTime')
 
 
 admin.site.register(Employee, EmployeeAdmin)

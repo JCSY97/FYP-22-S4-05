@@ -24,7 +24,7 @@ currentTime =  datetime.now().strftime('%H:%M:%S')
 
 def Employee_home(request):
 	dt = datetime.strptime(currentDate, '%Y-%m-%d')
-	start = dt - timedelta(days=dt.weekday() + 1)
+	start = dt - timedelta(days=dt.weekday())
 	end = start + timedelta(days=6)
 	startDate = start.strftime('%Y-%m-%d')
 	endDate = end.strftime('%Y-%m-%d')
@@ -35,26 +35,32 @@ def Employee_home(request):
 		CheckIn = ''
 		CheckOut = ''
 		Marklist = ['off', 'mc']
-		try:
-			currentAtten = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID']).filter(Q(AttendanDate=currentDate)|Q(StartDate=currentDate))
-
-			if currentAtten.Mark.lower() != 'off' or currentAtten.Mark.lower() != 'mc':
-				CheckIn = currentAtten.InTime
-				CheckOut = currentAtten.OutTime
+		CheckValues = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID']).filter(
+			StartDate=currentDate)
+		if CheckValues.exists():
+			AttenCheck = WorkSchedule.objects.get(Employee_id=request.session['Employee_ID'], StartDate=currentDate)
+			if AttenCheck.Mark.lower() != 'off' or AttenCheck.Mark.lower() != 'mc':
+				if AttenCheck.InTime is None and AttenCheck.OutTime is not None:
+					CheckIn = "Pending"
+					CheckOut = AttenCheck.OutTime
+				elif AttenCheck.OutTime is None and AttenCheck.InTime is not None:
+					CheckIn = AttenCheck.InTime
+					CheckOut = "Pending"
+				elif AttenCheck.InTime is None and AttenCheck.OutTime is None:
+					CheckOut = "Pending"
+					CheckIn = "Pending"
+				else:
+					CheckIn = AttenCheck.InTime
+					CheckOut = AttenCheck.OutTime
 			else:
 				CheckIn = 'OFF'
-				CheckOut='OFF'
-		except (AttributeError,ObjectDoesNotExist):
-			CheckIn = 'Waiting'
-			CheckOut = 'Waiting'
-
+				CheckOut = 'OFF'
 		scheduleWeek = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID'], StartDate__lte=endDate,StartDate__gte=startDate).exclude(Mark__in=Marklist).order_by('StartDate')
 
 		CountAsent = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID'],
-												 AttendanDate__lte=currentDate, AttendanDate__gte=startDate).filter(Mark='Absent').count()
+												 StartDate__lte=currentDate, StartDate__gte=startDate).filter(Mark='Absent').count()
 		RecentData = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID'],
-												 AttendanDate__lte=currentDate).exclude(Mark__in=Marklist).order_by(
-			'AttendanDate', 'EndDate')
+												 StartDate__lte=currentDate).exclude(Mark__in=Marklist).order_by('StartDate')
 
 		context = {
 			'Role': currentEmployee.Role.Role_ID,
@@ -68,10 +74,6 @@ def Employee_home(request):
 			'CheckIn': CheckIn,
 			'CheckOut': CheckOut,
 		}
-	# posts = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID'], AttendanDate__gte=(now-timedelta(days=5)).date()).values("WorkSchedule_id")
-
-	# if WorkSchedule.objects.filter(StartDate=currentDate,AttendanDate=currentDate).exists():
-	# 	print("yes")
 		return render(request, 'employee/employee_home.html', context)
 
 
@@ -84,7 +86,7 @@ def Employee_schedule(request):
 		# template = loader.get_template('HR/schedule.html')
 		currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
 		data = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID'])
-		js_data = serializers.serialize('json', data, fields=['StartDate', 'EndDate', 'StartTime', 'EndTime'])
+		js_data = serializers.serialize('json', data, fields=['StartDate', 'StartTime', 'EndTime'])
 		json_data = json.loads(js_data)
 		for d in json_data:
 			del d['pk']
