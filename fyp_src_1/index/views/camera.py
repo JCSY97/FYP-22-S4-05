@@ -1,7 +1,7 @@
 import cv2
-from django.http import HttpResponse , StreamingHttpResponse, request
+from django.http import HttpResponse, StreamingHttpResponse, request
 from django.shortcuts import render
-from flask import Flask, render_template,Response
+from flask import Flask, render_template, Response
 
 from index.views.facialRec import FR_class
 
@@ -15,10 +15,9 @@ import base64
 
 app = Flask(__name__)
 
-FR = FR_class("siamesemodelv2.h5")
+#FR = FR_class("siamesemodelv2.h5")
 
 verified = True
-
 
 
 class VideoCamera(object):
@@ -29,25 +28,25 @@ class VideoCamera(object):
         self.video = cv2.VideoCapture(0)
         self.video.set(3, 640)
         self.video.set(4, 480)
-    
+
     def __del__(self):
         self.video.release()
-    
+
     def get_frame(self):
-        
+
         cascPath = "static/assets/js/haarcascade_frontalface_default.xml"
         faceCascade = cv2.CascadeClassifier(cascPath)
         success, image = self.video.read()
-        image =  cv2.flip(image,1)
+        image = cv2.flip(image, 1)
         # We are using Motion JPEG, but OpenCV defaults to capture raw images,
         # so we must encode it into JPEG in order to correctly display the
         # video stream.
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         #imgname = os.path.join(Image_PATH,f'{str(uuid.uuid1())}.jpg')
-        faces = faceCascade.detectMultiScale(gray, 
-            scaleFactor=1.2,
-            minNeighbors=5,     
-            minSize=(20, 20))
+        faces = faceCascade.detectMultiScale(gray,
+                                             scaleFactor=1.2,
+                                             minNeighbors=5,
+                                             minSize=(20, 20))
 
         for (x, y, w, h) in faces:
 
@@ -56,33 +55,30 @@ class VideoCamera(object):
         ret, jpeg = cv2.imencode('.jpg', image)
         return jpeg.tobytes()
 
+
 @app.route('/')
 def index(request):
     if request.method == 'POST':
         try:
             frame_ = request.POST.get('image')
-            frame_=str(frame_)
-            data=frame_.replace('data:image/jpeg;base64,','')
-            data=data.replace(' ', '+')
+            frame_ = str(frame_)
+            data = frame_.replace('data:image/jpeg;base64,', '')
+            data = data.replace(' ', '+')
             imgdata = base64.b64decode(data)
 
-            filename = 'cameraTest/some_image.jpg' 
+            filename = 'cameraTest/some_image.jpg'
             with open(filename, 'wb') as f:
                 f.write(imgdata)
 
-
             results, verified = FR.verify(0.5, 0.5)
 
-            #print(results)
+            # print(results)
             print(verified)
 
-
-
-            return JsonResponse({"valid": str(verified)}, status = 200)
+            return JsonResponse({"valid": str(verified)}, status=200)
 
         except:
             print('Error')
-
 
     return render(request, 'index/camera.html')
 
@@ -93,10 +89,11 @@ def gen(camera):
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
 
+
 @app.route('/video_feed')
 def video_feed(request):
     # return StreamingHttpResponse(gen(VideoCamera()), content_type='multipart/x-mixed-replace; boundary=frame')
-    return StreamingHttpResponse (gen(VideoCamera()), content_type='multipart/x-mixed-replace; boundary=frame')
+    return StreamingHttpResponse(gen(VideoCamera()), content_type='multipart/x-mixed-replace; boundary=frame')
 
 
 @api_view(['GET'])
@@ -107,7 +104,3 @@ def return_verified(request):
 
 if __name__ == 'main':
     app.run()
-
-
-
-
