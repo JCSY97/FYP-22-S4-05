@@ -78,14 +78,14 @@
               start = start + '"start":"' +`${value}` +'",';
               end = end + '"end":"' +`${value}` +'"},';
               mark = mark + '{"title": "' + `${value}` ;
-              
+
             } 
             
             else if(`${key}` == "StartTime" )
             {
               if (`${value}` != "null"){
                 //start = start +'T' +`${value}` +'",';
-                mark = mark + ' ' + `${value} ` ;
+                mark = '{"title": "' + `${value} ` ;
               }
               else{
                // start = start + '",';
