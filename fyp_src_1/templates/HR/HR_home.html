@@ -36,7 +36,7 @@
                     <div class="ps-3">
                     {% if CheckIn in 'Present'  %}
                      <h6 class="text-success">{{ CheckIn }}</h6>
-                        {% elif CheckIn in 'Waiting' %}
+                        {% elif CheckIn in 'Pending' %}
                          <h6 class="text-warning">{{ CheckIn }}</h6>
                          {% else %}
                          <h6 class="text-danger">{{ CheckIn }}</h6>
@@ -62,7 +62,7 @@
                     <div class="ps-3">
                       {% if Ad.Mark in 'Present' %}
                       <h6 class="text-success">{{ CheckOut }}</h6>
-                     {% elif CheckOut in 'Waiting' %}
+                     {% elif CheckOut in 'Pending' %}
                      <h6 class="text-warning">{{ CheckOut }}</h6>
                      {% else %}
                      <h6 class="text-danger">{{ CheckOut }}</h6>
