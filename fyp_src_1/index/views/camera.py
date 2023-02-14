@@ -58,25 +58,21 @@ class VideoCamera(object):
 @app.route('/')
 def index(request):
     if request.method == 'POST':
-        print("hello")
         try:
             frame_ = request.POST.get('image')
-            empID = request.POST.get("empid")
+            empID = request.POST.get("empID")
             frame_ = str(frame_)
             data = frame_.replace('data:image/jpeg;base64,', '')
             data = data.replace(' ', '+')
             imgdata = base64.b64decode(data)
 
             filename = 'media/verify/verify_test/inputImage.jpg'
-            print("test123")
             with open(filename, 'wb') as f:
                 f.write(imgdata)
 
-            print("tes1231231")
 
             # results, verified = FR.verify(0.5, 0.5)
-            compare_result, compare_verified = FR.verify((0.5, 0.5, empID))
-            print("test12345")
+            compare_result, compare_verified = FR.verify(0.5, 0.5, empID)
 
 
             # print(results)

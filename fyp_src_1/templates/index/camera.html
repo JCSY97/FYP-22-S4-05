@@ -73,7 +73,9 @@
 
 
 
-var timeLeft = 45;
+var timeLeft = 10;
+var timerId
+
 
 
 
@@ -96,11 +98,12 @@ var timeLeft = 45;
 
                   });
   }
-      var timerId = setInterval(countdown, 2000);
+      timerId = setInterval(countdown, 2000);
   }
 
  function countdown() {
-      var Emloyeeid =document.getElementById("EmployeeId").value;
+      var Employeeid = document.getElementById("EmployeeId").value;
+      console.log(Employeeid)
       if (timeLeft == 0) {
           clearTimeout(timerId);
 
@@ -118,7 +121,7 @@ var timeLeft = 45;
                   url: "{% url 'camera'  %}",
                   data: {
                       'image': dataTemp,
-                      'empID': Emloyeeid,
+                      'empID': Employeeid,
                       csrfmiddlewaretoken: '{{ csrf_token }}'
                   },
                   success: function(data) {

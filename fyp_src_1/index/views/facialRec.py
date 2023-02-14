@@ -62,23 +62,18 @@ class FR_class:
 
 	def verify(self, detection_threshold, verification_threshold, empid):
 		results = []
-		print(empid)
-		for image in os.listdir(os.path.join('media', 'verify', 'emp_id')):
-			print(image)
+		for image in os.listdir(os.path.join('media', 'verify', empid)):
 			input_img = preprocess(os.path.join('media', 'verify', 'verify_test' , 'inputImage.jpg'))
 			validation_img = preprocess(os.path.join('media', 'verify', empid, image))
-			print(image)
-        
+	
 			# Make Predictions 
 			result = self.model.predict(list(np.expand_dims([input_img, validation_img], axis=1)))
 			results.append(result)
 
+
 		detection = np.sum(np.array(results) > detection_threshold)
-		print(np.array(results))
-
-			# Verification Threshold: Proportion of positive predictions / total positive samples 
-		verification = detection / len(os.listdir(os.path.join('media', 'verify', 'emp_id')))
+		# Verification Threshold: Proportion of positive predictions / total positive samples 
+		verification = detection / len(os.listdir(os.path.join('media', 'verify', empid)))
 		verified = verification > verification_threshold
-
 		return results, verified
 
