@@ -15,7 +15,7 @@ import base64
 
 app = Flask(__name__)
 
-FR = FR_class("siamesemodelv2.h5")
+#FR = FR_class("siamesemodelv2.h5")
 
 verified = True
 
