@@ -196,9 +196,9 @@
 {% endblock content %}
 {% block script %}
       <script>
-   //  {% for message in messages%}
- //        alert('{{ message }}');
-//     {% endfor %}
+     {% for message in messages%}
+         alert('{{ message }}');
+    {% endfor %}
 
      var password = document.getElementById("password")
   , confirm_password = document.getElementById("renewPassword");
