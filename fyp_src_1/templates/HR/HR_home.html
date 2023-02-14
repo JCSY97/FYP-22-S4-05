@@ -127,8 +127,9 @@
                         <th scope="col">Status</th>
                       </tr>
                     </thead>
-                      {% for Ad in Redata %}
+                     
                     <tbody>
+                      {% for Ad in Redata %}
                       <tr>
                         <th scope="row">{{ Ad.StartDate }}</th>
                         {% if Ad.Mark in 'Present' %}
@@ -148,6 +149,11 @@
                         <td>{{ Ad.InTime|date:"G:i" }}   --   <span class ="text-danger">{{ Ad.OutTime |date:"G:i"}} </span></td>
 
                         <td><span class="badge bg-danger">{{ Ad.Mark }}</span></td>
+                        {% elif Ad.Mark in 'Pending' %}
+
+                        <td><span class="text-warning">{{ Ad.InTime|date:"G:i" }}   --   {{ Ad.OutTime |date:"G:i"}}</span></td>
+
+                        <td><span class="badge bg-warning">{{ Ad.Mark }}</span></td>
 
                         {% else %}
 
@@ -159,8 +165,9 @@
                            
                        
                       </tr>
-                    </tbody>
                       {% endfor %}
+                    </tbody>
+                     
                   </table>
 
                 </div>
