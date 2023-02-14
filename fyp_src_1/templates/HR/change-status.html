@@ -94,7 +94,8 @@
                   <br>
                   <br>
                   <button onclick='setGetParameter( "{{ Emp_id}} ")' class="btn btn-danger" >Back</button>
-                  <button type="submit" class="btn btn-primary float-end">Update</button>
+                 <button type="submit" class="btn btn-primary float-end">Update</button>
+                   <!-- <a href="{% url 'EmployeeSchedule' Emp_id %}"  type="submit" class="btn btn-primary float-end">Update</a> -->
                 </div>
 
               </form>
@@ -124,5 +125,7 @@
 function setGetParameter(s){
   window.location.href = "{% url 'EmployeesProfile' %}" + "?id="+s;
 }
+
+
 </script>
 {% endblock script %}

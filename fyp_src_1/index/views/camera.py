@@ -15,9 +15,8 @@ import base64
 
 app = Flask(__name__)
 
-#FR = FR_class("siamesemodelv2.h5")
+FR = FR_class("siamesemodelv2.h5")
 
-verified = True
 
 
 class VideoCamera(object):
@@ -59,28 +58,43 @@ class VideoCamera(object):
 @app.route('/')
 def index(request):
     if request.method == 'POST':
+        print("hello")
         try:
             frame_ = request.POST.get('image')
+            empID = request.POST.get("empid")
             frame_ = str(frame_)
             data = frame_.replace('data:image/jpeg;base64,', '')
             data = data.replace(' ', '+')
             imgdata = base64.b64decode(data)
 
-            filename = 'cameraTest/some_image.jpg'
+            filename = 'media/verify/verify_test/inputImage.jpg'
+            print("test123")
             with open(filename, 'wb') as f:
                 f.write(imgdata)
 
-            results, verified = FR.verify(0.5, 0.5)
+            print("tes1231231")
+
+            # results, verified = FR.verify(0.5, 0.5)
+            compare_result, compare_verified = FR.verify((0.5, 0.5, empID))
+            print("test12345")
+
 
             # print(results)
-            print(verified)
+            print(compare_result)
+            print(compare_verified)
 
-            return JsonResponse({"valid": str(verified)}, status=200)
+
+
+
+            return JsonResponse({"valid": str(compare_verified)}, status=200)
 
         except:
             print('Error')
 
     return render(request, 'index/camera.html')
+
+
+
 
 
 def gen(camera):
