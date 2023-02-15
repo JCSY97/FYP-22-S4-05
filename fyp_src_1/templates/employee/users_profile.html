@@ -264,7 +264,7 @@
                   <!-- Change Password Form -->
                   <form method="POST">
                     {% csrf_token %}
-                       
+                    <input type="hidden" name="form_type" value="changePassword"><!-- back end get data -->
                     <div class="row mb-3">
                       <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">Current Password</label>
                       <div class="col-md-8 col-lg-9">

@@ -13,30 +13,30 @@ import string
 
 currentDate = datetime.now().strftime("%Y-%m-%d")
 currentTime =  datetime.now().strftime('%H:%M:%S')
-def CheckMark():
-	UserStatus = WorkSchedule.objects.filter(StartDate__lt=currentDate)
-	for i in UserStatus:
-		WorksId = WorkSchedule.objects.get(WorkSchedule_id=i.WorkSchedule_id)
-		if WorksId.Mark.lower() != 'off' or WorksId.Mark.lower() != 'mc':
-			if WorksId.InTime is None and WorksId.StartTime is not None or WorksId.OutTime is None and WorksId.EndTime is not None:
-				WorksId.Mark = 'Absent'
+
+UserStatus = WorkSchedule.objects.filter(StartDate__lt=currentDate)
+for i in UserStatus:
+	WorksId = WorkSchedule.objects.get(WorkSchedule_id=i.WorkSchedule_id)
+	if WorksId.Mark.lower() != 'off' or WorksId.Mark.lower() != 'mc':
+		if WorksId.InTime is None and WorksId.StartTime is not None or WorksId.OutTime is None and WorksId.EndTime is not None:
+			WorksId.Mark = 'Absent'
+			WorksId.save()
+		elif WorksId.InTime is not None and WorksId.StartTime is not None or WorksId.OutTime is not None and WorksId.EndTime is not None:
+			if WorksId.StartTime >= WorksId.InTime and WorksId.EndTime <= WorksId.OutTime:
+				WorksId.Mark = 'Present'
 				WorksId.save()
-			elif WorksId.InTime is not None and WorksId.StartTime is not None or WorksId.OutTime is not None and WorksId.EndTime is not None:
-				if WorksId.StartTime >= WorksId.InTime and WorksId.EndTime <= WorksId.OutTime:
-					WorksId.Mark = 'Present'
-					WorksId.save()
-				elif WorksId.StartTime < WorksId.InTime and WorksId.EndTime > WorksId.OutTime:
-					WorksId.Mark = 'Late & leave early'
-					WorksId.save()
-				elif WorksId.StartTime >= WorksId.InTime and WorksId.EndTime > WorksId.OutTime:
-					WorksId.Mark = 'leave early'
-					WorksId.save()
-				elif WorksId.StartTime < WorksId.InTime and WorksId.EndTime <= WorksId.OutTime:
-					WorksId.Mark = 'late'
-					WorksId.save()
-			else:
-				WorksId.Mark = 'Pending'
+			elif WorksId.StartTime < WorksId.InTime and WorksId.EndTime > WorksId.OutTime:
+				WorksId.Mark = 'Late & leave early'
 				WorksId.save()
+			elif WorksId.StartTime >= WorksId.InTime and WorksId.EndTime > WorksId.OutTime:
+				WorksId.Mark = 'leave early'
+				WorksId.save()
+			elif WorksId.StartTime < WorksId.InTime and WorksId.EndTime <= WorksId.OutTime:
+				WorksId.Mark = 'late'
+				WorksId.save()
+		else:
+			WorksId.Mark = 'Pending'
+			WorksId.save()
 
 
 def get_MD5(Password):
@@ -80,7 +80,7 @@ def HR_home(request):
 				CheckOut= 'OFF'
 
 		scheduleWeek = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID'], StartDate__lte=endDate,
-												   StartDate__gte=startDate).filter(StartTime__isnull=False,EndTime__isnull=False).exclude(Mark__in=Marklist).order_by('StartDate')
+												   StartDate__gte=startDate).exclude(Mark__in=Marklist).order_by('StartDate')
 
 
 		CountAsent = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID'],StartDate__lte=currentDate, StartDate__gte=startDate).filter(Mark='Absent').count()
@@ -145,7 +145,7 @@ def HR_Profile(request):
 					messages.info(request, 'Your password has been changed')
 					return redirect('HR_Profile')
 				elif new_passWord != new_password_2:
-					messages.info(request, 'New Password and reenter password does not match')
+					messages.info(request, 'password is different')
 					return redirect('HR_Profile')
 
 				else:
@@ -176,18 +176,17 @@ def HR_EmployeePage(request):
 		'Employee_ID' : currentEmployee.Employee_ID,
 		'Job_Title' : currentEmployee.Job_Title,
 		'Full_Name' : currentEmployee.Full_Name,
-		'PFP': currentEmployee.Profile_Image.url,
 		'data': data,
 	}
 	return render(request, 'HR/employees.html', context)
 
 
-def HR_EmpProfile(request,Empid):
+def HR_EmpProfile(request):
 	currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
-	if request.method == 'POST':
-		# EmpId = request.GET.get('id')
+	if request.method == 'GET':
+		EmpId = request.GET.get('id')
 		# print(EmpId,"testes")
-		Myinfo = Employee.objects.get(Employee_ID = Empid)
+		Myinfo = Employee.objects.get(Employee_ID = EmpId)
 		context = {
 			'Role': currentEmployee.Role.Role_ID,
 			'Employee_ID': currentEmployee.Employee_ID,
@@ -237,7 +236,7 @@ def Change_Status(request, Editempid):
 		currentDate = datetime.now().strftime("%Y-%m-%d")
 		currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
 		Emp = Employee.objects.get(Employee_ID=Editempid)
-		Atten = WorkSchedule.objects.filter(Employee_id=Editempid,StartDate__lte=currentDate).order_by('-StartDate')[:5]
+		Atten = WorkSchedule.objects.filter(Employee_id=Editempid).filter(StartDate__lte=currentDate).order_by('StartDate')
 		if request.method=='POST':
 			UpdateAttendance = WorkSchedule.objects.get(WorkSchedule_id=request.POST.get('dateselected'))
 			NewStatus =request.POST.get('status')
@@ -250,10 +249,7 @@ def Change_Status(request, Editempid):
 			else:
 				UpdateAttendance.Mark = NewStatus
 				UpdateAttendance.save()
-
-
-			CheckMark()
-			return redirect('/HR/Employee/Schedule/'+ str(Editempid))
+			return redirect('EmployeesPage')
 		else:
 			context={
 				'Role': currentEmployee.Role.Role_ID,
@@ -352,9 +348,29 @@ def Emp_update_Schedule(request,Editempid):
 							WordSche = WorkSchedule(StartDate=d,StartTime=StartTime,EndTime=EndTime,Employee_id=Editempid,Mark=Marks)
 							WordSche.save()
 
-				CheckMark()
-
-
+						UserStatus = WorkSchedule.objects.filter(StartDate__lt=currentDate)
+						for i in UserStatus:
+							WorksId = WorkSchedule.objects.get(WorkSchedule_id=i.WorkSchedule_id)
+							if WorksId.Mark.lower() != 'off' or WorksId.Mark.lower() != 'mc':
+								if WorksId.InTime is None and WorksId.StartTime is not None or WorksId.OutTime is None and WorksId.EndTime is not None:
+									WorksId.Mark = 'Absent'
+									WorksId.save()
+								elif WorksId.InTime is not None and WorksId.StartTime is not None or WorksId.OutTime is not None and WorksId.EndTime is not None:
+									if WorksId.StartTime >= WorksId.InTime and WorksId.EndTime <= WorksId.OutTime:
+										WorksId.Mark = 'Present'
+										WorksId.save()
+									elif WorksId.StartTime < WorksId.InTime and WorksId.EndTime > WorksId.OutTime:
+										WorksId.Mark = 'Late & leave early'
+										WorksId.save()
+									elif WorksId.StartTime >= WorksId.InTime and WorksId.EndTime > WorksId.OutTime:
+										WorksId.Mark = 'leave early'
+										WorksId.save()
+									elif WorksId.StartTime < WorksId.InTime and WorksId.EndTime <= WorksId.OutTime:
+										WorksId.Mark = 'late'
+										WorksId.save()
+								else:
+									WorksId.Mark = 'Pending'
+									WorksId.save()
 
 
 			return  redirect('EmployeesPage')
@@ -365,6 +381,6 @@ def Emp_update_Schedule(request,Editempid):
 			'Full_Name': currentEmployee.Full_Name,
 			"Emp_id" :Emp.Employee_ID,
 			'Name' : Emp.Full_Name,
-			}
+	}
 		return render(request, 'HR/upload-schedule.html',context)
 

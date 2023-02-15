@@ -230,15 +230,32 @@ def edit_employee(request, edit_employee_id):
 		currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
 		if request.method == 'POST':
 			edit_employee = Employee.objects.get(Employee_ID=edit_employee_id)
+			if request.POST.get('form_type') == 'editProfile':
+				
+				edit_employee.Full_Name = request.POST.get('fullName')
+				edit_employee.Role = Role.objects.get(Role_Name=request.POST.get('newRole'))
+				edit_employee.Phone_Number = request.POST.get('phone')
+				edit_employee.Email_Address = request.POST.get('email')
 
-			edit_employee.Full_Name = request.POST.get('fullName')
-			edit_employee.Role = Role.objects.get(Role_Name=request.POST.get('newRole'))
-			edit_employee.Phone_Number = request.POST.get('phone')
-			edit_employee.Email_Address = request.POST.get('email')
+				edit_employee.save()
 
-			edit_employee.save()
-
-			return redirect('/sys_admin/view_employees/edit/' + str(edit_employee_id))
+				return redirect('/sys_admin/view_employees/edit/' + str(edit_employee_id))
+			elif request.POST.get('form_type') == 'changePassword':
+				# edit_employee = Employee.objects.get(Employee_ID=edit_employee_id)
+				Random_salt = ''.join(random.sample(string.ascii_letters + string.digits + string.punctuation, 4))
+				New_salt = Random_salt
+				new_passWord = request.POST.get('newpassword')
+				new_password_2 = request.POST.get('renewPassword')
+				Update_pssword = get_MD5(new_passWord + New_salt)
+				if new_passWord == new_password_2:
+					edit_employee.Password = Update_pssword
+					edit_employee.salt = New_salt
+					edit_employee.save()
+					# messages.info(request, 'Your password has been changed')
+					return redirect('/sys_admin/view_employees/edit/' + str(edit_employee_id))
+				else:
+					# messages.info(request, 'password is different')
+					return redirect('/sys_admin/view_employees/edit/' + str(edit_employee_id))
 
 		else:
 			if Employee.objects.filter(Employee_ID=edit_employee_id).count() == 1:

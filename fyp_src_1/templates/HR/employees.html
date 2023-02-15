@@ -27,7 +27,7 @@
                 <br>
               </div>
                 
-              <table class="table table-borderless table-hover datatable">
+              <table class="table table-borderless datatable">
                 <thead>
                   <tr>
                     <th scope="col"></th>
@@ -41,6 +41,7 @@
                 <tbody>
                   {% for d in data  %}
                   <tr class="tr" onclick='setGetParameter( "{{ d.Employee_ID}} ")'>
+                    <!-- <th scope="row"></th> -->
                     <th scope="row"> {{ forloop.counter }}</th>
                     <td>{{d.Full_Name}}</td>
                     <td>{{d.Job_Title}}</td>
@@ -73,7 +74,8 @@
 <script>
 
 function setGetParameter(s){
-  window.location.href = "{% url 'EmployeesProfile' %}" + "?id="+s;
+   window.location.href = "{% url 'EmployeesProfile' %}" + "?id="+s;
+  // window.location.href = "HEmployeesProfile"+"/" +s;
 }
 </script>
 {% endblock script %}

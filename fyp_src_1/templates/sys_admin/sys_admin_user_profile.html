@@ -152,6 +152,7 @@
                   <!-- Change Password Form -->
                   <form method="POST">
                     {% csrf_token %}
+                    <input type="hidden" name="form_type" value="changePassword">
                     <!-- to differentiate the form -->
                      
                     <div class="row mb-3">
