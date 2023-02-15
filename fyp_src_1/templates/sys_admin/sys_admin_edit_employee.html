@@ -152,7 +152,7 @@
                     </div>
 
                     <div class="text-center">
-                      <button type="button" class="btn btn-danger float-start">Delete Employee</button>
+                      <a href="{% url 'sys_admin_delete_employee' edit_employee_id %}" class="btn btn-danger float-start" >Delete Employee</a>
                       <button type="submit" class="btn btn-primary float-end">Save Changes</button>
                     </div>
                   </form><!-- End Profile Edit Form -->
@@ -203,6 +203,9 @@
 {% block script %}
 
 <script>
+   {% for message in messages%}
+         alert('{{ message }}');
+    {% endfor %}
   var password = document.getElementById("password")
   , confirm_password = document.getElementById("renewPassword");
 
