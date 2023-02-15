@@ -6,7 +6,7 @@
   <main id="main" class="main">
 
     <div class="pagetitle">
-      <h1>Change Status for Employee Name</h1>
+      <h1>Change Status for {{ Name }}</h1>
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="{%  url 'HR_home' %}">Home</a></li>
@@ -24,7 +24,7 @@
           <div class="card recent-sales overflow-auto">
 
             <div class="card-body">
-                <h5 class="card-title">Change Status For Employee Name</h5>
+                <h5 class="card-title">Change Status For {{ Name }}</h5>
               <form  method="POST" class="row g-3 needs-validation" action = "">
                {% csrf_token %}
                 <!------------------------Start Date---------------------------->
