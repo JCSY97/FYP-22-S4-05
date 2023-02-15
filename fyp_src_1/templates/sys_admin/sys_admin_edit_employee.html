@@ -152,7 +152,7 @@
                     </div>
 
                     <div class="text-center">
-                      <a href="{% url 'sys_admin_delete_employee' edit_employee_id %}" class="btn btn-danger float-start" >Delete Employee</a>
+                      <a class="btn btn-danger float-start" onclick="return DeleteJob();" href="{% url 'sys_admin_delete_employee' edit_employee_id %}">Delete Employee</a>
                       <button type="submit" class="btn btn-primary float-end">Save Changes</button>
                     </div>
                   </form><!-- End Profile Edit Form -->
@@ -201,10 +201,22 @@
 {% endblock content %}
 {% block script %}
 
-<script>
+<script type="text/javascript" >
    {% for message in messages%}
          alert('{{ message }}');
     {% endfor %}
+
+   function DeleteJob()
+   {
+       if (confirm("Confirm deletion of Employee id:{{ edit_employee_full_name }} Account？ will not recover"))
+       {
+           return true;
+       }else {
+           return false;
+       }
+   }
+
+
   var password = document.getElementById("newPassword")
   , confirm_password = document.getElementById("renewPassword");
 

@@ -52,7 +52,6 @@ def HR_home(request):
 	endDate = end.strftime('%Y-%m-%d')
 	if 'Employee_ID' in request.session:
 		fourdates = date.today() - timedelta(days=4)
-
 		currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
 		CheckIn=''
 		CheckOut=''

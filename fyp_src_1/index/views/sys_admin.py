@@ -106,6 +106,8 @@ def sys_admin_view_employees(request):
 
 
 def sys_admin_create_user(request):
+	BigEmployess = Employee.objects.all().order_by('Employee_ID').last()
+
 	if request.method == 'POST':
 		New_Employee_Full_Name = request.POST.get('name')
 		New_Employee_Job_Title = request.POST.get('Job_title')
@@ -149,7 +151,10 @@ def sys_admin_create_user(request):
 
 
 	else:
-		return render(request, 'sys_admin/sys_admin_create_user.html')
+		context = {
+			'BigEmpid': BigEmployess.Employee_ID + 1,
+		}
+		return render(request, 'sys_admin/sys_admin_create_user.html',context)
 
 
 def delete_employee(request, delete_employee_id):
