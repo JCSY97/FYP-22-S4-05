@@ -47,6 +47,7 @@
                       <td>{{ employee.Role.Role_Name }}</td>
                       <td>{{ employee.Start_Date }}</td>
                     </tr>
+                  
                   {% endfor %}
                 </tbody>
               </table>
@@ -69,7 +70,7 @@
 <script>
 
   function setGetParameter(s){
-    window.location.href = "edit" + "/"+s;
+    window.location.href = "edit/" +s;
   }
   </script>
 {% endblock script %}
