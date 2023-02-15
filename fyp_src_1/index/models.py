@@ -36,27 +36,10 @@ class Employee(models.Model):
 		return f'Employee {self.Employee_ID}'
 
 
-# class Attendance(models.Model):
-# 	Attendance_id = models.BigAutoField(primary_key=True)
-#
-# 	Employee_ID = models.ForeignKey(Employee,on_delete=models.DO_NOTHING)
-#
-# 	AttendanDate = models.DateField()
-# 	Mark = models.CharField(max_length=100,null=True)
-# 	InTime = models.CharField(max_length=256, null=True, blank=True)
-# 	OutTime = models.CharField(max_length=256,null=True, blank=True)
-# 	status = models.IntegerField(default=0)
-#
-# 	def __str__(self):
-# 		return f'Employee_ID {self.Employee_ID}'
-#
-# 	class Meta:
-# 		db_table = 'Attendance'
-
 class WorkSchedule(models.Model):
 
 	WorkSchedule_id = models.BigAutoField(primary_key=True)
-	Employee = models.ForeignKey(Employee,on_delete=models.DO_NOTHING)
+	Employee = models.ForeignKey(Employee,on_delete=models.CASCADE)
 	InTime = models.TimeField(max_length=256, null=True, blank=True)
 	OutTime = models.TimeField(max_length=256, null=True, blank=True)
 
@@ -71,14 +54,3 @@ class WorkSchedule(models.Model):
 
 	class Meta:
 		db_table = 'WorkSchedule'
-
-# class Admin(models.Model):
-# 	Admin_id = models.BigAutoField(primary_key=True)
-# 	Employee_ID = models.ForeignKey(Employee,on_delete=models.CASCADE)
-# 	Full_Name = models.ForeignKey(Employee,on_delete=models.CASCADE)
-# 	Phone_Number = models.ForeignKey(Employee,on_delete=models.CASCADE)
-# 	Position = models.ForeignKey(Employee,on_delete=models.CASCADE)
-# 	Role = models.ForeignKey(Role,on_delete=models.CASCADE)
-# 	Profile_Image = models.ImageField(default='default.jpg',null=True)
-# 	def __str__(self):
-# 		return f'Admin {self.Employee_ID}'

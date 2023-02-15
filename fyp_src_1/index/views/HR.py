@@ -62,7 +62,7 @@ def HR_home(request):
 		CheckValues = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID']).filter(StartDate=currentDate)
 		if CheckValues.exists():
 			AttenCheck =  WorkSchedule.objects.get(Employee_id=request.session['Employee_ID'],StartDate=currentDate)
-			if AttenCheck.Mark.lower() != 'off' or AttenCheck.Mark.lower() != 'mc':
+			if AttenCheck.Mark.lower() == 'pending':
 				if AttenCheck.InTime is None and AttenCheck.OutTime is not None:
 					CheckIn = "Pending"
 					CheckOut=AttenCheck.OutTime
@@ -176,6 +176,7 @@ def HR_EmployeePage(request):
 		'Employee_ID' : currentEmployee.Employee_ID,
 		'Job_Title' : currentEmployee.Job_Title,
 		'Full_Name' : currentEmployee.Full_Name,
+		'PFP': currentEmployee.Profile_Image.url,
 		'data': data,
 	}
 	return render(request, 'HR/employees.html', context)
@@ -240,7 +241,7 @@ def Change_Status(request, Editempid):
 		if request.method=='POST':
 			UpdateAttendance = WorkSchedule.objects.get(WorkSchedule_id=request.POST.get('dateselected'))
 			NewStatus =request.POST.get('status')
-			StatusName ='null'
+			StatusName ='pending'
 			if NewStatus == StatusName:
 				UpdateAttendance.Mark = NewStatus
 				UpdateAttendance.StartTime =request.POST.get('timestartnew')
@@ -276,6 +277,7 @@ def Employee_View_Schedule(request,Editempid):
 		context={
 		'Employee_ID': currentEmployee.Employee_ID,
 		'Job_Title': currentEmployee.Job_Title,
+		'PFP': currentEmployee.Profile_Image.url,
 		'Full_Name': currentEmployee.Full_Name,
 		"Emp_id" :Emp.Employee_ID,
 		'Name' : Emp.Full_Name,
@@ -324,7 +326,7 @@ def Emp_update_Schedule(request,Editempid):
 
 			for weeks in weekdays:
 				Marks = request.POST.get(str(weeks))
-				if Marks !='null':
+				if Marks !='pending':
 					StartTime = None
 					EndTime = None
 				if currentYear < int(SchedduleYear) or int(SchedduleMonth) > currentMonth:
@@ -351,7 +353,7 @@ def Emp_update_Schedule(request,Editempid):
 						UserStatus = WorkSchedule.objects.filter(StartDate__lt=currentDate)
 						for i in UserStatus:
 							WorksId = WorkSchedule.objects.get(WorkSchedule_id=i.WorkSchedule_id)
-							if WorksId.Mark.lower() != 'off' or WorksId.Mark.lower() != 'mc':
+							if WorksId.Mark.lower() =='pending':
 								if WorksId.InTime is None and WorksId.StartTime is not None or WorksId.OutTime is None and WorksId.EndTime is not None:
 									WorksId.Mark = 'Absent'
 									WorksId.save()
@@ -379,6 +381,7 @@ def Emp_update_Schedule(request,Editempid):
 			'Employee_ID': currentEmployee.Employee_ID,
 			'Job_Title': currentEmployee.Job_Title,
 			'Full_Name': currentEmployee.Full_Name,
+			'PFP': currentEmployee.Profile_Image.url,
 			"Emp_id" :Emp.Employee_ID,
 			'Name' : Emp.Full_Name,
 	}

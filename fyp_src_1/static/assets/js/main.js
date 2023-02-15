@@ -212,7 +212,7 @@
 
 $('#status').on('change', function () {
   let status = document.getElementById("status").value;
-  if (status == "null") {
+  if (status == "pending") {
 
     let option2 = '<option value="" selected disabled>Choose</option>';
     let option1 = '<option value="" selected disabled>Choose</option>';
