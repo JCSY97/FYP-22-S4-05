@@ -135,7 +135,23 @@ def index(request):
                     # check if this person is in EMPLOYEE table
                     if Employee.objects.filter(Employee_ID=known_face[best_match_index]):
                         # check if this person is in WORKSCHEDULE table
-                        if WorkSchedule.objects.filter(Employee_ID=known_face[best_match_index]):
+                        EMPID = known_face[best_match_index]
+                        AttenIntime =WorkSchedule.objects.filter(Employee_ID=EMPID,StartDate=currentDate)
+                        if AttenIntime.exists():
+                            if AttenIntime[0].InTime is None:
+                                AttenIntime[0].InTime =currentTime
+                                AttenIntime[0].save()
+                            else:
+                                t1 = AttenIntime[0].InTime
+                                t2 = datetime.strptime(currentTime, "%H:%M:%S")
+
+                                # get difference
+                                delta = t2 - t1
+                                # time difference in seconds
+                                if (delta.total_seconds() / 60 / 60)>=1:
+                                    AttenIntime[0].OutTime =currentTime
+                                    AttenIntime[0].save()
+
                                 
 
 

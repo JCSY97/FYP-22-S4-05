@@ -44,6 +44,7 @@ def Check_In(request):
 
 def index_login(request):
 	#if request.POST:
+	Title='Login Page'
 	if request.method == 'POST':
 		try:
 			# EmployeeID = request.POST.get('EmployeeID')
@@ -74,7 +75,10 @@ def index_login(request):
 			messages.error(request, 'Invalid Username')
 			return redirect('login')
 	else:
-		return render(request, 'index/login.html')
+		context={
+			'title': Title,
+		}
+		return render(request, 'index/login.html',context)
 
 
 def DeletedButton(request, Editempid):
@@ -97,9 +101,13 @@ def DeletedButton(request, Editempid):
 		return redirect('Home')
 
 
-
 def logout(request):
+	try:
+		del request.session['Employee_ID']
+	except KeyError:
+		pass
 	request.session.flush()
+
 	messages.info(request, 'You have been logged out')
 	return redirect('login')
 
