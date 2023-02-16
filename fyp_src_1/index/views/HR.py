@@ -249,6 +249,7 @@ def Change_Status(request, Editempid):
 		sdate = datetime.now() + timedelta(days=3)
 		currentDate = sdate.strftime("%Y-%m-%d")
 		currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
+
 		Emp = Employee.objects.get(Employee_ID=Editempid)
 		Atten = WorkSchedule.objects.filter(Employee_id=Editempid).filter(StartDate__lte=currentDate).order_by('StartDate')
 		if request.method=='POST':
@@ -340,14 +341,19 @@ def Emp_update_Schedule(request,Editempid):
 			SchedduleYear = request.POST.get('yearselect')
 			SchedduleMonth =request.POST.get('monthselect')
 
-			StartTime = request.POST.get('timestart')
-			EndTime = request.POST.get('timeend')
-
+			StartTime =''
+			EndTime = ''
+			print(StartTime)
+			print(EndTime)
 			for weeks in weekdays:
 				Marks = request.POST.get(str(weeks))
 				if Marks !='pending':
 					StartTime = None
 					EndTime = None
+				else:
+					StartTime = request.POST.get('timestart')
+					EndTime = request.POST.get('timeend')
+
 				if currentYear < int(SchedduleYear) or int(SchedduleMonth) > currentMonth:
 					for d in alldays(int(SchedduleYear), int(SchedduleMonth), 1, weeks):
 
@@ -358,12 +364,13 @@ def Emp_update_Schedule(request,Editempid):
 					for d in alldays(currentYear, currentMonth, currenDay, weeks):
 						Start = WorkSchedule.objects.filter(Employee_id=Editempid,StartDate=d)
 						if  Start.exists():
-							WorkId = WorkSchedule.objects.get(Q(Employee_id=Editempid, StartDate=d))
+							WorkId = WorkSchedule.objects.get(Employee_id=Editempid, StartDate=d)
 							UpdateWork = WorkSchedule.objects.get(WorkSchedule_id=WorkId.WorkSchedule_id)
 							UpdateWork.StartTime=StartTime
 							UpdateWork.EndTime=EndTime
 							UpdateWork.Mark=Marks
 							UpdateWork.save()
+
 						else:
 							Marks = request.POST.get(str(weeks))
 							WordSche = WorkSchedule(StartDate=d,StartTime=StartTime,EndTime=EndTime,Employee_id=Editempid,Mark=Marks)
