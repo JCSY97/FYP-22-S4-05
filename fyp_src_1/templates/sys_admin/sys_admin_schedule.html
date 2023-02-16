@@ -115,7 +115,9 @@
             }
             ;
           }); 
-          listings = listings.substring(0, listings.length - 1);
+          if(listings != '['){
+            listings = listings.substring(0, listings.length - 1);
+          }
 
           listings = listings + "]";
 
