@@ -205,7 +205,7 @@ def HR_View_Schedule(request):
 	if 'Employee_ID' in request.session:
 		# template = loader.get_template('HR/schedule.html')
 		currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
-		data = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID']).filter(StartDate__isnull=False)
+		data = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID']).filter(StartDate__isnull=False,StartTime__isnull=False,EndTime__isnull=False)
 		js_data =serializers.serialize('json',data,fields=['StartDate','StartTime','EndTime'])
 		json_data=json.loads(js_data)
 		for d in json_data:

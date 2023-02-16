@@ -28,17 +28,21 @@ def index_home(request):
 def Check_In(request):
 	return render(request, 'index/camera.html')
 
-def UpdateAttendance():
-	WorkTime = WorkSchedule.objects.filter(StartDate=currentDate)
-	for i in WorkTime:
-		E=Employee.objects.exclude(Employee_ID=i.Employee_id)
-		if E :
-			print(E)
-			# 可运行的代码
+# def UpdateAttendance():
+# 		WorkTime = WorkSchedule.objects.filter(StartDate=currentDate)
+# 		print(WorkTime)
+# 		for i in WorkTime:
+# 			E=Employee.objects.all().exclude(Employee_ID=i.Employee_id)
+# 			if currentTime >= '00:00:00':
+# 			# 可运行的代码
+#
+# 				WordSche = WorkSchedule(StartDate=currentDate, StartTime=None, EndTime=None, Employee_id=E,
+# 										Mark='pending')
+# 				WordSche.save()
+
 	# if currentTime >'12:00:00':
 
 def index_login(request):
-	UpdateAttendance()
 	#if request.POST:
 	if request.method == 'POST':
 		try:

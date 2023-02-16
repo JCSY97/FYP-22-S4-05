@@ -117,38 +117,39 @@ def sys_admin_create_user(request):
 		New_Role_Name = request.POST.get('roles')
 
 		# do password hash later
-		New_Password = request.POST.get('password')
-		New_Password_2 = request.POST.get('password2')
+		New_Password = request.POST.get('newPassword')
+		New_Password_2 = request.POST.get('renewPassword')
 		Random_salt = ''.join(random.sample(string.ascii_letters + string.digits+string.punctuation, 4))
 		New_salt=Random_salt
+		print(New_Password+New_salt)
 		Encry_Pass = get_MD5(New_Password+New_salt)
-		Encry_Pass_2 = get_MD5(New_Password_2+New_salt)
+		print(Encry_Pass)
 		
 
 		#if employee_ID is taken
+
 		if Employee.objects.filter(Employee_ID=New_Employee_ID).exists():
 			messages.error(request, 'There already exist such Employee ID')
 			return redirect('sys_admin_create_user')
 
-		elif Encry_Pass != Encry_Pass_2:
+		elif New_Password != New_Password_2:
 			messages.error(request, 'Your passwords does not match')
 			return redirect('sys_admin_create_user')
 		else:
 			New_Role = Role.objects.get(Role_Name=New_Role_Name)
-			
+
 			# if have PFP
-			if request.FILES['profilepic']:
+
+			if request.FILES.get('profilepic') is not None:
 				New_PFP = request.FILES['profilepic']
 				new_employee = Employee(Employee_ID=New_Employee_ID, Full_Name=New_Employee_Full_Name, Phone_Number=New_Phone_Number,
-									 Email_Address=New_Email_Address, Role=New_Role,salt=New_salt, Job_Title=New_Employee_Job_Title ,Password=Encry_Pass, Profile_Image=New_PFP)
+									 Email_Address=New_Email_Address, Role=New_Role,salt=New_salt, Job_Title=New_Employee_Job_Title,Start_Date=currentDate ,Password=Encry_Pass, Profile_Image=New_PFP)
 			else:
-				new_employee = Employee(Employee_ID=New_Employee_ID, Full_Name=New_Employee_Full_Name, Phone_Number=New_Phone_Number,
-									 Email_Address=New_Email_Address, Job_Title=New_Employee_Job_Title, salt=New_salt,Role=New_Role, Password=Encry_Pass)
+				new_employee = Employee(Employee_ID=New_Employee_ID, Full_Name=New_Employee_Full_Name, Phone_Number=New_Phone_Number,Start_Date=currentDate,
+									 Email_Address=New_Email_Address, Job_Title=New_Employee_Job_Title, salt=New_salt,Role=New_Role, Password=Encry_Pass,Profile_Image='profile_pics/default.jpg')
 			new_employee.save()
 			messages.success(request, 'New account has been created')
 			return redirect('sys_admin_create_user')
-
-
 
 	else:
 		context = {
@@ -288,7 +289,7 @@ def schedule(request):
 	if 'Employee_ID' in request.session:
 		# template = loader.get_template('HR/schedule.html')
 		currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
-		data = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID'])
+		data = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID']).filter(StartDate__isnull=False,StartTime__isnull=False,EndTime__isnull=False)
 		js_data =serializers.serialize('json',data,fields=['StartDate','EndDate','StartTime','EndTime'])
 		json_data=json.loads(js_data)
 		for d in json_data:
