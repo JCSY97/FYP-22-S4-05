@@ -8,6 +8,7 @@ from index.views.facialRec import FR_class
 from rest_framework.decorators import api_view
 
 from django.http import JsonResponse
+import math
 
 
 import base64
@@ -17,7 +18,7 @@ import face_recognition
 import numpy as np
 
 from index.models import Employee, Role, WorkSchedule
-from datetime import date,datetime, timedelta
+from datetime import date,datetime, timedelta, time
 
 app = Flask(__name__)
 
@@ -134,53 +135,45 @@ def index(request):
 
                     # check if this person is in EMPLOYEE table
                     if Employee.objects.filter(Employee_ID=known_face[best_match_index]):
-                        # check if this person is in WORKSCHEDULE table
                         EMPID = known_face[best_match_index]
-                        AttenIntime =WorkSchedule.objects.filter(Employee_ID=EMPID,StartDate=currentDate)
+                        AttenIntime =WorkSchedule.objects.filter(Employee_id=EMPID,StartDate=currentDate)
+
+
                         if AttenIntime.exists():
+                            currentEmp = WorkSchedule.objects.get(WorkSchedule_id=AttenIntime[0].WorkSchedule_id)
+                            # clock in
                             if AttenIntime[0].InTime is None:
-                                AttenIntime[0].InTime =currentTime
-                                AttenIntime[0].save()
+                            
+                                currentEmp.InTime =currentTime
+                                currentEmp.save()
+                                print("CLOCKED IN")
+
+                            # clock out
                             else:
-                                t1 = AttenIntime[0].InTime
-                                t2 = datetime.strptime(currentTime, "%H:%M:%S")
-
-                                # get difference
-                                delta = t2 - t1
-                                # time difference in seconds
-                                if (delta.total_seconds() / 60 / 60)>=1:
-                                    AttenIntime[0].OutTime =currentTime
-                                    AttenIntime[0].save()
-
-                                
+                                t1 = AttenIntime[0].InTime.strftime("%H:%M")
+                                #t1_in_hours = t1.hour + round((t1.min/60), 2)
 
 
+                                t2 = datetime.now().time().strftime("%H:%M")
+                                #t2_in_hours = t2.hour + round((t2.min/60), 2)
 
+                                HM = '%H:%M'
+                                # time difference between in time and out time
+                                delta = datetime.strptime(t2, HM) - datetime.strptime(t1, HM)
 
-
-
-
-
-
-
-                        # clock in
-                        if WorkSchedule.objects.filter(Employee_ID=known_face[best_match_index], StartDate=currentDate, InTime__isnull==True):
-                            today_work_schedule = WorkSchedule.objects.get(Employee_ID=known_face[best_match_index], StartDate=currentDate)
-
-                            today_work_schedule.InTime = currentTime
-
-                        # clock out
-                        elif WorkSchedule.objects.filter(Employee_ID=known_face[best_match_index], StartDate=currentDate, InTime__isnull==False):
-                            if currentTime > InTime+1hour
-
-
-
-
-
-
-
-
-
+                                # clock out only if the difference between current time and INTIME is more than 1 hour
+                                # 1 hour = 3600 seconds
+                                if (delta.total_seconds()) > 3600 :
+                                    currentEmp.OutTime = currentTime
+                                    currentEmp.save()
+                                    print("saved")
+                                else:
+                                    print("asdasdasd")
+                        else:
+                            # this else block is for employee who clock in when there is no schedule for that person
+                            # write new role in employee table
+                            new_row = WorkSchedule(Employee_id=EMPID, StartDate=currentDate, InTime=currentTime)
+                            new_row.save()
 
                 else:
                     print("face not in database")
