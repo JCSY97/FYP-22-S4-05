@@ -38,11 +38,14 @@ class Employee(models.Model):
 
 class WorkSchedule(models.Model):
 
+
 	WorkSchedule_id = models.BigAutoField(primary_key=True)
 	Employee = models.ForeignKey(Employee,on_delete=models.CASCADE)
+	#attendance
 	InTime = models.TimeField(max_length=256, null=True, blank=True)
 	OutTime = models.TimeField(max_length=256, null=True, blank=True)
 
+	# schedule
 	Mark = models.CharField(max_length=256,null=True)
 	StartDate = models.DateField()
 	StartTime = models.TimeField(null=True)

@@ -73,7 +73,7 @@
 
 
 
-var timeLeft = 10;
+var timeLeft = 60;
 var timerId
 
 
@@ -90,7 +90,6 @@ var timerId
                   })
                   .then(function(stream) {
 
-                      console.log("test")
                       video.srcObject = stream;
                       video.play();
                   })
