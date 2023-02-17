@@ -123,7 +123,8 @@
                     <thead>
                       <tr>
                         <th scope="col">Date</th>
-                        <th scope="col">Time</th>
+                        <th scope="col">Work Time</th>
+                        <th scope="col">Clock in/Out Time</th>
                         <th scope="col">Status</th>
                       </tr>
                     </thead>
@@ -132,6 +133,7 @@
                       {% for Ad in Redata %}
                       <tr>
                         <th scope="row">{{ Ad.StartDate }}</th>
+                        <td>{{ Ad.StartTime |date:"G:i"}}  --   {{ Ad.EndTime |date:"G:i"}}</td>
                         {% if Ad.Mark in 'Present' %}
                         
                         <td><span class ="text-success">{{ Ad.InTime |date:"G:i" }}   --   {{ Ad.OutTime |date:"G:i" }}</span></td>
@@ -194,18 +196,7 @@
 
           <!-- Recent Activity -->
           <div class="card">
-            <div class="filter">
-              <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-              <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                <li class="dropdown-header text-start">
-                  <h6>Filter</h6>
-                </li>
-
-                <li><a class="dropdown-item" href="#">Today</a></li>
-                <li><a class="dropdown-item" href="#">This Month</a></li>
-                <li><a class="dropdown-item" href="#">This Year</a></li>
-              </ul>
-            </div>
+            
 
             <div class="card-body">
               <h5 class="card-title">Schedule <span>| This week</span></h5>
