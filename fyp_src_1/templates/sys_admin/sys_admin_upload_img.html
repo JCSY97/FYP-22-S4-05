@@ -11,8 +11,8 @@
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="{% url 'sys_admin_home' %}">Home</a></li>
-          <li class="breadcrumb-item"><a href="#">Upload Image</a></li>
-          <li class="breadcrumb-item active">Employee ID</li>
+          <li class="breadcrumb-item"><a href="{% url 'sys_admin_view_employees' %}">Employees</a></li>
+          <li class="breadcrumb-item active">Upload Images</li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
@@ -32,8 +32,10 @@
               </div>
               <div class="upload__img-wrap"></div>
             </div>
-            <div class="text-center">
-              <button type="submit" class="btn btn-primary float-start">Upload</button>
+            <div class="col-lg-6">
+              <a href="./edit-user.html" type="button" class="btn btn-danger">Back</a>
+              <button type="submit" class="btn btn-primary float-end">Upload</button>
+
             </div>
           </form>
             

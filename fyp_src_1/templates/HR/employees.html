@@ -30,7 +30,8 @@
               <table class="table table-borderless table-hover datatable">
                 <thead>
                   <tr>
-                    <th scope="col"></th>
+                  
+                      <th scope="col">Employee Id</th>
                     <th scope="col">Name</th>
                     <th scope="col">Position</th>
                     <th scope="col">Start Date</th>
@@ -42,7 +43,8 @@
                   {% for d in data  %}
                   <tr class="tr" onclick='setGetParameter( "{{ d.Employee_ID}} ")'>
                     <!-- <th scope="row"></th> -->
-                    <th scope="row"> {{ forloop.counter }}</th>
+                    <!-- <th scope="row"> {{ forloop.counter }}</th> -->
+                      <th scope="row">{{d.Employee_ID}}</th>
                     <td>{{d.Full_Name}}</td>
                     <td>{{d.Job_Title}}</td>
                     <td>{{d.Start_Date}}</td>
