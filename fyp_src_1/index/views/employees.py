@@ -124,12 +124,13 @@ def viewProfile(request):
 
 				if request.FILES.get('Pic') is not None:
 					New_p = request.FILES['Pic']
-					if currentEmployee.Profile_Image:
+					if currentEmployee.Profile_Image != 'media/profile_pics/default.jpg':
 						if os.path.isfile(currentEmployee.Profile_Image.path):
 							os.remove(currentEmployee.Profile_Image.path)
 
 					currentEmployee.Profile_Image = New_p
-
+				else:
+					currentEmployee.Profile_Image= 'media/profile_pics/default.jpg'
 				currentEmployee.Full_Name = request.POST.get('fullName_edit')
 				currentEmployee.Phone_Number = request.POST.get('phone')
 				currentEmployee.Email_Address = request.POST.get('email')

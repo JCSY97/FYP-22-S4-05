@@ -41,9 +41,9 @@
                 
                 <tbody>
                   {% for d in data  %}
-                  <tr class="tr" onclick='setGetParameter( "{{ d.Employee_ID}} ")'>
+                  <tr class="tr"  data-href="{% url 'EmployeesProfile' d.Employee_ID %}">
                     <!-- <th scope="row"></th> -->
-                    <!-- <th scope="row"> {{ forloop.counter }}</th> -->
+{#                    <!-- <th scope="row"> {{ forloop.counter }}</th> -->#}
                       <th scope="row">{{d.Employee_ID}}</th>
                     <td>{{d.Full_Name}}</td>
                     <td>{{d.Job_Title}}</td>
@@ -75,9 +75,17 @@
 {% block script %}
 <script>
 
-function setGetParameter(s){
-   window.location.href = "{% url 'EmployeesProfile' %}" + "?id="+s;
+function GetEmploeeid(s){
+   window.location.href= 'editSchedule'+'/'+s;
   // window.location.href = "HEmployeesProfile"+"/" +s;
+  alert(s)
 }
+
+$(document).ready(function(){
+      $('table tr').click(function(){
+        window.location = $(this).data('href');
+        return false;
+      });
+    });
 </script>
 {% endblock script %}

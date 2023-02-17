@@ -180,7 +180,8 @@
                 <div class="col-lg-12 text-center">
                   <br>
                   <br>
-                   <button onclick='setGetParameter( "{{ Emp_id}} ")' class="btn btn-danger float-start" >Back</button>
+                  <a href="{% url 'EmployeesProfile' Emp_id %}" class="btn btn-danger float-start">Back</a>
+                   <!-- <button  class="btn btn-danger float-start" >Back</button> -->
                   <button type="submit" class="btn btn-primary">Upload</button>
                 </div>
 
@@ -282,8 +283,5 @@
     }
   });
 
-  function setGetParameter(s){
-  window.location.href = "{% url 'EmployeesProfile' %}" + "?id="+s;
-}
 </script>
 {% endblock script %}

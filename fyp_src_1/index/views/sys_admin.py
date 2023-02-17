@@ -181,12 +181,13 @@ def user_profile(request):
 
 				if request.FILES.get('Pic') is not None:
 					New_p = request.FILES['Pic']
-					if currentEmployee.Profile_Image:
+					if currentEmployee.Profile_Image != 'media/profile_pics/default.jpg':
 						if os.path.isfile(currentEmployee.Profile_Image.path):
 							os.remove(currentEmployee.Profile_Image.path)
 
 					currentEmployee.Profile_Image = New_p
-
+				else:
+					currentEmployee.Profile_Image = 'media/profile_pics/default.jpg'
 				currentEmployee.Full_Name = request.POST.get('fullName_edit')
 				currentEmployee.Phone_Number = request.POST.get('phone_edit')
 				currentEmployee.Email_Address = request.POST.get('email_edit')
@@ -246,11 +247,13 @@ def edit_employee(request, edit_employee_id):
 				edit_employee = Employee.objects.get(Employee_ID=edit_employee_id)
 				if request.FILES.get('Pic') is not None:
 					New_p = request.FILES['Pic']
-					if currentEmployee.Profile_Image:
+					if currentEmployee.Profile_Image != 'media/profile_pics/default.jpg':
 						if os.path.isfile(currentEmployee.Profile_Image.path):
 							os.remove(currentEmployee.Profile_Image.path)
 
 					edit_employee.Profile_Image =New_p
+				else:
+					currentEmployee.Profile_Image= 'media/profile_pics/default.jpg'
 				edit_employee.Full_Name = request.POST.get('fullName')
 				edit_employee.Phone_Number = request.POST.get('phone')
 				edit_employee.Email_Address = request.POST.get('email')
