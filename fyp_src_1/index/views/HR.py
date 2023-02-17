@@ -54,11 +54,9 @@ def HR_home(request):
 	endDate = end.strftime('%Y-%m-%d')
 	Title='HR Home Page'
 	if 'Employee_ID' in request.session:
-		fourdates = date.today() - timedelta(days=4)
 		currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
 		CheckIn=''
 		CheckOut=''
-		Marklist = ['off','mc']
 
 
 		CheckValues = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID']).filter(StartDate=currentDate)
@@ -243,19 +241,19 @@ def HR_View_Schedule(request):
 		return redirect('login')
 
 
-def Change_Status(request, Editempid):
+def Change_Status(request, Empid,Wid):
 	if 'Employee_ID' in request.session:
 		Title ='Change Employee Work Stauts'
 		sdate = datetime.now() + timedelta(days=3)
 		currentDate = sdate.strftime("%Y-%m-%d")
 		currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
 
-		Emp = Employee.objects.get(Employee_ID=Editempid)
-		Atten = WorkSchedule.objects.filter(Employee_id=Editempid).filter(StartDate__lte=currentDate).order_by('StartDate')
+		Emp = Employee.objects.get(Employee_ID=Empid)
+		Atten = WorkSchedule.objects.filter(Employee_id=Empid,WorkSchedule_id=Wid)
 		if request.method=='POST':
-			UpdateAttendance = WorkSchedule.objects.get(WorkSchedule_id=request.POST.get('dateselected'))
+			UpdateAttendance = WorkSchedule.objects.get(WorkSchedule_id=Wid)
 			NewStatus =request.POST.get('status')
-			StatusName ='pending'
+			StatusName ='Pending'
 			if NewStatus == StatusName:
 				UpdateAttendance.Mark = NewStatus
 				UpdateAttendance.StartTime =request.POST.get('timestartnew')
@@ -290,7 +288,7 @@ def Employee_View_Schedule(request,Editempid):
 		Title = 'Employee Attendance Page'
 		currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
 		Emp = Employee.objects.get(Employee_ID=Editempid)
-		Emp_Atten = WorkSchedule.objects.filter(Employee_id=Editempid).filter(StartDate__lte=currentDate).order_by('StartDate')
+		Emp_Atten = WorkSchedule.objects.filter(Employee_id=Editempid).order_by('StartDate')[:60]
 
 		context={
 		'Employee_ID': currentEmployee.Employee_ID,
@@ -347,7 +345,7 @@ def Emp_update_Schedule(request,Editempid):
 			print(EndTime)
 			for weeks in weekdays:
 				Marks = request.POST.get(str(weeks))
-				if Marks !='pending':
+				if Marks !='Pending':
 					StartTime = None
 					EndTime = None
 				else:

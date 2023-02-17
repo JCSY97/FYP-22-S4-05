@@ -28,7 +28,7 @@
                 <br>
               </div>
 
-              <table class="table table-borderless datatable">
+              <table class="table table-borderless  table-hover  datatable">
                 <thead>
                   <tr>
                     <th scope="col">Date</th>
@@ -42,32 +42,50 @@
 
                 <tbody id="bodyitem">
                   {% for Atten in AttenData %}
-                  
-                  <tr onclick="document.location ='{% url 'EmployeeStatus' Emp_id %}'">
+                       <tr onclick="document.location ='{% url 'EmployeeStatus' Emp_id Atten.WorkSchedule_id %}'">
+
                     <td>{{ Atten.StartDate }}</td>
-                    <td>{{ Atten.StartTime }}</td>
-                    <td>{{ Atten.EndTime }}</td>
+
+                           {% if Atten.StartTime is None %}
+                               <td class="text-warning">--</td>
+                               {% else %}
+                               <td>{{ Atten.StartTime|date:"G:i" }}</td>
+                       {% endif %}
+                       {% if Atten.EndTime is None %}
+                               <td>--</td>
+                               {% else %}
+                               <td>{{ Atten.StartTime|date:"G:i" }}</td>
+                       {% endif %}
                     {% if Atten.Mark in 'Present' %}
-                    <td class="text-success">{{ Atten.InTime }}</td>
-                    <td class="text-success">{{ Atten.OutTime }}</td>
+                    
+                    <td class="text-success">{{ Atten.InTime|date:"G:i" }}</td>
+                    <td class="text-success">{{ Atten.OutTime|date:"G:i" }}</td>
                     <td class="text-success">{{ Atten.Mark }}</td>
                     {% elif Atten.Mark in 'Late' %}
-                    <td class="text-danger">{{ Atten.InTime }}</td>
-                    <td class="text-success">{{ Atten.OutTime }}</td>
+                    <td class="text-danger">{{ Atten.InTime |date:"G:i"}}</td>
+                    <td class="text-success">{{ Atten.OutTime|date:"G:i" }}</td>
                     <td class="text-danger">{{ Atten.Mark }}</td>
-                    {% elif Atten.Mark in 'leave early' %}
-                    <td class="text-success">{{ Atten.InTime }}</td>
-                    <td class="text-danger">{{ Atten.OutTime }}</td>
+                    {% elif Atten.Mark in 'Leave early' %}
+                    <td class="text-success">{{ Atten.InTime|date:"G:i" }}</td>
+                    <td class="text-danger">{{ Atten.OutTime |date:"G:i"}}</td>
                     <td class="text-danger">{{ Atten.Mark }}</td>
                     {% elif Atten.Mark in 'Pending' %}
-                    <td class="text-warning">{{ Atten.InTime }}</td>
-                    <td class="text-warning">{{ Atten.OutTime }}</td>
+                    <td class="text-warning">{{ Atten.InTime|date:"G:i" }}</td>
+                    <td class="text-warning">{{ Atten.OutTime|date:"G:i" }}</td>
+                    <td class="text-warning">{{ Atten.Mark }}</td>
+                    {% elif Atten.Mark in 'Off' %}
+                    <td class="text-warning">{{ Atten.InTime|date:"G:i" }}</td>
+                    <td class="text-warning">{{ Atten.OutTime|date:"G:i" }}</td>
+                    <td class="text-warning">{{ Atten.Mark }}</td>
+                    {% elif Atten.Mark in 'MC' %}
+                    <td class="text-warning">{{ Atten.InTime|date:"G:i" }}</td>
+                    <td class="text-warning">{{ Atten.OutTime|date:"G:i" }}</td>
                     <td class="text-warning">{{ Atten.Mark }}</td>
                     {% else %}
-                    <td class="text-danger">{{ Atten.InTime }}</td>
-                    <td class="text-danger">{{ Atten.OutTime }}</td>
+                    <td class="text-danger">{{ Atten.InTime|date:"G:i" }}</td>
+                    <td class="text-danger">{{ Atten.OutTime|date:"G:i" }}</td>
                     <td class="text-danger">{{ Atten.Mark }}</td>
-                    {% endif %}
+                  {% endif %}
 
 
                   </tr>
@@ -76,6 +94,7 @@
                 </tbody>
               </table>
                 <button onclick='setGetParameter( "{{ Emp_id}} ")' class="btn btn-danger" >Back</button>
+                <a href="{% url 'UpdateEmpSchedule' Emp_id %}" class="btn btn-primary float-end">Upload Schedule</a>
             </div>
 
           </div>
@@ -94,19 +113,19 @@
 {% endblock content %}
 {% block script %}
 <script type="text/javascript">
-{#  /**var items ;#}
-{#  {% for Atten in EmpWorkDate %}#}
-{#       items +=' <tr onclick="document.location = "./change-status.html"">'+#}
-{#                    '<td>{{ Atten.StartDate }}</td>'+#}
-{#                    '<td>09:00</td>'+#}
-{#                    '<td>17:00</td>'+#}
-{#                    '<td class="text-success">09:00</td>'+#}
-{#                    '<td class="text-success">17:00</td>'+#}
-{#                    '<td class="text-success">Present</td>' +#}
-{#                 ' </tr>'#}
-{#  {% endfor %}#}
-{#        var bodyitem = document.getElementById("bodyitem");#}
-{#        bodyitem.innerHTML=items;**/#}
+// {#  /**var items ;#}
+// {#  {% for Atten in EmpWorkDate %}#}
+// {#       items +=' <tr onclick="document.location = "./change-status.html"">'+#}
+// {#                    '<td>{{ Atten.StartDate }}</td>'+#}
+// {#                    '<td>09:00</td>'+#}
+// {#                    '<td>17:00</td>'+#}
+// {#                    '<td class="text-success">09:00</td>'+#}
+// {#                    '<td class="text-success">17:00</td>'+#}
+// {#                    '<td class="text-success">Present</td>' +#}
+// {#                 ' </tr>'#}
+// {#  {% endfor %}#}
+// {#        var bodyitem = document.getElementById("bodyitem");#}
+// {#        bodyitem.innerHTML=items;**/#}
   function setGetParameter(s){
     window.location.href = "{% url 'EmployeesProfile' %}" + "?id="+s;
   }

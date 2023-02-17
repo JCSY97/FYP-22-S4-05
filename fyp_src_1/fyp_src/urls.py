@@ -44,7 +44,7 @@ urlpatterns = [
     path('HR/Employees/', HR.HR_EmployeePage, name='EmployeesPage'),
     path(r'^HR/EmployeesProfile$', HR.HR_EmpProfile, name='EmployeesProfile'),
     path('HR/View_Schedule', HR.HR_View_Schedule, name='View_Schedule'),
-    path('HR/Employee/Status/<int:Editempid>/', HR.Change_Status, name='EmployeeStatus'),
+    path('HR/Employee/Status/<int:Empid>/<int:Wid>/', HR.Change_Status, name='EmployeeStatus'),
     path('HR/Employee/Schedule/<int:Editempid>/', HR.Employee_View_Schedule, name='EmployeeSchedule'),
     path('HR/Employee/Update/Schedule/<int:Editempid>/', HR.Emp_update_Schedule, name='UpdateEmpSchedule'),
 

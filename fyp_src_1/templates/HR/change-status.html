@@ -34,11 +34,9 @@
                     <label for="dateselected" class="form-label">Date</label>
                     <div class="input-group has-validation">
 
-                      <select class="form-select year" id="dateselected" name="dateselected" aria-label="Floating label select example" required >
-                            {% for i in Data %}
-                          <option  name="attenid" value="{{ i.WorkSchedule_id }}">{{ i.StartDate }}</option>
-                            {% endfor %}
-                      </select>
+                      {% for i in Data %}
+                          <input  name="attenid" type="text" value="{{ i.StartDate }}" disabled class="form-control"/>
+                      {% endfor %}
                     </div>
                   </div>
 
@@ -93,7 +91,7 @@
                 <div class="col-lg-6">
                   <br>
                   <br>
-                  <button onclick='setGetParameter( "{{ Emp_id}} ")' class="btn btn-danger" >Back</button>
+                  <a href="{% url 'EmployeeSchedule' Emp_id %}" class="btn btn-danger" >Back</a>
                  <button type="submit" class="btn btn-primary float-end">Update</button>
                    <!-- <a href="{% url 'EmployeeSchedule' Emp_id %}"  type="submit" class="btn btn-primary float-end">Update</a> -->
                 </div>
@@ -121,10 +119,6 @@
 {% block script %}
 <script>
 
-
-function setGetParameter(s){
-  window.location.href = "{% url 'EmployeesProfile' %}" + "?id="+s;
-}
 
 
 </script>

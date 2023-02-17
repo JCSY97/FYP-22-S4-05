@@ -138,7 +138,7 @@
 
                         <td><span class="badge bg-success">{{ Ad.Mark }}</span></td>
 
-                        {% elif Ad.Mark in 'leave early' %}
+                        {% elif Ad.Mark in 'Leave early' %}
 
                         <td>{{ Ad.InTime|date:"G:i" }}   --   <span class ="text-danger">{{ Ad.OutTime |date:"G:i"}} </span></td>
 
@@ -148,12 +148,12 @@
                         <td><span class="text-warning">{{ Ad.InTime|date:"G:i" }}   --   {{ Ad.OutTime |date:"G:i"}}</span></td>
 
                         <td><span class="badge bg-warning">{{ Ad.Mark }}</span></td>
-                            {% elif Ad.Mark in 'off' %}
+                            {% elif Ad.Mark in 'Off' %}
 
                         <td><span class="text-warning">{{ Ad.InTime|date:"G:i" }}   --   {{ Ad.OutTime |date:"G:i"}}</span></td>
 
                         <td><span class="badge bg-warning">{{ Ad.Mark }}</span></td>
-                            {% elif Ad.Mark in 'mc' %}
+                            {% elif Ad.Mark in 'MC' %}
 
                         <td><span class="text-warning">{{ Ad.InTime|date:"G:i" }}   --   {{ Ad.OutTime |date:"G:i"}}</span></td>
 
