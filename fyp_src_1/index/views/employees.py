@@ -23,11 +23,13 @@ currentDate = datetime.now().strftime("%Y-%m-%d")
 currentTime =  datetime.now().strftime('%H:%M:%S')
 
 def Employee_home(request):
+
 	dt = datetime.strptime(currentDate, '%Y-%m-%d')
 	start = dt - timedelta(days=dt.weekday())
 	end = start + timedelta(days=6)
 	startDate = start.strftime('%Y-%m-%d')
 	endDate = end.strftime('%Y-%m-%d')
+	Title='Employee Home Page'
 	if 'Employee_ID' in request.session:
 		fourdates = date.today() - timedelta(days=4)
 		currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
@@ -55,12 +57,13 @@ def Employee_home(request):
 			else:
 				CheckIn = 'OFF'
 				CheckOut = 'OFF'
-		scheduleWeek = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID'], StartDate__lte=endDate,StartDate__gte=startDate).exclude(Mark__in=Marklist).order_by('StartDate')
+		scheduleWeek = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID'], StartDate__lte=endDate,StartDate__gte=startDate,
+												   StartTime__isnull=False,EndTime__isnull=False).order_by('StartDate')
 
 		CountAsent = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID'],
-												 StartDate__lte=currentDate, StartDate__gte=startDate).filter(Mark='Absent').count()
+												 StartDate__lte=currentDate, StartDate__gte=startDate).exclude(Mark__in=Marklist).filter(Mark='Absent').count()
 		RecentData = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID'],
-												 StartDate__lte=currentDate).exclude(Mark__in=Marklist).order_by('StartDate')
+												 StartDate__lte=currentDate).order_by('StartDate')
 
 		context = {
 			'Role': currentEmployee.Role.Role_ID,
@@ -73,6 +76,7 @@ def Employee_home(request):
 			'count': CountAsent,
 			'CheckIn': CheckIn,
 			'CheckOut': CheckOut,
+			'title': Title,
 		}
 		return render(request, 'employee/employee_home.html', context)
 
@@ -83,6 +87,7 @@ def Employee_home(request):
 
 def Employee_schedule(request):
 	if 'Employee_ID' in request.session:
+		Title='Schedule Page'
 		# template = loader.get_template('HR/schedule.html')
 		currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
 		data = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID']).filter(StartDate__isnull=False,StartTime__isnull=False,EndTime__isnull=False)
@@ -99,6 +104,7 @@ def Employee_schedule(request):
 			'Full_Name': currentEmployee.Full_Name,
 			'PFP': currentEmployee.Profile_Image.url,
 			'js_data': js_data,
+			'title': Title,
 		}
 
 		return render(request, 'employee/schedule.html',context)
@@ -111,7 +117,7 @@ def Employee_schedule(request):
 def viewProfile(request):
 	if 'Employee_ID' in request.session:
 		currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
-
+		Title='Profile Page'
 		if request.method == 'POST':
 			# for edit user profile form
 			if request.POST.get('form_type') == 'editProfile':
@@ -166,6 +172,7 @@ def viewProfile(request):
 				'Phone' : currentEmployee.Phone_Number,
 				'Job_Title' : currentEmployee.Job_Title,
 				'PFP' : currentEmployee.Profile_Image.url,
+				'title': Title,
 			}
 			return render(request, 'employee/users_profile.html', context)
 	else:

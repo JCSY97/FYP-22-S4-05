@@ -29,6 +29,7 @@ def sys_admin_home(request):
 	end = start + timedelta(days=6)
 	startDate = start.strftime('%Y-%m-%d')
 	endDate = end.strftime('%Y-%m-%d')
+	Title ='Admin Home Page'
 	if 'Employee_ID' in request.session:
 		fourdates = date.today() - timedelta(days=4)
 		currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
@@ -58,13 +59,13 @@ def sys_admin_home(request):
 				CheckOut = 'OFF'
 
 		scheduleWeek = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID'], StartDate__lte=endDate,
-												   StartDate__gte=startDate).exclude(Mark__in=Marklist).order_by('StartDate')
+												   StartDate__gte=startDate,StartTime__isnull=False,EndTime__isnull=False).order_by('StartDate')
 
 		CountAsent = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID'],
 												 StartDate__lte=currentDate, StartDate__gte=startDate).filter(Mark='Absent').count()
 
 		RecentData = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID'],
-												 StartDate__lte=currentDate).exclude(Mark__in=Marklist).order_by("StartDate")
+												 StartDate__lte=currentDate).order_by("StartDate")
 
 
 
@@ -79,6 +80,7 @@ def sys_admin_home(request):
 			'count':CountAsent,
 			'CheckIn': CheckIn,
 			'CheckOut': CheckOut,
+			'title':Title,
 		}
 
 		return render(request, 'sys_admin/sys_admin_home.html', context)
@@ -91,7 +93,7 @@ def sys_admin_home(request):
 def sys_admin_view_employees(request):
 
 	currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
-
+	Title ='Admin View Employees Page'
 	allEmployees = Employee.objects.all()
 	context={
 		'Employee_ID' : currentEmployee.Employee_ID,
@@ -99,6 +101,7 @@ def sys_admin_view_employees(request):
 		'Role' : currentEmployee.Role.Role_Name,
 		'PFP' : currentEmployee.Profile_Image.url,
 		'Employees' : allEmployees,
+		'title': Title,
 	}
 
 	return render(request, 'sys_admin/sys_admin_view_employees.html', context)
@@ -152,8 +155,10 @@ def sys_admin_create_user(request):
 			return redirect('sys_admin_create_user')
 
 	else:
+		Title ='Create Account'
 		context = {
 			'BigEmpid': BigEmployess.Employee_ID + 1,
+			'title': Title,
 		}
 		return render(request, 'sys_admin/sys_admin_create_user.html',context)
 
@@ -216,6 +221,7 @@ def user_profile(request):
 
 
 		else:
+			Title='User Profile'
 			context = {
 				'Employee_ID' : currentEmployee.Employee_ID,
 				'Full_Name' : currentEmployee.Full_Name,
@@ -223,6 +229,7 @@ def user_profile(request):
 				'Email' : currentEmployee.Email_Address,
 				'Phone' : currentEmployee.Phone_Number,
 				'PFP' : currentEmployee.Profile_Image.url,
+				'title': Title,
 			}
 			return render(request, 'sys_admin/sys_admin_user_profile.html', context)
 	else:
@@ -237,9 +244,14 @@ def edit_employee(request, edit_employee_id):
 		if request.method == 'POST':
 			if request.POST.get('form_type')=='editProfile':
 				edit_employee = Employee.objects.get(Employee_ID=edit_employee_id)
-					
+				if request.FILES.get('Pic') is not None:
+					New_p = request.FILES['Pic']
+					if currentEmployee.Profile_Image:
+						if os.path.isfile(currentEmployee.Profile_Image.path):
+							os.remove(currentEmployee.Profile_Image.path)
+
+					edit_employee.Profile_Image =New_p
 				edit_employee.Full_Name = request.POST.get('fullName')
-				edit_employee.Role = Role.objects.get(Role_Name=request.POST.get('newRole'))
 				edit_employee.Phone_Number = request.POST.get('phone')
 				edit_employee.Email_Address = request.POST.get('email')
 
@@ -266,6 +278,7 @@ def edit_employee(request, edit_employee_id):
 					return redirect('/sys_admin/view_employees/edit/' + str(edit_employee_id))
 
 		else:
+			Title='Edit Employee Page'
 			if Employee.objects.filter(Employee_ID=edit_employee_id).count() == 1:
 				edit_employee = Employee.objects.get(Employee_ID=edit_employee_id)
 				context = {
@@ -278,6 +291,7 @@ def edit_employee(request, edit_employee_id):
 					'Full_Name' : currentEmployee.Full_Name,
 					'Role' : currentEmployee.Role.Role_Name,
 					'PFP' : currentEmployee.Profile_Image.url,
+					'title': Title,
 				}
 
 				return render(request, 'sys_admin/sys_admin_edit_employee.html', context)
@@ -295,7 +309,7 @@ def schedule(request):
 		for d in json_data:
 			del d['pk']
 			del d['model']
-
+		Title="Schedule Page"
 		js_data = json.dumps(json_data,ensure_ascii=False)
 		context = {
 			'Employee_ID' : currentEmployee.Employee_ID,
@@ -303,6 +317,7 @@ def schedule(request):
 			'Full_Name' : currentEmployee.Full_Name,
 			'PFP': currentEmployee.Profile_Image.url,
 			'js_data': js_data,
+			'title': Title,
 		}
 
 		return render(request, 'sys_admin/sys_admin_schedule.html',context)

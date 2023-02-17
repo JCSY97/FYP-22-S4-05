@@ -1,4 +1,6 @@
 import json
+from django.contrib.auth.decorators import login_required
+import requests
 from django.db.models import Q
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, redirect
@@ -13,6 +15,7 @@ import string
 
 currentDate = datetime.now().strftime("%Y-%m-%d")
 currentTime =  datetime.now().strftime('%H:%M:%S')
+
 
 def CheckMark():
 	UserStatus = WorkSchedule.objects.filter(StartDate__lt=currentDate)
@@ -30,10 +33,10 @@ def CheckMark():
 					WorksId.Mark = 'Late & leave early'
 					WorksId.save()
 				elif WorksId.StartTime >= WorksId.InTime and WorksId.EndTime > WorksId.OutTime:
-					WorksId.Mark = 'leave early'
+					WorksId.Mark = 'Leave early'
 					WorksId.save()
 				elif WorksId.StartTime < WorksId.InTime and WorksId.EndTime <= WorksId.OutTime:
-					WorksId.Mark = 'late'
+					WorksId.Mark = 'Late'
 					WorksId.save()
 			else:
 				WorksId.Mark = 'Pending'
@@ -49,6 +52,7 @@ def HR_home(request):
 	end = start + timedelta(days=6)
 	startDate = start.strftime('%Y-%m-%d')
 	endDate = end.strftime('%Y-%m-%d')
+	Title='HR Home Page'
 	if 'Employee_ID' in request.session:
 		fourdates = date.today() - timedelta(days=4)
 		currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
@@ -78,13 +82,13 @@ def HR_home(request):
 				CheckOut= 'OFF'
 
 		scheduleWeek = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID'], StartDate__lte=endDate,
-												   StartDate__gte=startDate).exclude(Mark__in=Marklist).order_by('StartDate')
+												   StartDate__gte=startDate,StartTime__isnull=False,EndTime__isnull=False).order_by('StartDate')
 
 
 		CountAsent = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID'],StartDate__lte=currentDate, StartDate__gte=startDate).filter(Mark='Absent').count()
 
 		RecentData = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID'],
-												 StartDate__lte=currentDate).exclude(Mark__in=Marklist).order_by('StartDate')
+												 StartDate__lte=currentDate).order_by('StartDate')
 
 		context = {
 			'Role' : currentEmployee.Role.Role_ID,
@@ -97,6 +101,7 @@ def HR_home(request):
 			'ScheduleWeek':scheduleWeek,
 			'CheckIn':CheckIn,
 			'CheckOut':CheckOut,
+			'title': Title,
 		}
 		return render(request, 'HR/HR_home.html', context)
 	else:
@@ -107,7 +112,7 @@ def HR_home(request):
 def HR_Profile(request):
 	if 'Employee_ID' in request.session:
 		currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
-
+		Title='User Profile'
 		if request.method == 'POST':
 			# for edit user profile form
 			if request.POST.get('form_type') == 'editProfile':
@@ -159,6 +164,7 @@ def HR_Profile(request):
 				'Phone' : currentEmployee.Phone_Number,
 				'Job_Title' : currentEmployee.Job_Title,
 				'PFP' : currentEmployee.Profile_Image.url,
+				'title': Title,
 			}
 			return render(request, 'HR/HR_profile.html', context)
 	else:
@@ -168,6 +174,7 @@ def HR_Profile(request):
 
 def HR_EmployeePage(request):
 	currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
+	Title='Employees Page'
 	data = Employee.objects.all()
 	context = {
 		'Employee_ID' : currentEmployee.Employee_ID,
@@ -175,12 +182,16 @@ def HR_EmployeePage(request):
 		'Full_Name' : currentEmployee.Full_Name,
 		'PFP': currentEmployee.Profile_Image.url,
 		'data': data,
+		'title': Title,
 	}
 	return render(request, 'HR/employees.html', context)
 
 
 def HR_EmpProfile(request):
+
 	currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
+
+	Title='HR-Employee Profile'
 	if request.method == 'GET':
 		EmpId = request.GET.get('id')
 		# print(EmpId,"testes")
@@ -197,13 +208,16 @@ def HR_EmpProfile(request):
 			'Emp_Email' : Myinfo.Email_Address,
 			'Emp_Phone' : Myinfo.Phone_Number,
 			'Emp_PFP' : Myinfo.Profile_Image.url,
+			'title': Title,
 		}
 		return render(request, 'HR/employees-profile.html', context)
+
 	# return HttpResponse(EmpId)
 
 def HR_View_Schedule(request):
 	if 'Employee_ID' in request.session:
 		# template = loader.get_template('HR/schedule.html')
+		Title = 'View Schedule'
 		currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
 		data = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID']).filter(StartDate__isnull=False,StartTime__isnull=False,EndTime__isnull=False)
 		js_data =serializers.serialize('json',data,fields=['StartDate','StartTime','EndTime'])
@@ -218,6 +232,7 @@ def HR_View_Schedule(request):
 			'Job_Title' : currentEmployee.Job_Title,
 			'Full_Name' : currentEmployee.Full_Name,
 			'PFP': currentEmployee.Profile_Image.url,
+			'title': Title,
 			'js_data': js_data,
 		}
 
@@ -230,9 +245,11 @@ def HR_View_Schedule(request):
 
 def Change_Status(request, Editempid):
 	if 'Employee_ID' in request.session:
+		Title ='Change Employee Work Stauts'
 		sdate = datetime.now() + timedelta(days=3)
 		currentDate = sdate.strftime("%Y-%m-%d")
 		currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
+
 		Emp = Employee.objects.get(Employee_ID=Editempid)
 		Atten = WorkSchedule.objects.filter(Employee_id=Editempid).filter(StartDate__lte=currentDate).order_by('StartDate')
 		if request.method=='POST':
@@ -260,6 +277,7 @@ def Change_Status(request, Editempid):
 				"Emp_id" :Emp.Employee_ID,
 				'Name' : Emp.Full_Name,
 				'Data':Atten,
+				'title': Title,
 			}
 			return render(request, 'HR/change-status.html',context)
 
@@ -269,6 +287,7 @@ def Change_Status(request, Editempid):
 def Employee_View_Schedule(request,Editempid):
 
 	if 'Employee_ID' in request.session:
+		Title = 'Employee Attendance Page'
 		currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
 		Emp = Employee.objects.get(Employee_ID=Editempid)
 		Emp_Atten = WorkSchedule.objects.filter(Employee_id=Editempid).filter(StartDate__lte=currentDate).order_by('StartDate')
@@ -281,6 +300,7 @@ def Employee_View_Schedule(request,Editempid):
 		"Emp_id" :Emp.Employee_ID,
 		'Name' : Emp.Full_Name,
 		'AttenData':Emp_Atten,
+		'title': Title,
 		}
 
 		return render(request, 'HR/employees-view-schedule.html',context)
@@ -309,6 +329,7 @@ def alldays(year,month,Inputday,whichDayYouWant):
 
 weekdays = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
 def Emp_update_Schedule(request,Editempid):
+	Title='Upload Schedule'
 	if 'Employee_ID' in request.session:
 		currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
 		Emp = Employee.objects.get(Employee_ID=Editempid)
@@ -320,14 +341,19 @@ def Emp_update_Schedule(request,Editempid):
 			SchedduleYear = request.POST.get('yearselect')
 			SchedduleMonth =request.POST.get('monthselect')
 
-			StartTime = request.POST.get('timestart')
-			EndTime = request.POST.get('timeend')
-
+			StartTime =''
+			EndTime = ''
+			print(StartTime)
+			print(EndTime)
 			for weeks in weekdays:
 				Marks = request.POST.get(str(weeks))
 				if Marks !='pending':
 					StartTime = None
 					EndTime = None
+				else:
+					StartTime = request.POST.get('timestart')
+					EndTime = request.POST.get('timeend')
+
 				if currentYear < int(SchedduleYear) or int(SchedduleMonth) > currentMonth:
 					for d in alldays(int(SchedduleYear), int(SchedduleMonth), 1, weeks):
 
@@ -338,12 +364,13 @@ def Emp_update_Schedule(request,Editempid):
 					for d in alldays(currentYear, currentMonth, currenDay, weeks):
 						Start = WorkSchedule.objects.filter(Employee_id=Editempid,StartDate=d)
 						if  Start.exists():
-							WorkId = WorkSchedule.objects.get(Q(Employee_id=Editempid, StartDate=d))
+							WorkId = WorkSchedule.objects.get(Employee_id=Editempid, StartDate=d)
 							UpdateWork = WorkSchedule.objects.get(WorkSchedule_id=WorkId.WorkSchedule_id)
 							UpdateWork.StartTime=StartTime
 							UpdateWork.EndTime=EndTime
 							UpdateWork.Mark=Marks
 							UpdateWork.save()
+
 						else:
 							Marks = request.POST.get(str(weeks))
 							WordSche = WorkSchedule(StartDate=d,StartTime=StartTime,EndTime=EndTime,Employee_id=Editempid,Mark=Marks)
@@ -360,6 +387,7 @@ def Emp_update_Schedule(request,Editempid):
 			'PFP': currentEmployee.Profile_Image.url,
 			"Emp_id" :Emp.Employee_ID,
 			'Name' : Emp.Full_Name,
+			'title': Title,
 	}
 		return render(request, 'HR/upload-schedule.html',context)
 

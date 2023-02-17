@@ -19,7 +19,7 @@
         <li class="nav-item dropdown pe-3">
 
           <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-            <img src="{{ PFP }}" alt="Profile" class="rounded-circle">
+            <img src="{{ PFP }}" alt="Profile" class="rounded-circle"  height="35" width="35">
             <span class="d-none d-md-block dropdown-toggle ps-2">{{ Full_Name }}</span>
           </a><!-- End Profile Iamge Icon -->
 
@@ -80,12 +80,7 @@
           <span>Employees</span>
         </a>
       </li><!-- End employee Nav -->
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="{% url 'sys_admin_upload_img' %}">
-          <i class="bi bi-card-image"></i>
-          <span>Upload Image</span>
-        </a>
-      </li><!-- End Upload Image Nav -->
+
       <li class="nav-item">
         <a class="nav-link collapsed" href="{% url 'sys_admin_schedule' %}">
           <i class="bi bi-calendar"></i>
