@@ -148,6 +148,16 @@
                         <td><span class="text-warning">{{ Ad.InTime|date:"G:i" }}   --   {{ Ad.OutTime |date:"G:i"}}</span></td>
 
                         <td><span class="badge bg-warning">{{ Ad.Mark }}</span></td>
+                            {% elif Ad.Mark in 'off' %}
+
+                        <td><span class="text-warning">{{ Ad.InTime|date:"G:i" }}   --   {{ Ad.OutTime |date:"G:i"}}</span></td>
+
+                        <td><span class="badge bg-warning">{{ Ad.Mark }}</span></td>
+                            {% elif Ad.Mark in 'mc' %}
+
+                        <td><span class="text-warning">{{ Ad.InTime|date:"G:i" }}   --   {{ Ad.OutTime |date:"G:i"}}</span></td>
+
+                        <td><span class="badge bg-warning">{{ Ad.Mark }}</span></td>
 
                         {% else %}
 

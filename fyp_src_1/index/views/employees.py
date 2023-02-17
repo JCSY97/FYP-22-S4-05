@@ -57,12 +57,13 @@ def Employee_home(request):
 			else:
 				CheckIn = 'OFF'
 				CheckOut = 'OFF'
-		scheduleWeek = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID'], StartDate__lte=endDate,StartDate__gte=startDate).exclude(Mark__in=Marklist).order_by('StartDate')
+		scheduleWeek = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID'], StartDate__lte=endDate,StartDate__gte=startDate,
+												   StartTime__isnull=False,EndTime__isnull=False).order_by('StartDate')
 
 		CountAsent = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID'],
-												 StartDate__lte=currentDate, StartDate__gte=startDate).filter(Mark='Absent').count()
+												 StartDate__lte=currentDate, StartDate__gte=startDate).exclude(Mark__in=Marklist).filter(Mark='Absent').count()
 		RecentData = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID'],
-												 StartDate__lte=currentDate).exclude(Mark__in=Marklist).order_by('StartDate')
+												 StartDate__lte=currentDate).order_by('StartDate')
 
 		context = {
 			'Role': currentEmployee.Role.Role_ID,
