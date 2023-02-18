@@ -42,7 +42,7 @@
 
                 <tbody id="bodyitem">
                   {% for Atten in AttenData %}
-                       <tr >
+                       <tr onclick="document.location ='{% url 'EmployeeStatus' Emp_id Atten.WorkSchedule_id %}'">
 
                     <td>{{ Atten.StartDate }}</td>
 
@@ -120,7 +120,7 @@
                 </tbody>
               </table>
               <a href="{% url 'EmployeesProfile' Emp_id %}" class="btn btn-danger">Back</a>
-                <!-- <button onclick='setGetParameter( "{{ Emp_id}} ")' class="btn btn-danger" >Back</button> -->
+{#                <!-- <button onclick='setGetParameter( "{{ Emp_id}} ")' class="btn btn-danger" >Back</button> -->#}
                 <a href="{% url 'UpdateEmpSchedule' Emp_id %}" class="btn btn-primary float-end">Upload Schedule</a>
             </div>
 
