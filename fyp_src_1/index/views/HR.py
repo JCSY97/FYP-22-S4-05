@@ -192,34 +192,31 @@ def HR_EmployeePage(request):
     return render(request, 'HR/employees.html', context)
 
 
-def HR_EmpProfile(request, Empid):
-    # if 'Employee_ID' in request.session:
-    print("yes Employee Edit")
-    currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
-   
-    Title = 'HR-Employee Profile'
-    EmpCheck = Employee.objects.filter(Employee_ID=Empid)
-    
-    if EmpCheck.exists():
-        # print(EmpId,"testes")
-        print('hello')
-        Myinfo = Employee.objects.get(Employee_ID=Empid)
-        print(Myinfo)
-        context = {
-            'Role': currentEmployee.Role.Role_ID,
-            'Employee_ID': currentEmployee.Employee_ID,
-            'Full_Name': currentEmployee.Full_Name,
-            'Job_Title': currentEmployee.Job_Title,
-            'PFP': currentEmployee.Profile_Image.url,
-            'Emp_id': Myinfo.Employee_ID,
-            'Emp_FullName': Myinfo.Full_Name,
-            'Emp_JobTitle': Myinfo.Job_Title,
-            'Emp_Email': Myinfo.Email_Address,
-            'Emp_Phone': Myinfo.Phone_Number,
-            'Emp_PFP': Myinfo.Profile_Image.url,
-            'title': Title,
-        }
-        return render(request, 'HR/employees-profile.html', context)
+
+def HR_EmpProfile(request):
+
+	currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
+
+	Title='HR-Employee Profile'
+	if request.method == 'GET':
+		EmpId = request.GET.get('id')
+		# print(EmpId,"testes")
+		Myinfo = Employee.objects.get(Employee_ID = EmpId)
+		context = {
+			'Role': currentEmployee.Role.Role_ID,
+			'Employee_ID': currentEmployee.Employee_ID,
+			'Full_Name': currentEmployee.Full_Name,
+			'Job_Title': currentEmployee.Job_Title,
+			'PFP': currentEmployee.Profile_Image.url,
+			'Emp_id': Myinfo.Employee_ID,
+			'Emp_FullName': Myinfo.Full_Name,
+			'Emp_JobTitle' : Myinfo.Job_Title,
+			'Emp_Email' : Myinfo.Email_Address,
+			'Emp_Phone' : Myinfo.Phone_Number,
+			'Emp_PFP' : Myinfo.Profile_Image.url,
+			'title': Title,
+		}
+		return render(request, 'HR/employees-profile.html', context)
 
 
 # return HttpResponse(EmpId)

@@ -10,7 +10,7 @@
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="{% url 'sys_admin_home' %}">Home</a></li>
-          <li class="breadcrumb-item"><a href="{% url 'sys_admin_view_employees' %}">Employees</a></li>
+          <li class="breadcrumb-item"><a href="{% url 'sys_admin_view_employees' %}">{{ edit_employee_full_name }}</a></li>
           <li class="breadcrumb-item active">Profile</li>
         </ol>
       </nav>
@@ -86,7 +86,8 @@
                     <div class="col-lg-9 col-md-8">{{ edit_employee_email }}</div>
                   </div>
                   <a href="{% url 'sys_admin_view_employees' %}" class="btn btn-danger">Back</a>
-                     <a href="{% url 'sys_admin_upload_img' %}" class="btn btn-primary">Upload Image</a>
+                  <a href="{% url 'sys_admin_upload_img' %}" class="btn btn-primary">Upload Image</a>
+
                 </div>
 
                 <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
@@ -214,7 +215,7 @@
 
    function DeleteJob()
    {
-       if (confirm("Confirm deletion of Employee id:{{ edit_employee_full_name }} Account？ will not recover"))
+       if (confirm("Confirm deletion of Employee id:{{ edit_employee_full_name }} Account? will not recover"))
        {
            return true;
        }else {
@@ -236,6 +237,8 @@
 
     password.onchange = validatePassword;
     confirm_password.onkeyup = validatePassword;
+
+
 </script>
 {% endblock script %}
 

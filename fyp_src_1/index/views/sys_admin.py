@@ -297,7 +297,7 @@ def edit_employee(request, edit_employee_id):
 					'title': Title,
 				}
 
-				return render(request, 'sys_admin/sys_admin_edit_employee.html', context)
+			return render(request, 'sys_admin/sys_admin_edit_employee.html', context)
 	else:
 		messages.error(request, 'Please login')
 		return redirect('login')
@@ -331,6 +331,8 @@ def schedule(request):
 
 
 def upload_img(request):
+
+
 	return render(request, 'sys_admin/sys_admin_upload_img.html')
 
 
