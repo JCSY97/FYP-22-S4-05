@@ -99,6 +99,8 @@ print(len(known_face_encodings))
 def index(request):
     if request.method == 'POST':
         try:
+            return_data = ""
+            return_face_detected = ""
             frame_ = request.POST.get('image')
             frame_ = str(frame_)
             data = frame_.replace('data:image/jpeg;base64,', '')
@@ -126,7 +128,10 @@ def index(request):
 
                 # face detected
                 if face_distances[best_match_index] < 0.4:
-                    print("employee " + str(known_face[best_match_index]) + " has detected")
+                    # get employeeName
+                    detected_emp_name = Employee.objects.get(Employee_ID = known_face[best_match_index]).Full_Name
+                    return_face_detected = str(detected_emp_name) + " detected"
+                    print(str(detected_emp_name) + " detected")
 
 
                     # check if this emp id is in database
@@ -136,6 +141,10 @@ def index(request):
                     # check if this person is in EMPLOYEE table
                     if Employee.objects.filter(Employee_ID=known_face[best_match_index]):
                         EMPID = known_face[best_match_index]
+                        # get EMPID's name
+                        EMP_name = Employee.objects.get(Employee_ID=EMPID).Full_Name
+
+
                         AttenIntime =WorkSchedule.objects.filter(Employee_id=EMPID,StartDate=currentDate)
 
 
@@ -146,7 +155,8 @@ def index(request):
                             
                                 currentEmp.InTime =currentTime
                                 currentEmp.save()
-                                print("CLOCKED IN")
+                                return_data = str(EMP_name) + " CLOCKED IN"
+                                print(str(EMP_name) + " CLOCKED IN")
 
                             # clock out
                             else:
@@ -166,24 +176,26 @@ def index(request):
                                 if (delta.total_seconds()) > 3600 :
                                     currentEmp.OutTime = currentTime
                                     currentEmp.save()
-                                    print("saved")
-                                else:
-                                    print("asdasdasd")
+
+                                    return_data = str(EMP_name) + " CLOCKED OUT"
+
+                                    print(str(EMP_name) + " CLOCKED OUT")
                         else:
                             # this else block is for employee who clock in when there is no schedule for that person
                             # write new role in employee table
                             new_row = WorkSchedule(Employee_id=EMPID, StartDate=currentDate, InTime=currentTime)
                             new_row.save()
+                            return_data = str(EMP_name) + " CLOCKED IN"
+                            print(str(EMP_name) + " CLOCKED IN")
 
                 else:
                     print("face not in database")
             elif len(face_locations) > 1:
                 print("more than one face detected")
+                return_face_detected = "more than one face detected"
 
             else:
                 print("no face has been detected")
-
-
 
 
 
@@ -192,7 +204,7 @@ def index(request):
 
 
             #return JsonResponse({"valid": str(compare_verified)}, status=200)
-            return JsonResponse({"valid": "hello"}, status=200)
+            return JsonResponse({"return_data" : return_data, "return_face_detected":return_face_detected}, status=200)
 
         except Exception as e:
             print(e)
