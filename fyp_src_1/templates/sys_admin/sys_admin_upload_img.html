@@ -11,7 +11,7 @@
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="{% url 'sys_admin_home' %}">Home</a></li>
-          <li class="breadcrumb-item"><a href="{% url 'sys_admin_view_employees' %}"></a></li>
+          <li class="breadcrumb-item"><a href="{% url 'sys_admin_edit_employee' Emplid %}">{{Name}}</a></li>
           <li class="breadcrumb-item active">Upload Images</li>
         </ol>
       </nav>
@@ -22,18 +22,19 @@
         <div class="col-lg-12">
 
           
-          <form>
+          <form enctype="multipart/form-data" method="POST">
+            {% csrf_token %}
             <div class="upload__box">
               <div class="upload__btn-box">
                 <label class="upload__btn">
                   <p>Upload images</p>
-                  <input type="file" multiple="" data-max_length="20" class="upload__inputfile">
+                  <input type="file"  data-max_length="20" class="upload__inputfile"  name="UploadImage" multiple>
                 </label>
               </div>
               <div class="upload__img-wrap"></div>
             </div>
             <div class="col-lg-6">
-              <a href="./edit-user.html" type="button" class="btn btn-danger">Back</a>
+              <a class="btn btn-danger" href="{%url 'sys_admin_edit_employee' Emplid %}">Back</a>
               <button type="submit" class="btn btn-primary float-end">Upload</button>
 
             </div>
@@ -50,3 +51,8 @@
 
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 {% endblock content %}
+{% block script %}
+<script>
+
+</script>
+{% endblock script %}

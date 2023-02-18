@@ -7,6 +7,8 @@ import random
 import string
 import hashlib
 import os
+from django.conf import settings
+
 from django.core.exceptions import ObjectDoesNotExist
 from django.core import serializers
 from django.db.models import Q
@@ -127,7 +129,7 @@ def sys_admin_create_user(request):
 		print(New_Password+New_salt)
 		Encry_Pass = get_MD5(New_Password+New_salt)
 		print(Encry_Pass)
-		
+
 
 		#if employee_ID is taken
 
@@ -194,8 +196,8 @@ def user_profile(request):
 				currentEmployee.save()
 
 				return redirect('sys_admin_user_profile')
-			
-			# for change password form	
+
+			# for change password form
 			elif request.POST.get('form_type') == 'changePassword':
 
 				Random_salt = ''.join(random.sample(string.ascii_letters + string.digits + string.punctuation, 4))
@@ -261,7 +263,7 @@ def edit_employee(request, edit_employee_id):
 				edit_employee.save()
 
 				return redirect('/sys_admin/view_employees/edit/' + str(edit_employee_id))
-		
+
 			elif request.POST.get('form_type') == 'changePassword':
 				edit_employee = Employee.objects.get(Employee_ID=edit_employee_id)
 				Random_salt = ''.join(random.sample(string.ascii_letters + string.digits + string.punctuation, 4))
@@ -269,7 +271,7 @@ def edit_employee(request, edit_employee_id):
 				new_passWord = request.POST.get('newpassword')
 				new_password_2 = request.POST.get('renewpassword')
 				Update_pssword = get_MD5(new_passWord + New_salt)
-				
+
 				if new_passWord == new_password_2:
 					edit_employee.Password = Update_pssword
 					edit_employee.salt = New_salt
@@ -330,10 +332,29 @@ def schedule(request):
 		return redirect('login')
 
 
-def upload_img(request):
+def upload_img(request, empid):
+	if 'Employee_ID' in request.session:
+		Emp = Employee.objects.filter(Employee_ID=empid)
 
+		currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
+		if request.method == 'POST':
+			filepath = os.path.join(settings.BASE_DIR, 'media', 'verify', str(empid))
+			if not os.path.exists(filepath):
+				for f in request.FILES.getlist('UploadImage'):
 
-	return render(request, 'sys_admin/sys_admin_upload_img.html')
+					print(f.name)
+			# for root,dirs,files in os.walk(os.getcwd):
+			# 	for i in New_p:
+			# 		print(root,dirs)
+
+			return redirect('/sys_admin/view_employees/edit/' + str(empid))
+		elif Emp.exists():
+			Information={
+				'Name':Emp[0].Full_Name,
+				"Emplid":Emp[0].Employee_ID,
+			}
+
+			return render(request, 'sys_admin/sys_admin_upload_img.html',Information)
 
 
 def logout(request):
