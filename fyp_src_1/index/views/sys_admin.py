@@ -8,8 +8,6 @@ import string
 import hashlib
 import os
 from django.conf import settings
-
-from django.core.exceptions import ObjectDoesNotExist
 from django.core import serializers
 from django.db.models import Q
 from django.contrib.auth.hashers import make_password
@@ -341,8 +339,11 @@ def upload_img(request, empid):
 			filepath = os.path.join(settings.BASE_DIR, 'media', 'verify', str(empid))
 			if not os.path.exists(filepath):
 				for f in request.FILES.getlist('UploadImage'):
+					os.makedirs(filepath)
+					fout = open(filepath,"wb+")
+					for chunk in f:
+						fout.write(chunk)
 
-					print(f.name)
 			# for root,dirs,files in os.walk(os.getcwd):
 			# 	for i in New_p:
 			# 		print(root,dirs)
