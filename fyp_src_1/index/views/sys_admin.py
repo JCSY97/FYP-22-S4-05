@@ -12,6 +12,10 @@ from django.core import serializers
 from django.db.models import Q
 from django.contrib.auth.hashers import make_password
 
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
+
+
 
 currentDate = datetime.now().strftime("%Y-%m-%d")
 currentTime =  datetime.now().strftime('%H:%M:%S')
@@ -329,7 +333,6 @@ def schedule(request):
 		messages.error(request, 'Please login first')
 		return redirect('login')
 
-
 def upload_img(request, empid):
 	if 'Employee_ID' in request.session:
 		Emp = Employee.objects.filter(Employee_ID=empid)
@@ -337,12 +340,28 @@ def upload_img(request, empid):
 		currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
 		if request.method == 'POST':
 			filepath = os.path.join(settings.BASE_DIR, 'media', 'verify', str(empid))
-			if not os.path.exists(filepath):
-				for f in request.FILES.getlist('UploadImage'):
-					os.makedirs(filepath)
-					fout = open(filepath,"wb+")
-					for chunk in f:
-						fout.write(chunk)
+
+			# make file first if not exist
+			try:
+			    os.mkdir(filepath)
+			except:
+			    pass
+
+
+			for f in request.FILES.getlist('UploadImage'):
+			 		print(f)
+			 		print(type(f))
+
+			 		f_filepath = os.path.join(filepath, f.name)
+			 		test = default_storage.save(f_filepath, ContentFile(f.read()))
+
+			
+			# if os.path.exists(filepath):
+			# 	for f in request.FILES.getlist('UploadImage'):
+			# 		print(f)
+			# 		fout = open(filepath,"wb+")
+			# 		for chunk in f:
+			# 			fout.write(chunk)
 
 			# for root,dirs,files in os.walk(os.getcwd):
 			# 	for i in New_p:
@@ -356,6 +375,9 @@ def upload_img(request, empid):
 			}
 
 			return render(request, 'sys_admin/sys_admin_upload_img.html',Information)
+	else:
+		messages.error(request, 'Please login first')
+		return redirect('login')
 
 
 def logout(request):

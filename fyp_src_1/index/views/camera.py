@@ -54,7 +54,7 @@ for person in os.listdir(verify_file_path):
     known_face_encodings.append(img_of_person_encoding)
 
 print(known_face)
-print(len(known_face_encodings))
+print("Number of faces encoded : " + str(len(known_face_encodings)))
 
 
 
@@ -190,6 +190,8 @@ def index(request):
 
                 else:
                     print("face not in database")
+                    return_face_detected = "Math not found"
+
             elif len(face_locations) > 1:
                 print("more than one face detected")
                 return_face_detected = "more than one face detected"
