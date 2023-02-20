@@ -61,23 +61,32 @@ print("link success")
 # print ("数据操作成功")
 from datetime import date, timedelta
 
-d1 = date(2023, 1, 1)
-d2 = date(2023, 2, 20)
+# d1 = date(2023, 1, 1)
+# d2 = date(2023, 2, 20)
+# delta = d2 - d1
+#
+# for i in range(delta.days + 1):
+#     dat= d1 + timedelta(days=i)
+
+
+
+# insertEmployee = "INSERT INTO index_employee (Employee_ID, Full_Name, Job_Title, Phone_Number, Email_Address, Password, Start_Date, Role_id, salt, Profile_Image) values(?,?,?,?,?,?,?,?,?,?)"
+# d=30
+InsertWork ="insert into WorkSchedule(mark, startdate, employee_id, endtime, starttime, intime, outtime) VALUES (?,?,?,?,?,?,?)"
+# for i in range(100005,1000012):
+#    ran_str = ''.join(random.sample(string.ascii_letters, 6))
+#    ran_str=("HR"+str(i)+ran_str)
+#    Phone = ''.join(random.sample(string.digits, 8))
+#    se.execute(insert,[(i),(ran_str),("Admin"),(Phone),('Admin12345@gmail.com'),('ce2ffefdca67bc04f70351cc651e8bc4'),('2023-02-08'),(1),('Fyp1'),('profile_pics/default.jpg')])
+from datetime import date, timedelta
+
+d1 = date(2023, 2, 1)
+d2 = date(2023, 2, 18)
 delta = d2 - d1
 
 for i in range(delta.days + 1):
     dat= d1 + timedelta(days=i)
-
-
-
-insert = "INSERT INTO index_employee (Employee_ID, Full_Name, Job_Title, Phone_Number, Email_Address, Password, Start_Date, Role_id, salt, Profile_Image) values(?,?,?,?,?,?,?,?,?,?)"
-d=30
-
-for i in range(41,60):
-   ran_str = ''.join(random.sample(string.ascii_letters, 6))
-   ran_str=("HR"+str(i)+ran_str)
-   Phone = ''.join(random.sample(string.digits, 8))
-   se.execute(insert,[(i),(ran_str),("Admin"),(Phone),('Admin12345@gmail.com'),('ce2ffefdca67bc04f70351cc651e8bc4'),('2023-02-08'),(1),('Fyp1'),('profile_pics/default.jpg')])
+    se.execute(InsertWork, ['Pending', dat, '100001','18:00','09:00','7:45','18:00'])
 
 conn.commit()
 print ("数据操作成功")

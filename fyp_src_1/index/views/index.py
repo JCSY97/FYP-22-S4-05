@@ -86,21 +86,20 @@ def DeletedButton(request, Editempid):
 	#
 	currentEmployee = Employee.objects.get(Employee_ID=Editempid)
 
-	DEFAULT = 'media/profile_pics/default.jpg'
+	DEFAULT = 'profile_pics/default.jpg'
 
-	if currentEmployee.Profile_Image != 'media/profile_pics/default.jpg':
+	if currentEmployee.Profile_Image != 'profile_pics/default.jpg':
 		if os.path.isfile(currentEmployee.Profile_Image.path) is not None:
 			os.remove(currentEmployee.Profile_Image.path)
-
-	
 		currentEmployee.Profile_Image=DEFAULT
 		currentEmployee.save()
-	if currentEmployee.Role.Role_ID == 1:
-		return redirect('sys_admin_home')
-	elif currentEmployee.Role.Role_ID == 2:
-		return redirect('HR_home')
-	elif currentEmployee.Role.Role_ID ==3:
-		return redirect('Home')
+		userObject = Employee.objects.get(Employee_ID=Editempid)
+		if userObject.Role.Role_ID == 1:
+			return redirect('sys_admin_home')
+		elif userObject.Role.Role_ID == 2:
+			return redirect('HR_home')
+		elif userObject.Role.Role_ID == 3:
+			return redirect('Home')
 
 
 def logout(request):

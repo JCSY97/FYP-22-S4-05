@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, reverse
-from index.models import Employee, Role,WorkSchedule
+from index.models import Employee, Role, WorkSchedule
 from django.contrib import messages
-from datetime import date,datetime, timedelta
+from datetime import date, datetime, timedelta
 import json
 import random
 import string
@@ -15,10 +15,9 @@ from django.contrib.auth.hashers import make_password
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 
-
-
 currentDate = datetime.now().strftime("%Y-%m-%d")
-currentTime =  datetime.now().strftime('%H:%M:%S')
+currentTime = datetime.now().strftime('%H:%M:%S')
+
 
 def get_MD5(Password):
 	md5 = hashlib.md5()
@@ -33,7 +32,7 @@ def sys_admin_home(request):
 	end = start + timedelta(days=6)
 	startDate = start.strftime('%Y-%m-%d')
 	endDate = end.strftime('%Y-%m-%d')
-	Title ='Admin Home Page'
+	Title = 'Admin Home Page'
 	if 'Employee_ID' in request.session:
 		fourdates = date.today() - timedelta(days=4)
 		currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
@@ -63,15 +62,15 @@ def sys_admin_home(request):
 				CheckOut = 'OFF'
 
 		scheduleWeek = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID'], StartDate__lte=endDate,
-												   StartDate__gte=startDate,StartTime__isnull=False,EndTime__isnull=False).order_by('StartDate')
+												   StartDate__gte=startDate, StartTime__isnull=False,
+												   EndTime__isnull=False).order_by('StartDate')
 
 		CountAsent = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID'],
-												 StartDate__lte=currentDate, StartDate__gte=startDate).filter(Mark='Absent').count()
+												 StartDate__lte=currentDate, StartDate__gte=startDate).filter(
+			Mark='Absent').count()
 
 		RecentData = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID'],
 												 StartDate__lte=currentDate).order_by("StartDate")
-
-
 
 		context = {
 			'Role': currentEmployee.Role.Role_ID,
@@ -81,10 +80,10 @@ def sys_admin_home(request):
 			'PFP': currentEmployee.Profile_Image.url,
 			'Redata': RecentData,
 			'ScheduleWeek': scheduleWeek,
-			'count':CountAsent,
+			'count': CountAsent,
 			'CheckIn': CheckIn,
 			'CheckOut': CheckOut,
-			'title':Title,
+			'title': Title,
 		}
 
 		return render(request, 'sys_admin/sys_admin_home.html', context)
@@ -95,21 +94,19 @@ def sys_admin_home(request):
 
 
 def sys_admin_view_employees(request):
-
 	currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
-	Title ='Admin View Employees Page'
+	Title = 'Admin View Employees Page'
 	allEmployees = Employee.objects.all()
-	context={
-		'Employee_ID' : currentEmployee.Employee_ID,
-		'Full_Name' : currentEmployee.Full_Name,
-		'Role' : currentEmployee.Role.Role_Name,
-		'PFP' : currentEmployee.Profile_Image.url,
-		'Employees' : allEmployees,
+	context = {
+		'Employee_ID': currentEmployee.Employee_ID,
+		'Full_Name': currentEmployee.Full_Name,
+		'Role': currentEmployee.Role.Role_Name,
+		'PFP': currentEmployee.Profile_Image.url,
+		'Employees': allEmployees,
 		'title': Title,
 	}
 
 	return render(request, 'sys_admin/sys_admin_view_employees.html', context)
-
 
 
 def sys_admin_create_user(request):
@@ -126,14 +123,13 @@ def sys_admin_create_user(request):
 		# do password hash later
 		New_Password = request.POST.get('newPassword')
 		New_Password_2 = request.POST.get('renewPassword')
-		Random_salt = ''.join(random.sample(string.ascii_letters + string.digits+string.punctuation, 4))
-		New_salt=Random_salt
-		print(New_Password+New_salt)
-		Encry_Pass = get_MD5(New_Password+New_salt)
+		Random_salt = ''.join(random.sample(string.ascii_letters + string.digits + string.punctuation, 4))
+		New_salt = Random_salt
+		print(New_Password + New_salt)
+		Encry_Pass = get_MD5(New_Password + New_salt)
 		print(Encry_Pass)
 
-
-		#if employee_ID is taken
+		# if employee_ID is taken
 
 		if Employee.objects.filter(Employee_ID=New_Employee_ID).exists():
 			messages.error(request, 'There already exist such Employee ID')
@@ -149,22 +145,28 @@ def sys_admin_create_user(request):
 
 			if request.FILES.get('profilepic') is not None:
 				New_PFP = request.FILES['profilepic']
-				new_employee = Employee(Employee_ID=New_Employee_ID, Full_Name=New_Employee_Full_Name, Phone_Number=New_Phone_Number,
-									 Email_Address=New_Email_Address, Role=New_Role,salt=New_salt, Job_Title=New_Employee_Job_Title,Start_Date=currentDate ,Password=Encry_Pass, Profile_Image=New_PFP)
+				new_employee = Employee(Employee_ID=New_Employee_ID, Full_Name=New_Employee_Full_Name,
+										Phone_Number=New_Phone_Number,
+										Email_Address=New_Email_Address, Role=New_Role, salt=New_salt,
+										Job_Title=New_Employee_Job_Title, Start_Date=currentDate, Password=Encry_Pass,
+										Profile_Image=New_PFP)
 			else:
-				new_employee = Employee(Employee_ID=New_Employee_ID, Full_Name=New_Employee_Full_Name, Phone_Number=New_Phone_Number,Start_Date=currentDate,
-									 Email_Address=New_Email_Address, Job_Title=New_Employee_Job_Title, salt=New_salt,Role=New_Role, Password=Encry_Pass,Profile_Image='profile_pics/default.jpg')
+				new_employee = Employee(Employee_ID=New_Employee_ID, Full_Name=New_Employee_Full_Name,
+										Phone_Number=New_Phone_Number, Start_Date=currentDate,
+										Email_Address=New_Email_Address, Job_Title=New_Employee_Job_Title,
+										salt=New_salt, Role=New_Role, Password=Encry_Pass,
+										Profile_Image='profile_pics/default.jpg')
 			new_employee.save()
 			messages.success(request, 'New account has been created')
 			return redirect('sys_admin_create_user')
 
 	else:
-		Title ='Create Account'
+		Title = 'Create Account'
 		context = {
 			'BigEmpid': BigEmployess.Employee_ID + 1,
 			'title': Title,
 		}
-		return render(request, 'sys_admin/sys_admin_create_user.html',context)
+		return render(request, 'sys_admin/sys_admin_create_user.html', context)
 
 
 def delete_employee(request, delete_employee_id):
@@ -185,13 +187,13 @@ def user_profile(request):
 
 				if request.FILES.get('Pic') is not None:
 					New_p = request.FILES['Pic']
-					if currentEmployee.Profile_Image != 'media/profile_pics/default.jpg':
+					if currentEmployee.Profile_Image != 'profile_pics/default.jpg':
 						if os.path.isfile(currentEmployee.Profile_Image.path):
 							os.remove(currentEmployee.Profile_Image.path)
 
 					currentEmployee.Profile_Image = New_p
 				else:
-					currentEmployee.Profile_Image = 'media/profile_pics/default.jpg'
+					currentEmployee.Profile_Image = 'profile_pics/default.jpg'
 				currentEmployee.Full_Name = request.POST.get('fullName_edit')
 				currentEmployee.Phone_Number = request.POST.get('phone_edit')
 				currentEmployee.Email_Address = request.POST.get('email_edit')
@@ -226,14 +228,14 @@ def user_profile(request):
 
 
 		else:
-			Title='User Profile'
+			Title = 'User Profile'
 			context = {
-				'Employee_ID' : currentEmployee.Employee_ID,
-				'Full_Name' : currentEmployee.Full_Name,
-				'Role' : currentEmployee.Role.Role_Name,
-				'Email' : currentEmployee.Email_Address,
-				'Phone' : currentEmployee.Phone_Number,
-				'PFP' : currentEmployee.Profile_Image.url,
+				'Employee_ID': currentEmployee.Employee_ID,
+				'Full_Name': currentEmployee.Full_Name,
+				'Role': currentEmployee.Role.Role_Name,
+				'Email': currentEmployee.Email_Address,
+				'Phone': currentEmployee.Phone_Number,
+				'PFP': currentEmployee.Profile_Image.url,
 				'title': Title,
 			}
 			return render(request, 'sys_admin/sys_admin_user_profile.html', context)
@@ -242,22 +244,27 @@ def user_profile(request):
 		return redirect('login')
 
 
-
 def edit_employee(request, edit_employee_id):
 	if 'Employee_ID' in request.session:
 		currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
 		if request.method == 'POST':
-			if request.POST.get('form_type')=='editProfile':
-				edit_employee = Employee.objects.get(Employee_ID=edit_employee_id)
-				if request.FILES.get('Pic') is not None:
-					New_p = request.FILES['Pic']
-					if currentEmployee.Profile_Image != 'media/profile_pics/default.jpg':
-						if os.path.isfile(currentEmployee.Profile_Image.path):
-							os.remove(currentEmployee.Profile_Image.path)
+			if request.POST.get('form_type') == 'editProfile':
 
-					edit_employee.Profile_Image =New_p
+				edit_employee = Employee.objects.get(Employee_ID=edit_employee_id)
+
+				if request.FILES.get('EmpPic') is not None:
+					New_p = request.FILES['EmpPic']
+
+					if edit_employee.Profile_Image != 'profile_pics/default.jpg':
+
+						if os.path.isfile(edit_employee.Profile_Image.path):
+							os.remove(edit_employee.Profile_Image.path)
+						print(New_p)
+					edit_employee.Profile_Image = New_p
+
 				else:
-					currentEmployee.Profile_Image= 'media/profile_pics/default.jpg'
+					edit_employee.Profile_Image = 'profile_pics/default.jpg'
+
 				edit_employee.Full_Name = request.POST.get('fullName')
 				edit_employee.Phone_Number = request.POST.get('phone')
 				edit_employee.Email_Address = request.POST.get('email')
@@ -280,24 +287,24 @@ def edit_employee(request, edit_employee_id):
 					edit_employee.save()
 					messages.info(request, 'Your password has been changed')
 					return redirect('/sys_admin/view_employees/edit/' + str(edit_employee_id))
-				elif new_passWord!=new_password_2:
+				elif new_passWord != new_password_2:
 					messages.info(request, 'password is different')
 					return redirect('/sys_admin/view_employees/edit/' + str(edit_employee_id))
 
 		else:
-			Title='Edit Employee Page'
+			Title = 'Edit Employee Page'
 			if Employee.objects.filter(Employee_ID=edit_employee_id).count() == 1:
 				edit_employee = Employee.objects.get(Employee_ID=edit_employee_id)
 				context = {
-					'edit_employee_id' : edit_employee_id,
-					'edit_employee_full_name' : edit_employee.Full_Name,
-					'edit_employee_role' : edit_employee.Role,
-					'edit_employee_phone' : edit_employee.Phone_Number,
-					'edit_employee_email' : edit_employee.Email_Address,
-					'edit_employee_pfp' : edit_employee.Profile_Image.url,
-					'Full_Name' : currentEmployee.Full_Name,
-					'Role' : currentEmployee.Role.Role_Name,
-					'PFP' : currentEmployee.Profile_Image.url,
+					'edit_employee_id': edit_employee_id,
+					'edit_employee_full_name': edit_employee.Full_Name,
+					'edit_employee_role': edit_employee.Role,
+					'edit_employee_phone': edit_employee.Phone_Number,
+					'edit_employee_email': edit_employee.Email_Address,
+					'edit_employee_pfp': edit_employee.Profile_Image.url,
+					'Full_Name': currentEmployee.Full_Name,
+					'Role': currentEmployee.Role.Role_Name,
+					'PFP': currentEmployee.Profile_Image.url,
 					'title': Title,
 				}
 
@@ -306,32 +313,36 @@ def edit_employee(request, edit_employee_id):
 		messages.error(request, 'Please login')
 		return redirect('login')
 
+
 def schedule(request):
 	if 'Employee_ID' in request.session:
 		# template = loader.get_template('HR/schedule.html')
 		currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
-		data = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID']).filter(StartDate__isnull=False,StartTime__isnull=False,EndTime__isnull=False)
-		js_data =serializers.serialize('json',data,fields=['StartDate','EndDate','StartTime','EndTime'])
-		json_data=json.loads(js_data)
+		data = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID']).filter(StartDate__isnull=False,
+																							  StartTime__isnull=False,
+																							  EndTime__isnull=False)
+		js_data = serializers.serialize('json', data, fields=['StartDate', 'EndDate', 'StartTime', 'EndTime'])
+		json_data = json.loads(js_data)
 		for d in json_data:
 			del d['pk']
 			del d['model']
-		Title="Schedule Page"
-		js_data = json.dumps(json_data,ensure_ascii=False)
+		Title = "Schedule Page"
+		js_data = json.dumps(json_data, ensure_ascii=False)
 		context = {
-			'Employee_ID' : currentEmployee.Employee_ID,
-			'Job_Title' : currentEmployee.Job_Title,
-			'Full_Name' : currentEmployee.Full_Name,
+			'Employee_ID': currentEmployee.Employee_ID,
+			'Job_Title': currentEmployee.Job_Title,
+			'Full_Name': currentEmployee.Full_Name,
 			'PFP': currentEmployee.Profile_Image.url,
 			'js_data': js_data,
 			'title': Title,
 		}
 
-		return render(request, 'sys_admin/sys_admin_schedule.html',context)
-		# return HttpResponse(template.render(context, request))
+		return render(request, 'sys_admin/sys_admin_schedule.html', context)
+	# return HttpResponse(template.render(context, request))
 	else:
 		messages.error(request, 'Please login first')
 		return redirect('login')
+
 
 def upload_img(request, empid):
 	if 'Employee_ID' in request.session:
@@ -343,38 +354,26 @@ def upload_img(request, empid):
 
 			# make file first if not exist
 			try:
-			    os.mkdir(filepath)
+				os.mkdir(filepath)
 			except:
-			    pass
-
+				pass
 
 			for f in request.FILES.getlist('UploadImage'):
-			 		print(f)
-			 		print(type(f))
+				print(f)
+				print(type(f))
 
-			 		f_filepath = os.path.join(filepath, f.name)
-			 		test = default_storage.save(f_filepath, ContentFile(f.read()))
+				f_filepath = os.path.join(filepath, f.name)
+				test = default_storage.save(f_filepath, ContentFile(f.read()))
 
-			
-			# if os.path.exists(filepath):
-			# 	for f in request.FILES.getlist('UploadImage'):
-			# 		print(f)
-			# 		fout = open(filepath,"wb+")
-			# 		for chunk in f:
-			# 			fout.write(chunk)
-
-			# for root,dirs,files in os.walk(os.getcwd):
-			# 	for i in New_p:
-			# 		print(root,dirs)
 
 			return redirect('/sys_admin/view_employees/edit/' + str(empid))
 		elif Emp.exists():
-			Information={
-				'Name':Emp[0].Full_Name,
-				"Emplid":Emp[0].Employee_ID,
+			Information = {
+				'Name': Emp[0].Full_Name,
+				"Emplid": Emp[0].Employee_ID,
 			}
 
-			return render(request, 'sys_admin/sys_admin_upload_img.html',Information)
+			return render(request, 'sys_admin/sys_admin_upload_img.html', Information)
 	else:
 		messages.error(request, 'Please login first')
 		return redirect('login')
@@ -384,3 +383,22 @@ def logout(request):
 	request.session.flush()
 	messages.info(request, 'You have been logged out')
 	return redirect('login')
+
+
+def sys_admin_deleepmPic(request, empid):
+	if 'Employee_ID' in request.session:
+		edit_employee = Employee.objects.get(Employee_ID=empid)
+
+		DEFAULT = 'profile_pics/default.jpg'
+
+		if edit_employee.Profile_Image != 'profile_pics/default.jpg':
+			if os.path.isfile(edit_employee.Profile_Image.path) is not None:
+				os.remove(edit_employee.Profile_Image.path)
+			edit_employee.Profile_Image = DEFAULT
+			edit_employee.save()
+
+		return redirect('/sys_admin/view_employees/edit/' + str(empid))
+
+	else:
+		messages.error(request, 'Please login first')
+		return redirect('login')

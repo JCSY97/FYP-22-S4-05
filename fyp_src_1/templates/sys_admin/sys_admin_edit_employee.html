@@ -90,7 +90,7 @@
                 <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
 
                   <!-- Profile Edit Form -->
-                  <form method="POST">
+                  <form method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
                     <input type="hidden" name="form_type" value="editProfile">
                     <div class="row mb-3">
@@ -99,9 +99,9 @@
                         <img src="{{ edit_employee_pfp }}" alt="Profile">
                         <div class="pt-2">
                           <label  class="btn btn-primary btn-sm">
-                             <input  type="file" id="yourProfile" name="Pic" accept="image/*" style="display: none;"><i class="bi bi-upload" style="color: #f6f9ff">
+                             <input  type="file" id="yourProfile" name="EmpPic" accept="image/*" style="display: none;"><i class="bi bi-upload" style="color: #f6f9ff">
                             </i></label>
-                          <a href="{% url 'DeletePic' edit_employee_id %}" class="btn btn-danger btn-sm" title="Remove my profile image"><i class="bi bi-trash"></i></a>
+                          <a href="{% url 'deleEmpimage' edit_employee_id %}" class="btn btn-danger btn-sm" title="Remove my profile image"><i class="bi bi-trash"></i></a>
                         </div>
                       </div>
                     </div>
@@ -165,7 +165,7 @@
 
                 <div class="tab-pane fade pt-3" id="profile-reset-password">
                   <!-- Change Password Form -->
-                  <form method="POST">
+                  <form method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
                     <input type="hidden" name="form_type" value="changePassword">
                     <div class="row mb-3">

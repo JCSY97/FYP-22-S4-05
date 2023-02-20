@@ -118,16 +118,17 @@ def HR_Profile(request):
         if request.method == 'POST':
             # for edit user profile form
             if request.POST.get('form_type') == 'editProfile':
+
                 if request.FILES.get('Pic') is not None:
                     New_p = request.FILES['Pic']
-                    if currentEmployee.Profile_Image != 'media/profile_pics/default.jpg':
+                    if currentEmployee.Profile_Image != 'profile_pics/default.jpg':
                     
                         if os.path.isfile(currentEmployee.Profile_Image.path):
                             os.remove(currentEmployee.Profile_Image.path)
 
                     currentEmployee.Profile_Image = New_p
                 else:
-                    currentEmployee.Profile_Image='media/profile_pics/default.jpg'
+                    currentEmployee.Profile_Image='profile_pics/default.jpg'
 
                 currentEmployee.Full_Name = request.POST.get('fullName_edit')
                 currentEmployee.Phone_Number = request.POST.get('phone')
@@ -352,8 +353,7 @@ def Emp_update_Schedule(request, Editempid):
 
             StartTime = ''
             EndTime = ''
-            print(StartTime)
-            print(EndTime)
+
             for weeks in weekdays:
                 Marks = request.POST.get(str(weeks))
                 if Marks != 'Pending':
