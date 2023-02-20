@@ -53,6 +53,8 @@
 {% endblock content %}
 {% block script %}
 <script>
-
+{% for message in messages%}
+         alert('{{ message }}');
+    {% endfor %}
 </script>
 {% endblock script %}

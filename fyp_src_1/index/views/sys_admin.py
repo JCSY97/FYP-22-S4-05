@@ -9,6 +9,8 @@ import hashlib
 import os
 from django.conf import settings
 from django.core import serializers
+import cv2
+
 from django.db.models import Q
 from django.contrib.auth.hashers import make_password
 
@@ -359,21 +361,31 @@ def upload_img(request, empid):
 				pass
 
 			for f in request.FILES.getlist('UploadImage'):
-				print(f)
-				print(type(f))
 
 				f_filepath = os.path.join(filepath, f.name)
 				test = default_storage.save(f_filepath, ContentFile(f.read()))
-
+				if Detectface(f_filepath):
+					messages.success(request, 'face detected successfully')
+				else:
+					os.remove(f_filepath)
+					messages.error(request, 'Please upload a single person picture')
 
 			return redirect('/sys_admin/view_employees/edit/' + str(empid))
-		elif Emp.exists():
-			Information = {
+		else:
+			Title = 'Upload Employee face Image Page'
+			context = {
+				'Role': currentEmployee.Role.Role_ID,
+				'Employee_ID': currentEmployee.Employee_ID,
+				'Full_Name': currentEmployee.Full_Name,
+				'Job_Title': currentEmployee.Job_Title,
+				'PFP': currentEmployee.Profile_Image.url,
+				'title': Title,
 				'Name': Emp[0].Full_Name,
 				"Emplid": Emp[0].Employee_ID,
 			}
 
-			return render(request, 'sys_admin/sys_admin_upload_img.html', Information)
+			return render(request, 'sys_admin/sys_admin_upload_img.html', context)
+
 	else:
 		messages.error(request, 'Please login first')
 		return redirect('login')
@@ -383,6 +395,39 @@ def logout(request):
 	request.session.flush()
 	messages.info(request, 'You have been logged out')
 	return redirect('login')
+
+
+def Detectface(image):
+	image = cv2.imread(image)
+	gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+	faceCascade = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
+	faces = faceCascade.detectMultiScale(
+		gray,
+		scaleFactor=1.3,
+		minNeighbors=3,
+		minSize=(30, 30)
+	)
+	status = ''
+	# print("[INFO] Found {0} Faces.".format(len(faces)))
+	# print(len(faces))
+
+	for (x, y, w, h) in faces:
+		cv2.rectangle(image, (x, y), (x + w, y + h), (0, 300, 0), 1)
+		roi_color = image[y:y + h, x:x + w]
+	# print("[INFO] Object found. Saving locally.")
+	# cv2.imwrite(str(w) + str(h) + '_faces.jpg', roi_color)
+	if len(faces) == 1:
+
+		status = cv2.imwrite('faces_detected.jpg', image)
+		# status=True
+		# print("[INFO] Image faces_detected.jpg written to filesystem: ", status)
+		return status
+	else:
+		status = False
+
+		# print("[INFO] Image faces_detected.jpg written to filesystem: ", status)
+		return status
 
 
 def sys_admin_deleepmPic(request, empid):
