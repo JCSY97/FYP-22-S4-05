@@ -45,26 +45,32 @@ for person in os.listdir(verify_file_path):
             continue
 
         image_path = os.path.join(verify_file_path, person)
-        image_path_split = os.path.splitext(os.listdir(image_path)[0])
+        # check if file is not empty
+        if len(os.listdir(os.path.join(image_path))) != 0:
 
-        if image_path_split[1] == ".jpg" or image_path_split[1] == ".png":
+            image_path_split = os.path.splitext(os.listdir(image_path)[0])
 
-            # add name to list of known_faces
-            known_face.append(person)
-            print(str(image_path) + " has been added to encoded_face_list")
+            if image_path_split[1] == ".jpg" or image_path_split[1] == ".png":
 
-            # add encoded image to list of known face encoding
-            # get first pic of each folder
-            img_of_person_file_path = os.path.join(image_path ,os.listdir(image_path)[0])
-            img_of_person = face_recognition.load_image_file(img_of_person_file_path)
-            img_of_person_encoding = face_recognition.face_encodings(img_of_person)[0]
 
-            known_face_encodings.append(img_of_person_encoding)
+                # add name to list of known_faces
+                known_face.append(person)
+                print(str(image_path) + " has been added to encoded_face_list")
 
+                # add encoded image to list of known face encoding
+                # get first pic of each folder
+                img_of_person_file_path = os.path.join(image_path ,os.listdir(image_path)[0])
+                img_of_person = face_recognition.load_image_file(img_of_person_file_path)
+                img_of_person_encoding = face_recognition.face_encodings(img_of_person)[0]
+
+                known_face_encodings.append(img_of_person_encoding)
+
+        else:
+                    print("EMPLOYEE " + str(image_path) + " has no images")
 
     else:
         print(person)
-
+#
 print(known_face)
 print("Number of faces encoded : " + str(len(known_face_encodings)))
 
