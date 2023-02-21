@@ -39,6 +39,7 @@ urlpatterns = [
     path('sys_admin/schedule/', sys_admin.schedule, name='sys_admin_schedule'),
     path('sys_admin/upload_img/<int:empid>', sys_admin.upload_img, name='sys_admin_upload_img'),
     path('sys_admin/deletEmp_image/<int:empid>', sys_admin.sys_admin_deleepmPic, name='deleEmpimage'),
+    path('sys_admin/user_profile/DeletedPicture/', sys_admin.delete_my_pfp, name="sys_admin_delete_my_pfp"),
 
     path('HR/home/', HR.HR_home, name='HR_home'),
     path('HR/Profile/', HR.HR_Profile, name='HR_Profile'),

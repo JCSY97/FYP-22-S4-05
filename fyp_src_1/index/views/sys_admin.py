@@ -189,7 +189,7 @@ def user_profile(request):
 
 				if request.FILES.get('Pic') is not None:
 					New_p = request.FILES['Pic']
-					if currentEmployee.Profile_Image != 'profile_pics/default.jpg':
+					if currentEmployee.Profile_Image.path != 'profile_pics/default.jpg':
 						if os.path.isfile(currentEmployee.Profile_Image.path):
 							os.remove(currentEmployee.Profile_Image.path)
 
@@ -257,7 +257,7 @@ def edit_employee(request, edit_employee_id):
 				if request.FILES.get('EmpPic') is not None:
 					New_p = request.FILES['EmpPic']
 
-					if edit_employee.Profile_Image != 'profile_pics/default.jpg':
+					if edit_employee.Profile_Image.path != 'profile_pics/default.jpg':
 
 						if os.path.isfile(edit_employee.Profile_Image.path):
 							os.remove(edit_employee.Profile_Image.path)
@@ -436,13 +436,35 @@ def sys_admin_deleepmPic(request, empid):
 
 		DEFAULT = 'profile_pics/default.jpg'
 
-		if edit_employee.Profile_Image != 'profile_pics/default.jpg':
+		if edit_employee.Profile_Image.path != 'profile_pics/default.jpg':
 			if os.path.isfile(edit_employee.Profile_Image.path) is not None:
 				os.remove(edit_employee.Profile_Image.path)
 			edit_employee.Profile_Image = DEFAULT
 			edit_employee.save()
 
 		return redirect('/sys_admin/view_employees/edit/' + str(empid))
+
+	else:
+		messages.error(request, 'Please login first')
+		return redirect('login')
+
+
+def delete_my_pfp(request):
+	if 'Employee_ID' in request.session:
+
+		currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
+		DEFAULT = 'profile_pics/default.jpg'
+
+		if currentEmployee.Profile_Image.path != 'profile_pics/default.jpg':
+			os.remove(currentEmployee.Profile_Image.path)
+
+	
+		currentEmployee.Profile_Image=DEFAULT
+		currentEmployee.save()
+		
+
+		return redirect("sys_admin_user_profile")
+
 
 	else:
 		messages.error(request, 'Please login first')
