@@ -131,7 +131,8 @@
 {% block script %}
 <script>
   {% for message in messages%}
-         alert('{{ message }}');
+         window.alert('{{ message }}');
+         window.location.href="{% url 'sys_admin_view_employees' %}";
     {% endfor %}
 
   var password = document.getElementById("newPassword")
