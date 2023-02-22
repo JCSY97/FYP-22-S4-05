@@ -174,7 +174,7 @@ def index(request):
                             
                                 currentEmp.InTime =currentTime
                                 currentEmp.save()
-                                return_data = str(EMP_name) + " CLOCKED IN"
+                                return_data = " CLOCKED IN"
                                 print(str(EMP_name) + " CLOCKED IN")
 
                             # clock out
@@ -192,11 +192,11 @@ def index(request):
 
                                 # clock out only if the difference between current time and INTIME is more than 1 hour
                                 # 1 hour = 3600 seconds
-                                if (delta.total_seconds()) > 3600 :
+                                if (delta.total_seconds()) > 300 :
                                     currentEmp.OutTime = currentTime
                                     currentEmp.save()
 
-                                    return_data = str(EMP_name) + " CLOCKED OUT"
+                                    return_data = " CLOCKED OUT"
 
                                     print(str(EMP_name) + " CLOCKED OUT")
                         else:
@@ -204,7 +204,7 @@ def index(request):
                             # write new role in employee table
                             new_row = WorkSchedule(Employee_id=EMPID, StartDate=currentDate, InTime=currentTime)
                             new_row.save()
-                            return_data = str(EMP_name) + " CLOCKED IN"
+                            return_data = " CLOCKED IN"
                             print(str(EMP_name) + " CLOCKED IN")
 
                 else:
