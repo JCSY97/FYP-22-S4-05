@@ -263,7 +263,13 @@ def Change_Status(request, Empid, Wid):
             UpdateAttendance = WorkSchedule.objects.get(WorkSchedule_id=Wid)
             NewStatus = request.POST.get('status')
             StatusName = 'Pending'
+            Mc ='MC'
             if NewStatus == StatusName:
+                UpdateAttendance.Mark = NewStatus
+                UpdateAttendance.StartTime = request.POST.get('timestartnew')
+                UpdateAttendance.EndTime = request.POST.get('timeendnew')
+                UpdateAttendance.save()
+            elif NewStatus == Mc:
                 UpdateAttendance.Mark = NewStatus
                 UpdateAttendance.StartTime = request.POST.get('timestartnew')
                 UpdateAttendance.EndTime = request.POST.get('timeendnew')
