@@ -275,7 +275,7 @@ def edit_employee(request, edit_employee_id):
 
 				edit_employee.Role = Role.objects.get(Role_Name=request.POST.get('newRole'))
 
-				edit_employee.Job_Title=request.POST.get('job')
+				edit_employee.Job_Title=request.POST.get('Job')
 				edit_employee.Full_Name = request.POST.get('fullName')
 				edit_employee.Phone_Number = request.POST.get('phone')
 				edit_employee.Email_Address = request.POST.get('email')
@@ -309,7 +309,7 @@ def edit_employee(request, edit_employee_id):
 				context = {
 					'edit_employee_id': edit_employee_id,
 					'edit_employee_full_name': edit_employee.Full_Name,
-					'edit_employee_role': edit_employee.Role,
+					'edit_employee_role': edit_employee.Role.Role_Name,
 					'edit_employee_jobtitle': edit_employee.Job_Title,
 					'edit_employee_phone': edit_employee.Phone_Number,
 					'edit_employee_email': edit_employee.Email_Address,

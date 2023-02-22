@@ -126,9 +126,9 @@
                     </div>
 
                   <div class="row mb-3">
-                      <label for="Phone" class="col-md-4 col-lg-3 col-form-label">Job Title</label>
+                      <label for="Job" class="col-md-4 col-lg-3 col-form-label">Job Title</label>
                       <div class="col-md-8 col-lg-9">
-                        <input name="job" type="text" class="form-control" id="Phone" value="{{ edit_employee_jobtitle }}">
+                        <input name="Job" type="text" class="form-control" id="Job" value="{{ edit_employee_jobtitle }}">
                       </div>
                     </div>
 
@@ -136,10 +136,19 @@
                       <label for="Job" class="col-md-4 col-lg-3 col-form-label">Role</label>
                       <div class="col-md-8 col-lg-9">
                         <select class="form-select" name="newRole">
-                            <option selected disabled >Please select employee role</option>
-                            <option value="HR" >HR</option>
+                            {% if edit_employee_role == 'HR' %}
+                            <option value="HR" selected>HR</option>
                             <option value="System Admin">System Admin</option>
                             <option value="Employee" >Employee</option>
+                            {% elif edit_employee_role == 'System Admin' %}
+                            <option value="HR" >HR</option>
+                            <option value="System Admin" selected>System Admin</option>
+                            <option value="Employee" >Employee</option>
+                            {% else %}
+                            <option value="HR">HR</option>
+                            <option value="System Admin">System Admin</option>
+                            <option value="Employee" selected>Employee</option>
+                            {% endif %}
 
                         </select>
                       </div>
