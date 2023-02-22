@@ -38,9 +38,6 @@ def CheckMark():
                 elif WorksId.StartTime < WorksId.InTime and WorksId.EndTime <= WorksId.OutTime:
                     WorksId.Mark = 'Late'
                     WorksId.save()
-            else:
-                WorksId.Mark = 'Pending'
-                WorksId.save()
 
 
 def get_MD5(Password):
