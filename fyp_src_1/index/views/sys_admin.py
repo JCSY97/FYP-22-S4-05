@@ -72,7 +72,7 @@ def sys_admin_home(request):
 			Mark='Absent').count()
 
 		RecentData = WorkSchedule.objects.filter(Employee_id=request.session['Employee_ID'],
-												 StartDate__lte=currentDate).order_by("StartDate")
+												 StartDate__lte=currentDate).order_by("-StartDate")
 
 		context = {
 			'Role': currentEmployee.Role.Role_ID,
