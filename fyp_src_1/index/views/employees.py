@@ -41,7 +41,7 @@ def Employee_home(request):
 			StartDate=currentDate)
 		if CheckValues.exists():
 			AttenCheck = WorkSchedule.objects.get(Employee_id=request.session['Employee_ID'], StartDate=currentDate)
-			if AttenCheck.Mark.lower() != 'off' or AttenCheck.Mark.lower() != 'mc':
+			if AttenCheck.Mark != 'Off' or AttenCheck.Mark != 'MC':
 				if AttenCheck.InTime is None and AttenCheck.OutTime is not None:
 					CheckIn = "Pending"
 					CheckOut = AttenCheck.OutTime

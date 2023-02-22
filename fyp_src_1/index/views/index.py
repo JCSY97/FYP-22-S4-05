@@ -16,7 +16,7 @@ import os
 
 
 def CheckMark():
-    UserStatus = WorkSchedule.objects.filter(StartDate__lte=currentDate)
+    UserStatus = WorkSchedule.objects.filter(StartDate__lt=currentDate)
     for i in UserStatus:
         WorksId = WorkSchedule.objects.get(WorkSchedule_id=i.WorkSchedule_id)
         if WorksId.Mark != 'Off' or WorksId.Mark != 'MC':
