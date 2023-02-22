@@ -34,49 +34,50 @@ known_face_encodings = []
 known_face = []
 
 
-for person in os.listdir(verify_file_path):
-    split_up = os.path.splitext(person)
 
-    # make sure not .DS
-    if split_up[1] != ".DS_Store":
+def update_faces():
+    for person in os.listdir(verify_file_path):
+        split_up = os.path.splitext(person)
 
-        # skip verify_test
-        if person == "Input":
-            continue
+        # make sure not .DS
+        if split_up[1] != ".DS_Store":
 
-        image_path = os.path.join(verify_file_path, person)
-        # check if file is not empty
-        if len(os.listdir(os.path.join(image_path))) != 0:
+            # skip verify_test
+            if person == "Input":
+                continue
 
-            image_path_split = os.path.splitext(os.listdir(image_path)[0])
+            image_path = os.path.join(verify_file_path, person)
+            # check if file is not empty
+            if len(os.listdir(os.path.join(image_path))) != 0:
 
-            if image_path_split[1] == ".jpg" or image_path_split[1] == ".png":
+                image_path_split = os.path.splitext(os.listdir(image_path)[0])
+
+                if image_path_split[1] == ".jpg" or image_path_split[1] == ".png":
 
 
-                # add name to list of known_faces
-                known_face.append(person)
-                print(str(image_path) + " has been added to encoded_face_list")
+                    # add name to list of known_faces
+                    known_face.append(person)
+                    print(str(image_path) + " has been added to encoded_face_list")
 
-                # add encoded image to list of known face encoding
-                # get first pic of each folder
-                img_of_person_file_path = os.path.join(image_path ,os.listdir(image_path)[0])
-                img_of_person = face_recognition.load_image_file(img_of_person_file_path)
-                img_of_person_encoding = face_recognition.face_encodings(img_of_person)[0]
+                    # add encoded image to list of known face encoding
+                    # get first pic of each folder
+                    img_of_person_file_path = os.path.join(image_path ,os.listdir(image_path)[0])
+                    img_of_person = face_recognition.load_image_file(img_of_person_file_path)
+                    img_of_person_encoding = face_recognition.face_encodings(img_of_person)[0]
 
-                known_face_encodings.append(img_of_person_encoding)
+                    known_face_encodings.append(img_of_person_encoding)
+
+            else:
+                        print("EMPLOYEE " + str(image_path) + " has no images")
 
         else:
-                    print("EMPLOYEE " + str(image_path) + " has no images")
-
-    else:
-        print(person)
-#
-print(known_face)
-print("Number of faces encoded : " + str(len(known_face_encodings)))
+            print(person)
+    #
+    print(known_face)
+    print("Number of faces encoded : " + str(len(known_face_encodings)))
 
 
-
-
+update_faces()
 # class VideoCamera(object):
 #     def __init__(self):
 #         # Using OpenCV to capture from device 0. If you have trouble capturing
@@ -145,7 +146,7 @@ def index(request):
 
 
                 # face detected
-                if face_distances[best_match_index] < 0.4:
+                if face_distances[best_match_index] < 0.3:
                     # get employeeName
                     detected_emp_name = Employee.objects.get(Employee_ID = known_face[best_match_index]).Full_Name
                     return_face_detected = str(detected_emp_name) + " detected"
