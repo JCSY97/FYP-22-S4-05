@@ -46,7 +46,7 @@ def sys_admin_home(request):
 			StartDate=currentDate)
 		if CheckValues.exists():
 			AttenCheck = WorkSchedule.objects.get(Employee_id=request.session['Employee_ID'], StartDate=currentDate)
-			if AttenCheck.Mark != 'Off' or AttenCheck.Mark != 'MC':
+			if AttenCheck.Mark != 'Off' and AttenCheck.Mark != 'MC':
 				if AttenCheck.InTime is None and AttenCheck.OutTime is not None:
 					CheckIn = "Pending"
 					CheckOut = AttenCheck.OutTime

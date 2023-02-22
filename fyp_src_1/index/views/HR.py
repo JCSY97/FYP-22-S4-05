@@ -21,7 +21,7 @@ def CheckMark():
     UserStatus = WorkSchedule.objects.filter(StartDate__lt=currentDate)
     for i in UserStatus:
         WorksId = WorkSchedule.objects.get(WorkSchedule_id=i.WorkSchedule_id)
-        if WorksId.Mark != 'Off' or WorksId.Mark != 'MC':
+        if WorksId.Mark != 'Off' and WorksId.Mark != 'MC':
             if WorksId.InTime is None and WorksId.StartTime is not None or WorksId.OutTime is None and WorksId.EndTime is not None:
                 WorksId.Mark = 'Absent'
                 WorksId.save()
@@ -260,24 +260,24 @@ def Change_Status(request, Empid, Wid):
         if request.method == 'POST':
             UpdateAttendance = WorkSchedule.objects.get(WorkSchedule_id=Wid)
             NewStatus = request.POST.get('status')
-            StatusName = 'Pending'
+
             Mc ='MC'
-            if NewStatus == StatusName:
+            if NewStatus == 'Pending':
                 UpdateAttendance.Mark = NewStatus
                 UpdateAttendance.StartTime = request.POST.get('timestartnew')
                 UpdateAttendance.EndTime = request.POST.get('timeendnew')
                 UpdateAttendance.save()
             elif NewStatus == Mc:
                 UpdateAttendance.Mark = NewStatus
-                UpdateAttendance.StartTime = request.POST.get('timestartnew')
-                UpdateAttendance.EndTime = request.POST.get('timeendnew')
                 UpdateAttendance.save()
             else:
                 UpdateAttendance.Mark = NewStatus
+                UpdateAttendance.StartTime = None
+                UpdateAttendance.EndTime = None
                 UpdateAttendance.save()
 
             CheckMark()
-            return redirect('EmployeesPage')
+            return redirect('EmployeeSchedule', Editempid=Empid)
         else:
             context = {
                 'Role': currentEmployee.Role.Role_ID,

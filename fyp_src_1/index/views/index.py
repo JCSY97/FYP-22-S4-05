@@ -19,7 +19,7 @@ def CheckMark():
     UserStatus = WorkSchedule.objects.filter(StartDate__lt=currentDate)
     for i in UserStatus:
         WorksId = WorkSchedule.objects.get(WorkSchedule_id=i.WorkSchedule_id)
-        if WorksId.Mark != 'Off' or WorksId.Mark != 'MC':
+        if WorksId.Mark != 'Off' and WorksId.Mark != 'MC':
             if WorksId.InTime is None and WorksId.StartTime is not None or WorksId.OutTime is None and WorksId.EndTime is not None:
                 WorksId.Mark = 'Absent'
                 WorksId.save()
