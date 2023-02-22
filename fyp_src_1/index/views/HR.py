@@ -38,6 +38,23 @@ def CheckMark():
                 elif WorksId.StartTime < WorksId.InTime and WorksId.EndTime <= WorksId.OutTime:
                     WorksId.Mark = 'Late'
                     WorksId.save()
+    current = WorkSchedule.objects.filter(StartDate=currentDate)
+    for k in current:
+        userid = WorkSchedule.objects.get(WorkSchedule_id=k.WorkSchedule_id)
+        if userid.Mark != 'Off' and userid.Mark != 'MC':
+            if userid.InTime is not None and userid.OutTime is not None:
+                if userid.StartTime >= userid.InTime and userid.EndTime <= userid.OutTime:
+                    userid.Mark = 'Present'
+                    userid.save()
+                elif userid.StartTime < userid.InTime and userid.EndTime > userid.OutTime:
+                    userid.Mark = 'Late & leave early'
+                    userid.save()
+                elif userid.StartTime >= userid.InTime and userid.EndTime > userid.OutTime:
+                    userid.Mark = 'Leave early'
+                    userid.save()
+                elif userid.StartTime < userid.InTime and userid.EndTime <= userid.OutTime:
+                    userid.Mark = 'Late'
+                    userid.save()
 
 
 def get_MD5(Password):
@@ -47,6 +64,7 @@ def get_MD5(Password):
 
 
 def HR_home(request):
+    CheckMark()
     dt = datetime.strptime(currentDate, '%Y-%m-%d')
     start = dt - timedelta(days=dt.weekday())
     end = start + timedelta(days=6)
@@ -119,13 +137,13 @@ def HR_Profile(request):
                 if request.FILES.get('Pic') is not None:
                     New_p = request.FILES['Pic']
                     if currentEmployee.Profile_Image != 'profile_pics/default.jpg':
-                    
+
                         if os.path.isfile(currentEmployee.Profile_Image.path):
                             os.remove(currentEmployee.Profile_Image.path)
 
                     currentEmployee.Profile_Image = New_p
                 else:
-                    currentEmployee.Profile_Image='profile_pics/default.jpg'
+                    currentEmployee.Profile_Image = 'profile_pics/default.jpg'
 
                 currentEmployee.Full_Name = request.POST.get('fullName_edit')
                 currentEmployee.Phone_Number = request.POST.get('phone')
@@ -193,10 +211,10 @@ def HR_EmployeePage(request):
 def HR_EmpProfile(request, Empid):
     if 'Employee_ID' in request.session:
         currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
-    
+
         Title = 'HR-Employee Profile'
         EmpCheck = Employee.objects.filter(Employee_ID=Empid)
-        
+
         if EmpCheck.exists():
             Myinfo = Employee.objects.get(Employee_ID=Empid)
             context = {
@@ -211,7 +229,7 @@ def HR_EmpProfile(request, Empid):
                 'Emp_Email': Myinfo.Email_Address,
                 'Emp_Phone': Myinfo.Phone_Number,
                 'Emp_PFP': Myinfo.Profile_Image.url,
-                'Emp_Role':Myinfo.Role.Role_Name,
+                'Emp_Role': Myinfo.Role.Role_Name,
                 'title': Title,
             }
             return render(request, 'HR/employees-profile.html', context)
@@ -261,7 +279,7 @@ def Change_Status(request, Empid, Wid):
             UpdateAttendance = WorkSchedule.objects.get(WorkSchedule_id=Wid)
             NewStatus = request.POST.get('status')
 
-            Mc ='MC'
+            Mc = 'MC'
             if NewStatus == 'Pending':
                 UpdateAttendance.Mark = NewStatus
                 UpdateAttendance.StartTime = request.POST.get('timestartnew')

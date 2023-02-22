@@ -16,26 +16,45 @@ import os
 
 
 def CheckMark():
-    UserStatus = WorkSchedule.objects.filter(StartDate__lt=currentDate)
-    for i in UserStatus:
-        WorksId = WorkSchedule.objects.get(WorkSchedule_id=i.WorkSchedule_id)
-        if WorksId.Mark != 'Off' and WorksId.Mark != 'MC':
-            if WorksId.InTime is None and WorksId.StartTime is not None or WorksId.OutTime is None and WorksId.EndTime is not None:
-                WorksId.Mark = 'Absent'
-                WorksId.save()
-            elif WorksId.InTime is not None and WorksId.StartTime is not None or WorksId.OutTime is not None and WorksId.EndTime is not None:
-                if WorksId.StartTime >= WorksId.InTime and WorksId.EndTime <= WorksId.OutTime:
-                    WorksId.Mark = 'Present'
-                    WorksId.save()
-                elif WorksId.StartTime < WorksId.InTime and WorksId.EndTime > WorksId.OutTime:
-                    WorksId.Mark = 'Late & leave early'
-                    WorksId.save()
-                elif WorksId.StartTime >= WorksId.InTime and WorksId.EndTime > WorksId.OutTime:
-                    WorksId.Mark = 'Leave early'
-                    WorksId.save()
-                elif WorksId.StartTime < WorksId.InTime and WorksId.EndTime <= WorksId.OutTime:
-                    WorksId.Mark = 'Late'
-                    WorksId.save()
+	UserStatus = WorkSchedule.objects.filter(StartDate__lt=currentDate)
+	for i in UserStatus:
+		WorksId = WorkSchedule.objects.get(WorkSchedule_id=i.WorkSchedule_id)
+		if WorksId.Mark != 'Off' and WorksId.Mark != 'MC':
+			if WorksId.InTime is None and WorksId.StartTime is not None or WorksId.OutTime is None and WorksId.EndTime is not None:
+				WorksId.Mark = 'Absent'
+				WorksId.save()
+			elif WorksId.InTime is not None and WorksId.StartTime is not None or WorksId.OutTime is not None and WorksId.EndTime is not None:
+				if WorksId.StartTime >= WorksId.InTime and WorksId.EndTime <= WorksId.OutTime:
+					WorksId.Mark = 'Present'
+					WorksId.save()
+				elif WorksId.StartTime < WorksId.InTime and WorksId.EndTime > WorksId.OutTime:
+					WorksId.Mark = 'Late & leave early'
+					WorksId.save()
+				elif WorksId.StartTime >= WorksId.InTime and WorksId.EndTime > WorksId.OutTime:
+					WorksId.Mark = 'Leave early'
+					WorksId.save()
+				elif WorksId.StartTime < WorksId.InTime and WorksId.EndTime <= WorksId.OutTime:
+					WorksId.Mark = 'Late'
+					WorksId.save()
+	current = WorkSchedule.objects.filter(StartDate=currentDate)
+	for k in current:
+		userid = WorkSchedule.objects.get(WorkSchedule_id=k.WorkSchedule_id)
+		if userid.Mark != 'Off' and userid.Mark != 'MC':
+			if userid.InTime is not None and userid.OutTime is not None:
+				if userid.StartTime >= userid.InTime and userid.EndTime <= userid.OutTime:
+					userid.Mark = 'Present'
+					userid.save()
+				elif userid.StartTime < userid.InTime and userid.EndTime > userid.OutTime:
+					userid.Mark = 'Late & leave early'
+					userid.save()
+				elif userid.StartTime >= userid.InTime and userid.EndTime > userid.OutTime:
+					userid.Mark = 'Leave early'
+					userid.save()
+				elif userid.StartTime < userid.InTime and userid.EndTime <= userid.OutTime:
+					userid.Mark = 'Late'
+					userid.save()
+
+
 
 def get_MD5(Password):
 	md5 = hashlib.md5()
