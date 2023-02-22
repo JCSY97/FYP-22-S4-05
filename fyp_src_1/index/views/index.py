@@ -12,6 +12,34 @@ import random
 import string
 import hashlib
 import os
+
+
+
+def CheckMark():
+    UserStatus = WorkSchedule.objects.filter(StartDate__lt=currentDate)
+    for i in UserStatus:
+        WorksId = WorkSchedule.objects.get(WorkSchedule_id=i.WorkSchedule_id)
+        if WorksId.Mark != 'Off' or WorksId.Mark != 'MC':
+            if WorksId.InTime is None and WorksId.StartTime is not None or WorksId.OutTime is None and WorksId.EndTime is not None:
+                WorksId.Mark = 'Absent'
+                WorksId.save()
+            elif WorksId.InTime is not None and WorksId.StartTime is not None or WorksId.OutTime is not None and WorksId.EndTime is not None:
+                if WorksId.StartTime >= WorksId.InTime and WorksId.EndTime <= WorksId.OutTime:
+                    WorksId.Mark = 'Present'
+                    WorksId.save()
+                elif WorksId.StartTime < WorksId.InTime and WorksId.EndTime > WorksId.OutTime:
+                    WorksId.Mark = 'Late & leave early'
+                    WorksId.save()
+                elif WorksId.StartTime >= WorksId.InTime and WorksId.EndTime > WorksId.OutTime:
+                    WorksId.Mark = 'Leave early'
+                    WorksId.save()
+                elif WorksId.StartTime < WorksId.InTime and WorksId.EndTime <= WorksId.OutTime:
+                    WorksId.Mark = 'Late'
+                    WorksId.save()
+            else:
+                WorksId.Mark = 'Pending'
+                WorksId.save()
+
 def get_MD5(Password):
 	md5 = hashlib.md5()
 	md5.update(Password.encode('utf-8'))
@@ -45,6 +73,7 @@ def Check_In(request):
 def index_login(request):
 	#if request.POST:
 	Title='Login Page'
+	CheckMark()
 	if request.method == 'POST':
 		try:
 			# EmployeeID = request.POST.get('EmployeeID')

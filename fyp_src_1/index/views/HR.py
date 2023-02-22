@@ -4,7 +4,7 @@ import requests
 from django.db.models import Q
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, redirect
-from index.models import Employee, Role, WorkSchedule
+from ..models import Employee, Role, WorkSchedule
 from django.contrib import messages
 from django.core import serializers
 from datetime import date, datetime, timedelta
@@ -21,7 +21,7 @@ def CheckMark():
     UserStatus = WorkSchedule.objects.filter(StartDate__lt=currentDate)
     for i in UserStatus:
         WorksId = WorkSchedule.objects.get(WorkSchedule_id=i.WorkSchedule_id)
-        if WorksId.Mark.lower() != 'off' or WorksId.Mark.lower() != 'mc':
+        if WorksId.Mark != 'Off' or WorksId.Mark != 'MC':
             if WorksId.InTime is None and WorksId.StartTime is not None or WorksId.OutTime is None and WorksId.EndTime is not None:
                 WorksId.Mark = 'Absent'
                 WorksId.save()
