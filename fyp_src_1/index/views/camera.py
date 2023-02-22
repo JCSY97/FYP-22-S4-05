@@ -41,7 +41,7 @@ for person in os.listdir(verify_file_path):
     if split_up[1] != ".DS_Store":
 
         # skip verify_test
-        if person == "verify_test":
+        if person == "Input":
             continue
 
         image_path = os.path.join(verify_file_path, person)
@@ -126,7 +126,7 @@ def index(request):
             imgdata = base64.b64decode(data)
 
 
-            filename = 'media/verify/verify_test/inputImage.jpg'
+            filename = 'media/verify/Input/inputImage.jpg'
             with open(filename, 'wb') as f:
                 f.write(imgdata)
 
@@ -208,7 +208,7 @@ def index(request):
 
                 else:
                     print("face not in database")
-                    return_face_detected = "Math not found"
+                    return_face_detected = "Match not found"
 
             elif len(face_locations) > 1:
                 print("more than one face detected")
