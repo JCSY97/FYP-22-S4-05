@@ -46,7 +46,7 @@ def sys_admin_home(request):
 			StartDate=currentDate)
 		if CheckValues.exists():
 			AttenCheck = WorkSchedule.objects.get(Employee_id=request.session['Employee_ID'], StartDate=currentDate)
-			if AttenCheck.Mark.lower() != 'off' or AttenCheck.Mark.lower() != 'mc':
+			if AttenCheck.Mark != 'Off' or AttenCheck.Mark != 'MC':
 				if AttenCheck.InTime is None and AttenCheck.OutTime is not None:
 					CheckIn = "Pending"
 					CheckOut = AttenCheck.OutTime
@@ -372,6 +372,8 @@ def upload_img(request, empid):
 
 			return redirect('/sys_admin/view_employees/edit/' + str(empid))
 		else:
+
+			img_list = os.path.join(settings.BASE_DIR, 'media', 'verify', str(empid))
 			Title = 'Upload Employee face Image Page'
 			context = {
 				'Role': currentEmployee.Role.Role_ID,
@@ -382,6 +384,7 @@ def upload_img(request, empid):
 				'title': Title,
 				'Name': Emp[0].Full_Name,
 				"Emplid": Emp[0].Employee_ID,
+				'images': img_list,
 			}
 
 			return render(request, 'sys_admin/sys_admin_upload_img.html', context)
