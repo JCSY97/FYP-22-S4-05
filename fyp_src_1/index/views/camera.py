@@ -192,7 +192,7 @@ def index(request):
 
                                 # clock out only if the difference between current time and INTIME is more than 1 hour
                                 # 1 hour = 3600 seconds
-                                if (delta.total_seconds()) > 3600 :
+                                if (delta.total_seconds()) > 300 :
                                     currentEmp.OutTime = currentTime
                                     currentEmp.save()
 
