@@ -124,6 +124,8 @@
           height = video.height;
           context.drawImage(video, 0, 0, width, height);
           var dataTemp = canvas.toDataURL('image/jpeg', 1);
+          var sentence ="";
+          var x = document.getElementById("videoElement"); 
           context.clearRect(0, 0, width, height);
 
           $.ajax({
@@ -135,11 +137,17 @@
                   },
                   success: function(data) {
                       
-                      console.log(data.return_data);
-                      console.log(data.return_face_detected)
+                      //console.log(data.return_data);
+                      //console.log(data.return_face_detected)
                       changeText(data.return_data);
                       document.getElementById("faceDetected").innerHTML = data.return_face_detected;
-
+                      sentence = data.return_face_detected + " You have been " + data.return_data;
+                      if(data.return_face_detected != "" && data.return_face_detected != "Match not found" &&  data.return_face_detected != undefined){
+                        x.pause(); 
+                        window.location.href="{% url 'index'  %}";
+                        window.alert(sentence)
+                        
+                      }
 
                   },
                   error: function(response) {
