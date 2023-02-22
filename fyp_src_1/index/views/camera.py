@@ -208,7 +208,7 @@ def index(request):
 
                 else:
                     print("face not in database")
-                    return_face_detected = "Math not found"
+                    return_face_detected = "Match not found"
 
             elif len(face_locations) > 1:
                 print("more than one face detected")
