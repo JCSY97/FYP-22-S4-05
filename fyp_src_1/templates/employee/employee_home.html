@@ -212,7 +212,7 @@
                     <tbody>
                       {% for Ad in Redata %}
                       <tr>
-                        <th scope="row">{{ Ad.StartDate }}</th>
+                        <th scope="row">{{ Ad.StartDate|date:'d m Y' }}</th>
                         <td>{{ Ad.StartTime |date:"G:i"}}  --   {{ Ad.EndTime |date:"G:i"}}</td>
                         {% if Ad.Mark in 'Present' %}
                         
