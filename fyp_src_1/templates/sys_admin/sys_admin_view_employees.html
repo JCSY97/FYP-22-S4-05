@@ -35,6 +35,7 @@
                   <tr>
                     <th scope="col">Emp_ID</th>
                     <th scope="col">Name</th>
+                    <th scope="col">Job Title</th>
                     <th scope="col">Position</th>
                     <th scope="col">Start Date</th>
                   </tr>
@@ -44,6 +45,7 @@
                     <tr class="tr" onclick='setGetParameter( "{{ employee.Employee_ID}} ")'>
                       <th scope="row">{{ employee.Employee_ID }}</th>
                       <td>{{ employee.Full_Name }}</td>
+                       <td>{{ employee.Job_Title }}</td>
                       <td>{{ employee.Role.Role_Name }}</td>
                       <td>{{ employee.Start_Date }}</td>
                     </tr>

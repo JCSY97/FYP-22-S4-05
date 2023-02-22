@@ -68,7 +68,12 @@
                   </div>
 
                   <div class="row">
-                    <div class="col-lg-3 col-md-4 label">Role</div>
+                    <div class="col-lg-3 col-md-4 label">Job Title</div>
+                    <div class="col-lg-9 col-md-8">{{ Job_Title }}</div>
+                  </div>
+
+                    <div class="row">
+                    <div class="col-lg-3 col-md-4 label ">Role</div>
                     <div class="col-lg-9 col-md-8">{{ Role }}</div>
                   </div>
 
@@ -118,11 +123,18 @@
                       </div>
                     </div>
 
+                      <div class="row mb-3">
+                      <label for="company" class="col-md-4 col-lg-3 col-form-label">Job Title</label>
+                      <div class="col-md-8 col-lg-9">
+                        <input name="company" type="text" class="form-control" id="company" value="{{ Job_Title }}" disabled>
+                      </div>
+                    </div>
+
 
                     <div class="row mb-3">
                       <label for="Job" class="col-md-4 col-lg-3 col-form-label">Role</label>
                       <div class="col-md-8 col-lg-9">
-                        <input name="role_edit" type="text" class="form-control" id="Job" value="{{ Role }}">
+                        <input name="role_edit" type="text" class="form-control" id="Job" value="{{ Role }}" disabled>
                       </div>
                     </div>
 

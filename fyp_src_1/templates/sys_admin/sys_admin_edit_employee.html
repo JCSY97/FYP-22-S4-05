@@ -68,6 +68,11 @@
                     <div class="col-lg-9 col-md-8">{{ edit_employee_full_name }}</div>
                   </div>
 
+                    <div class="row">
+                    <div class="col-lg-3 col-md-4 label">Job Title</div>
+                    <div class="col-lg-9 col-md-8">{{ edit_employee_jobtitle }}</div>
+                  </div>
+
                   <div class="row">
                     <div class="col-lg-3 col-md-4 label">Role</div>
                     <div class="col-lg-9 col-md-8">{{ edit_employee_role }}</div>
@@ -120,12 +125,10 @@
                       </div>
                     </div>
 
-                    
-
-                    <div class="row mb-3">
-                      <label for="company" class="col-md-4 col-lg-3 col-form-label">Company</label>
+                  <div class="row mb-3">
+                      <label for="Phone" class="col-md-4 col-lg-3 col-form-label">Job Title</label>
                       <div class="col-md-8 col-lg-9">
-                        <input name="company" type="text" class="form-control" id="company" value="FYP-22-S4-05" disabled>
+                        <input name="job" type="text" class="form-control" id="Phone" value="{{ edit_employee_jobtitle }}">
                       </div>
                     </div>
 
@@ -133,13 +136,15 @@
                       <label for="Job" class="col-md-4 col-lg-3 col-form-label">Role</label>
                       <div class="col-md-8 col-lg-9">
                         <select class="form-select" name="newRole">
-                          <option selected disabled>Select the role of employee</option>
-                          <option value="Admin">Admin</option>
-                          <option value="Hr">HR</option>
-                          <option value="Employee" selected="selected">Employee</option>
+                            <option selected disabled >Please select employee role</option>
+                            <option value="HR" >HR</option>
+                            <option value="System Admin">System Admin</option>
+                            <option value="Employee" >Employee</option>
+
                         </select>
                       </div>
                     </div>
+
 
                     <div class="row mb-3">
                       <label for="Phone" class="col-md-4 col-lg-3 col-form-label">Phone</label>

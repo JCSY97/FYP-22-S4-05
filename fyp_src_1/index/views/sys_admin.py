@@ -185,6 +185,10 @@ def user_profile(request):
 
 		if request.method == 'POST':
 			# for edit user profile form
+			if Role.objects.filter(Role_Name=request.POST.get('role_edit')) == 0:
+				messages.error(request, 'No such role')
+				return redirect('sys_admin_user_profile')
+
 			if request.POST.get('form_type') == 'editProfile':
 
 				if request.FILES.get('Pic') is not None:
@@ -234,8 +238,10 @@ def user_profile(request):
 			context = {
 				'Employee_ID': currentEmployee.Employee_ID,
 				'Full_Name': currentEmployee.Full_Name,
-				'Role': currentEmployee.Role.Role_Name,
+				'Job_Title': currentEmployee.Job_Title,
+
 				'Email': currentEmployee.Email_Address,
+				'Role': currentEmployee.Role.Role_Name,
 				'Phone': currentEmployee.Phone_Number,
 				'PFP': currentEmployee.Profile_Image.url,
 				'title': Title,
@@ -267,6 +273,9 @@ def edit_employee(request, edit_employee_id):
 				else:
 					edit_employee.Profile_Image = 'profile_pics/default.jpg'
 
+				edit_employee.Role = Role.objects.get(Role_Name=request.POST.get('newRole'))
+
+				edit_employee.Job_Title=request.POST.get('job')
 				edit_employee.Full_Name = request.POST.get('fullName')
 				edit_employee.Phone_Number = request.POST.get('phone')
 				edit_employee.Email_Address = request.POST.get('email')
@@ -301,6 +310,7 @@ def edit_employee(request, edit_employee_id):
 					'edit_employee_id': edit_employee_id,
 					'edit_employee_full_name': edit_employee.Full_Name,
 					'edit_employee_role': edit_employee.Role,
+					'edit_employee_jobtitle': edit_employee.Job_Title,
 					'edit_employee_phone': edit_employee.Phone_Number,
 					'edit_employee_email': edit_employee.Email_Address,
 					'edit_employee_pfp': edit_employee.Profile_Image.url,
@@ -386,7 +396,7 @@ def upload_img(request, empid):
 				"Emplid": Emp[0].Employee_ID,
 				'images': img_list,
 			}
-
+			print(img_list,'testimg')
 			return render(request, 'sys_admin/sys_admin_upload_img.html', context)
 
 	else:

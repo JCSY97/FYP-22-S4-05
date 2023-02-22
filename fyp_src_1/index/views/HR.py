@@ -211,6 +211,7 @@ def HR_EmpProfile(request, Empid):
                 'Emp_Email': Myinfo.Email_Address,
                 'Emp_Phone': Myinfo.Phone_Number,
                 'Emp_PFP': Myinfo.Profile_Image.url,
+                'Emp_Role':Myinfo.Role.Role_Name,
                 'title': Title,
             }
             return render(request, 'HR/employees-profile.html', context)
