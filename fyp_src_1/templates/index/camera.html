@@ -137,16 +137,19 @@
                   },
                   success: function(data) {
                       
-                      //console.log(data.return_data);
+                      console.log(data.return_data);
                       //console.log(data.return_face_detected)
                       changeText(data.return_data);
                       document.getElementById("faceDetected").innerHTML = data.return_face_detected;
-                      sentence = data.return_face_detected + " You have been " + data.return_data;
-                      if(data.return_face_detected != "" && data.return_face_detected != "Match not found" &&  data.return_face_detected != undefined && data.return_face_detected !="more than one face detected"){
+                      if(data.return_data.trim() == "CLOCKED IN" ){
                         x.pause(); 
                         window.location.href="{% url 'index'  %}";
-                        window.alert(sentence)
+                        window.alert(data.return_face_detected + "! You have been Clocked In! \nPlease press OK to return to Home page.")
                         
+                      }else if(data.return_data.trim() == "CLOCKED OUT" ){
+                        x.pause(); 
+                        window.location.href="{% url 'index'  %}";
+                        window.alert(data.return_face_detected + "! You have been Clocked Out! \nPlease press OK to return to Home page.")
                       }
 
                   },
