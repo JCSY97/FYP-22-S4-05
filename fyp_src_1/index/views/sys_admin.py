@@ -317,6 +317,7 @@ def edit_employee(request, edit_employee_id):
 					'Full_Name': currentEmployee.Full_Name,
 					'Role': currentEmployee.Role.Role_Name,
 					'PFP': currentEmployee.Profile_Image.url,
+					'Job_Title': currentEmployee.Job_Title,
 					'title': Title,
 				}
 
