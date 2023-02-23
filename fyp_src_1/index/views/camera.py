@@ -25,17 +25,14 @@ app = Flask(__name__)
 #FR = FR_class("siamesemodelv2.h5")
 
 
-
-
 # get list of face encoding when server starts
 verify_file_path = os.path.join("media", "verify")
+def load_faces():
 
-known_face_encodings = []
-known_face = []
+    known_face_encodings = []
+    known_face = []
 
 
-
-def update_faces():
     for person in os.listdir(verify_file_path):
         split_up = os.path.splitext(person)
 
@@ -77,7 +74,13 @@ def update_faces():
     print("Number of faces encoded : " + str(len(known_face_encodings)))
 
 
-update_faces()
+    # save encodings to .npy file
+    np.save('known_face_encodings.npy', np.array(known_face_encodings, dtype=object), allow_pickle=True)
+    np.save('known_face.npy', np.array(known_face, dtype=object), allow_pickle=True)
+
+
+load_faces();
+
 # class VideoCamera(object):
 #     def __init__(self):
 #         # Using OpenCV to capture from device 0. If you have trouble capturing
@@ -120,6 +123,11 @@ def index(request):
         return_data = ""
         return_face_detected = ""
         try:
+            # read from known_face_encoding.npy and known_face.npy
+            known_face = np.load('known_face.npy', allow_pickle=True)
+            known_face_encodings = np.load('known_face_encodings.npy', allow_pickle=True).astype(float)
+            
+
             frame_ = request.POST.get('image')
             frame_ = str(frame_)
             data = frame_.replace('data:image/jpeg;base64,', '')

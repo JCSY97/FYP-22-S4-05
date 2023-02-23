@@ -11,6 +11,8 @@ from django.conf import settings
 from django.core import serializers
 import cv2
 
+import numpy as np
+
 from django.db.models import Q
 from django.contrib.auth.hashers import make_password
 
@@ -402,6 +404,7 @@ def upload_img(request, empid):
 
 		currentEmployee = Employee.objects.get(Employee_ID=request.session['Employee_ID'])
 		if request.method == 'POST':
+
 			filepath = os.path.join(settings.BASE_DIR, 'media', 'verify', str(empid))
 
 			# make file first if not exist
@@ -419,6 +422,31 @@ def upload_img(request, empid):
 				else:
 					os.remove(f_filepath)
 					messages.error(request, 'Please upload a single person picture')
+
+
+			# update .npy for face encoding
+			known_face = np.load('known_face.npy', allow_pickle=True)
+			known_face_encodings = np.load('known_face_encodings.npy', allow_pickle=True).astype(float)
+
+
+			# check if folder not empty
+			if len(os.listdir(os.path.join('media', 'verify', str(request.session['Employee_ID'])))) != 0:
+				# append list of known_face
+				known_face = known_face.tolist()
+				known_face.append(request.session['Employee_ID'])
+
+				# append face encoding
+				img_of_person_file_path = os.listdir(os.path.join('media', 'verify', str(request.session['Employee_ID'])))[0]
+				img_of_person = face_recognition.load_image_file(img_of_person_file_path)
+				img_of_person_encoding = face_recognition.face_encodings(img_of_person)[0]
+
+				known_face_encodings = known_face_encodings.tolist()
+				known_face_encodings.append(img_of_person_encoding)
+
+	            # write back to file.
+
+				np.save('known_face_encodings.npy', np.array(known_face_encodings, dtype=object), allow_pickle=True)
+				np.save('known_face.npy', np.array(known_face, dtype=object), allow_pickle=True)
 
 			return redirect('/sys_admin/view_employees/edit/' + str(empid))
 		else:
