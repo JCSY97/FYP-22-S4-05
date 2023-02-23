@@ -117,9 +117,9 @@ update_faces()
 @app.route('/')
 def index(request):
     if request.method == 'POST':
+        return_data = ""
+        return_face_detected = ""
         try:
-            return_data = ""
-            return_face_detected = ""
             frame_ = request.POST.get('image')
             frame_ = str(frame_)
             data = frame_.replace('data:image/jpeg;base64,', '')
@@ -148,6 +148,7 @@ def index(request):
                 # face detected
                 if face_distances[best_match_index] < 0.3:
                     # get employeeName
+                    
                     detected_emp_name = Employee.objects.get(Employee_ID = known_face[best_match_index]).Full_Name
                     return_face_detected = str(detected_emp_name) + " detected"
                     print(str(detected_emp_name) + " detected")
