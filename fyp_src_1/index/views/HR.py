@@ -64,7 +64,7 @@ def get_MD5(Password):
 
 
 def HR_home(request):
-    CheckMark()
+    #CheckMark()
     dt = datetime.strptime(currentDate, '%Y-%m-%d')
     start = dt - timedelta(days=dt.weekday())
     end = start + timedelta(days=6)

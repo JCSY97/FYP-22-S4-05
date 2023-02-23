@@ -37,15 +37,16 @@ def CheckMark():
 					WorksId.Mark = 'Late'
 					WorksId.save()
 	current = WorkSchedule.objects.filter(StartDate=currentDate)
+
 	for k in current:
 		userid = WorkSchedule.objects.get(WorkSchedule_id=k.WorkSchedule_id)
 		if userid.Mark != 'Off' and userid.Mark != 'MC':
 			if userid.InTime is not None and userid.OutTime is not None:
-				if userid.StartTime >= userid.InTime and userid.EndTime <= userid.OutTime:
-					userid.Mark = 'Present'
-					userid.save()
-				elif userid.StartTime < userid.InTime and userid.EndTime > userid.OutTime:
+				if userid.StartTime < userid.InTime and userid.EndTime > userid.OutTime:
 					userid.Mark = 'Late & leave early'
+					userid.save()
+				elif userid.StartTime >= userid.InTime and userid.EndTime <= userid.OutTime:
+					userid.Mark = 'Present'
 					userid.save()
 				elif userid.StartTime >= userid.InTime and userid.EndTime > userid.OutTime:
 					userid.Mark = 'Leave early'
@@ -89,7 +90,7 @@ def Check_In(request):
 def index_login(request):
 	#if request.POST:
 	Title='Login Page'
-	CheckMark()
+	#CheckMark()
 	if request.method == 'POST':
 		try:
 			# EmployeeID = request.POST.get('EmployeeID')

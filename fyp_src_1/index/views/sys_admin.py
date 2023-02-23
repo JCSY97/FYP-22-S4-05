@@ -19,6 +19,8 @@ from django.contrib.auth.hashers import make_password
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 
+import face_recognition
+
 currentDate = datetime.now().strftime("%Y-%m-%d")
 currentTime = datetime.now().strftime('%H:%M:%S')
 
@@ -69,7 +71,7 @@ def CheckMark():
 
 # Create your views here.
 def sys_admin_home(request):
-	CheckMark()
+	#CheckMark()
 	dt = datetime.strptime(currentDate, '%Y-%m-%d')
 	start = dt - timedelta(days=dt.weekday())
 	end = start + timedelta(days=6)
@@ -437,6 +439,7 @@ def upload_img(request, empid):
 
 				# append face encoding
 				img_of_person_file_path = os.listdir(os.path.join('media', 'verify', str(request.session['Employee_ID'])))[0]
+				img_of_person_file_path = os.path.join('media', 'verify', str(request.session['Employee_ID']), img_of_person_file_path)
 				img_of_person = face_recognition.load_image_file(img_of_person_file_path)
 				img_of_person_encoding = face_recognition.face_encodings(img_of_person)[0]
 
@@ -478,37 +481,45 @@ def logout(request):
 	return redirect('login')
 
 
-def Detectface(image):
-	image = cv2.imread(image)
-	gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+# def Detectface(image):
+# 	image = cv2.imread(image)
+# 	gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
-	faceCascade = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
-	faces = faceCascade.detectMultiScale(
-		gray,
-		scaleFactor=1.3,
-		minNeighbors=3,
-		minSize=(30, 30)
-	)
-	status = ''
-	# print("[INFO] Found {0} Faces.".format(len(faces)))
-	# print(len(faces))
+# 	faceCascade = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
+# 	faces = faceCascade.detectMultiScale(
+# 		gray,
+# 		scaleFactor=1.3,
+# 		minNeighbors=3,
+# 		minSize=(30, 30)
+# 	)
+# 	status = ''
+# 	# print("[INFO] Found {0} Faces.".format(len(faces)))
+# 	# print(len(faces))
 
-	for (x, y, w, h) in faces:
-		cv2.rectangle(image, (x, y), (x + w, y + h), (0, 300, 0), 1)
-		roi_color = image[y:y + h, x:x + w]
-	# print("[INFO] Object found. Saving locally.")
-	# cv2.imwrite(str(w) + str(h) + '_faces.jpg', roi_color)
-	if len(faces) == 1:
+# 	for (x, y, w, h) in faces:
+# 		cv2.rectangle(image, (x, y), (x + w, y + h), (0, 300, 0), 1)
+# 		roi_color = image[y:y + h, x:x + w]
+# 	# print("[INFO] Object found. Saving locally.")
+# 	# cv2.imwrite(str(w) + str(h) + '_faces.jpg', roi_color)
+# 	if len(faces) == 1:
 
-		status = cv2.imwrite('faces_detected.jpg', image)
-		# status=True
-		# print("[INFO] Image faces_detected.jpg written to filesystem: ", status)
-		return status
+# 		status = cv2.imwrite('faces_detected.jpg', image)
+# 		# status=True
+# 		# print("[INFO] Image faces_detected.jpg written to filesystem: ", status)
+# 		return status
+# 	else:
+# 		status = False
+
+# 		# print("[INFO] Image faces_detected.jpg written to filesystem: ", status)
+# 		return status
+
+def Detectface(image_path):
+	input_face = face_recognition.load_image_file(image_path)
+	face_locations = face_recognition.face_locations(input_face)
+	if len(face_locations) == 1:
+		return True
 	else:
-		status = False
-
-		# print("[INFO] Image faces_detected.jpg written to filesystem: ", status)
-		return status
+		return False
 
 
 def sys_admin_deleepmPic(request, empid):

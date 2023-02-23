@@ -62,7 +62,7 @@ def CheckMark():
 					userid.save()
 
 def Employee_home(request):
-	CheckMark()
+	#CheckMark()
 	dt = datetime.strptime(currentDate, '%Y-%m-%d')
 	start = dt - timedelta(days=dt.weekday())
 	end = start + timedelta(days=6)
