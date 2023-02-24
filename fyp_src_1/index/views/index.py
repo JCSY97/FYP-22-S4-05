@@ -90,7 +90,7 @@ def Check_In(request):
 def index_login(request):
 	#if request.POST:
 	Title='Login Page'
-	#CheckMark()
+	CheckMark()
 	if request.method == 'POST':
 		try:
 			# EmployeeID = request.POST.get('EmployeeID')
