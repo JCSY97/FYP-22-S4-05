@@ -61,20 +61,15 @@
 
   <script>
 
-
   var canvas = document.getElementById('canvas');
   var context = canvas.getContext('2d');
   var resultTemp = document.getElementById("result");
   const video = document.querySelector("#videoElement");
   var text_change_count = 0;
 
-
-
-
-
-
   video.width = 400;
   video.height = 300;
+
   if (navigator.mediaDevices.getUserMedia) {
       navigator.mediaDevices.getUserMedia({
               video: true
